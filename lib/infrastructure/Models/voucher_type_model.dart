@@ -19,6 +19,7 @@ class VoucherType {
     this.supplier,
     this.V_Type,
     this.Description,
+    this.Name
   });
 
   String strSubCode;
@@ -28,6 +29,7 @@ class VoucherType {
   String supplier;
   String V_Type;
   String Description;
+  String Name;
 
   factory VoucherType.fromJson(Map<String, dynamic> json) => VoucherType(
     strSubCode: json["StrSubCode"],
@@ -37,6 +39,7 @@ class VoucherType {
     supplier: json["Supplier"],
     V_Type: json["V_Type"],
     Description: json["Description"],
+    Name: json["Name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +50,6 @@ class VoucherType {
     "Supplier": supplier,
     "V_Type": V_Type,
     "Description": Description,
+    "Name": Name
   };
 }

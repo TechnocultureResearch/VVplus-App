@@ -9,17 +9,23 @@ class ApiService{
 
   static const String getVoucherTypenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord= ${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrV_Type":""}'}";
 
+  static const String getVouchertypeStockIssuenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrV_Type":""}'}";
+
   static const String getGoDownnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord=${'{"StrFilter":"Godown","StrSiteCode":"AD","StrV_Type":""}'}";
 
   static const String getVoucherTypeURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
   static const String getReceivedBynewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord=${'{"StrFilter":"ReceivedBy","StrSiteCode":"AD","StrV_Type":""}'}";
 
+  static const String getStockIssueTonewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"IssuedTo","StrSiteCode":"AD","StrV_Type":" ISU "}'}";
+
   static const String getItemNameURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
   static const String getItemCurrentStatusURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"AL1","StrCostCenterCode":"AS1","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":"AS1"},{"StrCostCenterCode":"AS1"}]}'}";
 
-  static const String getItemCurrentStatusewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AD","StrV_Type":""}'}";
+  static const String getStockReceiveItemCurrentStatusewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AD","StrV_Type":""}'}";
+
+  static const String getStockIssueItemCurrentStatusnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AD","StrV_Type":""}'}";
 
   static const String getItemCostCenterURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCostCenter","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"N","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
