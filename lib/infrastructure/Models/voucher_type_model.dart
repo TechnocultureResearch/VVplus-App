@@ -17,6 +17,8 @@ class VoucherType {
     this.godown,
     this.purchaseOrderSelect,
     this.supplier,
+    this.V_Type,
+    this.Description,
   });
 
   String strSubCode;
@@ -24,6 +26,8 @@ class VoucherType {
   String godown;
   String purchaseOrderSelect;
   String supplier;
+  String V_Type;
+  String Description;
 
   factory VoucherType.fromJson(Map<String, dynamic> json) => VoucherType(
     strSubCode: json["StrSubCode"],
@@ -31,6 +35,8 @@ class VoucherType {
     godown: json["Godown"],
     purchaseOrderSelect: json["Purchase_order_select"],
     supplier: json["Supplier"],
+    V_Type: json["V_Type"],
+    Description: json["Description"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -39,5 +45,7 @@ class VoucherType {
     "Godown": godown,
     "Purchase_order_select": purchaseOrderSelect,
     "Supplier": supplier,
+    "V_Type": V_Type,
+    "Description": Description,
   };
 }

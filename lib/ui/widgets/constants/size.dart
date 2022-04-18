@@ -39,3 +39,4 @@ var paddingForms2 = const EdgeInsets.symmetric(vertical: 5);
 var paddingForms3 = const EdgeInsets.only(top: 32,left: 45,right: 35);
 
 var sizedbox1 = const SizedBox(height: 18,);
+var textFeildHeight = 51.0;

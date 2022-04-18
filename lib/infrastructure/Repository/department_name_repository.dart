@@ -5,7 +5,7 @@ import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'dart:async';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 
-class DepartmentNameRepository {
+class                                                      DepartmentNameRepository {
   Client client = Client();
 
   Future<List<DepartmentName>> getData() async {

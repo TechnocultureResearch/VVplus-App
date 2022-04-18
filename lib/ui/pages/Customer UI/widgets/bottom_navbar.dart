@@ -30,16 +30,24 @@ class _MyBottomNavbar extends State<BottomNavBar>{
         BottomNavigationBarItem(
             backgroundColor: primaryColor3,
             icon: Icon(Icons.circle),
-            title: Text('', style: TextStyle(color: primaryColor2))),
+            // title: Text('', style: TextStyle(color: primaryColor2))
+          label: ''
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.circle),
-            title: Text('', style: TextStyle(color: primaryColor2))),
+            // title: Text('', style: TextStyle(color: primaryColor2))
+            label: ''
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.circle),
-            title: Text('', style: TextStyle(color: Colors.black))),
+            // title: Text('', style: TextStyle(color: Colors.black))
+            label: ''
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.circle),
-            title: Text('', style: TextStyle(color: primaryColor2))),
+            // title: Text('', style: TextStyle(color: primaryColor2))
+            label: ''
+        ),
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Colors.green,

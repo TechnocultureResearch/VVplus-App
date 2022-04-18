@@ -17,7 +17,7 @@ class HomePageLogo extends StatelessWidget{
               top: 39,
             ),
             child: Image.asset(
-              image1,
+              imageLogo,
               scale: 1.5,
               height: 241,
               width: 286,

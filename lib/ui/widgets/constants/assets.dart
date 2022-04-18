@@ -1,7 +1,8 @@
 //  vasthu bihar image
 
 const String image2 = "assets/images/+.png";     //  + sign
-const String image1 = "assets/images/4feyuv9I 1.png";  //  app logo
+const String image1 = "assets/images/4feyuv9I 1.png"; //  app logo
+const String imageLogo = "assets/images/vv_plus_logo.png"; // logo no background
 
 //  for New complaint screen
 

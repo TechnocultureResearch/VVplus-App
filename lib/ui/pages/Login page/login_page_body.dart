@@ -2,6 +2,7 @@
 
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -55,8 +56,8 @@ class _LoginPageBodyState extends State<LoginPageBody> {
 //Widgets
   @override
   Widget build(BuildContext context) {
-    var height = SizeConfig.getHeight(context);
-    var width = SizeConfig.getWidth(context);
+    // var height = SizeConfig.getHeight(context);
+    // var width = SizeConfig.getWidth(context);
     return SingleChildScrollView(
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
@@ -76,130 +77,87 @@ class _LoginPageBodyState extends State<LoginPageBody> {
           }
         },
         child: SafeArea(
-          child: Container(
-            width: width,
-            height: height,
-            decoration: const BoxDecoration(
-              color: primaryColor3,
-            ),
-            child: Stack(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: 47,
-                    top: 39,
-                  ),
-                  child: Image.asset(
-                    image1,
-                    scale: 1.5,
-                    height: 241,
-                    width: 286,
+                  padding: const EdgeInsets.all(50.0),
+                  child: Image.asset(imageLogo,),
+                ),
+                Text(
+                  text1,
+                  style: t1Style(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  text2,
+                  style: simpleTextStyle2(),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  color: primaryColor3,
+                  height: textFeildHeight,
+                  child: PhoneNumberInput(focusNode: _phoneNumberFocusNode),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  text3,
+                  style: t2Style(),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  text4,
+                  style: t2Style(),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  text5,
+                  textAlign: TextAlign.center,
+                  style: simpleTextStyle2(),
+                ),
+                const SizedBox(height: 25),
+                Container(
+                  height: textFeildHeight,
+                  decoration: decoration1(),
+                  child: Center(
+                    child: OtpInput(focusNode: _otpFocusNode),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 240,
-                    top: 25,
-                  ),
-                  child: Image.asset(
-                    image2,
-                    scale: 1.5,
-                    height: 134,
-                    width: 68,
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
-                _buildBottomPart(context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SubmitButton1(),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    SubmitButton2(),
+                  ],
+                ),
               ],
             ),
           ),
-
-        ),
-      ),
-    );
-  }
-
-
-
-  Widget _buildBottomPart(BuildContext context) {
-    var width = SizeConfig.getWidth(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: 228,left: 37),
-      child: SizedBox(
-        width: width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              text1,
-              style: t1Style(),
-            ),
-            const SizedBox(height: 10,),
-            Text(
-              text2,
-              style: simpleTextStyle2(),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20,),
-            Container(
-              padding: padding2,
-              color: primaryColor3,
-              height: 51.0,
-              child: PhoneNumberInput(focusNode: _phoneNumberFocusNode),
-            ),
-            const SizedBox(height: 20,),
-            Text(
-              text3,
-              style: t2Style(),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              text4,
-              style: t2Style(),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 17,),
-            Row(
-              children: [
-                Padding(
-                  padding: padding3,
-
-                  child: Text(
-                    text5,
-                    textAlign: TextAlign.center,
-                    style: simpleTextStyle2(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 25),
-            Container(
-              height: 55,
-              width: 500,
-              padding: padding2,
-              decoration: decoration1(),
-              child: Center(
-                child: OtpInput(focusNode: _otpFocusNode),
-              ),
-            ),
-            const SizedBox(height: 46,),
-            Row(
-              children: const [
-                SubmitButton1(),
-                SizedBox(width: 20,),
-                SubmitButton2(),
-              ],
-            ),
-          ],
         ),
       ),
     );
   }
 }
 
-
 //Phone number text field class
 class PhoneNumberInput extends StatelessWidget {
-  const PhoneNumberInput({Key key,this.focusNode}) : super(key: key);
+  const PhoneNumberInput({Key key, this.focusNode}) : super(key: key);
 
   final FocusNode focusNode;
 
@@ -216,12 +174,17 @@ class PhoneNumberInput extends StatelessWidget {
             prefixIcon: phoneTextFieldPicker(),
             focusColor: textColor4,
             enabledBorder: outlineBorder(),
-            focusedBorder: outlineBorder(),//floatingLabelBehavior: FloatingLabelBehavior.never,
+            focusedBorder:
+                outlineBorder(), //floatingLabelBehavior: FloatingLabelBehavior.never,
             prefix: Padding(padding: phoneTextFieldPadding1),
             hintText: "Enter Mobile Number",
             //helperText:
-            hintStyle: const TextStyle(color: primaryColor2,),
-            errorText: state.phoneNumber.invalid ? 'Please ensure the number entered is valid' : null,
+            hintStyle: const TextStyle(
+              color: primaryColor2,
+            ),
+            errorText: state.phoneNumber.invalid
+                ? 'Please ensure the number entered is valid'
+                : null,
           ),
           keyboardType: TextInputType.number,
           onChanged: (value) {
@@ -272,15 +235,23 @@ class _OtpInputState extends State<OtpInput> {
                 });
               },
             ),
-            labelStyle: const TextStyle(color: primaryColor4,),
+            labelStyle: const TextStyle(
+              color: primaryColor4,
+            ),
             hintText: hintText2,
-            hintStyle: const TextStyle(color: primaryColor4,),
+            hintStyle: const TextStyle(
+              color: primaryColor4,
+            ),
             fillColor: primaryColor3,
             filled: true,
             enabledBorder: outlineBorder(),
             focusedBorder: outlineBorder(),
-            prefix: Padding(padding: phoneTextFieldPadding1,),
-            errorText: state.otp.invalid ? '''otp must be at least 5 characters''' : null,
+            prefix: Padding(
+              padding: phoneTextFieldPadding1,
+            ),
+            errorText: state.otp.invalid
+                ? '''otp must be at least 5 characters'''
+                : null,
           ),
           onChanged: (value) {
             context.read<LoginBloc>().add(OtpChanged(otp: value));
@@ -307,8 +278,10 @@ class SubmitButton1 extends StatelessWidget {
           size1: 0.37,
           horizontal1: 30,
           vertical1: 17,
-          press: () {Navigator.push(context, MaterialPageRoute(
-              builder: (context) => const HomePage()));},
+          press: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePage()));
+          },
           text: "Sign In",
         );
       },
@@ -331,8 +304,10 @@ class SubmitButton2 extends StatelessWidget {
           size1: 0.37,
           horizontal1: 30,
           vertical1: 17,
-          press: () {Navigator.push( context, MaterialPageRoute(
-              builder: (context) => const HomePageStaff()));},
+          press: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePageStaff()));
+          },
           text: "Sign In Staff",
         );
       },

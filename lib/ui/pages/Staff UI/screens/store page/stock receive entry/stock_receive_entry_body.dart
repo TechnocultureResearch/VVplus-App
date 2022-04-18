@@ -3,14 +3,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/received_by_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/stock_receive_entry_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
+import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
+import 'package:vvplus_app/infrastructure/Models/received_by_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -40,13 +44,15 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   bool pressed = false;
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  ReceivedByDropdownBloc receivedByDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
+  GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
 
   VoucherType selectVoucherType1;
-  VoucherType selectVoucherType2;
+  ReceivedBy selectReceivedBy;
+  Godown selectGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -80,7 +86,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
     });
 
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
+    receivedByDropdownBloc = ReceivedByDropdownBloc();
+    godownDropdownBloc = GodownDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
@@ -105,14 +112,14 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       selectVoucherType1 = state;
     });
   }
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(ReceivedBy state) {
     setState(() {
-      selectVoucherType2 = state;
+      selectReceivedBy = state;
     });
   }
-  void onDataChange3(VoucherType state) {
+  void onDataChange3(Godown state) {
     setState(() {
-      selectVoucherType3 = state;
+      selectGodown = state;
     });
   }
   void onDataChange4(ItemCostCenter state) {
@@ -134,7 +141,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectVoucherType2!=null && selectVoucherType3!=null && selectItemCostCenter!=null && extraWorkEntryFormKey1.currentState.validate()){
+      if(selectVoucherType1!=null && selectReceivedBy!=null && selectGodown!=null && selectItemCostCenter!=null && extraWorkEntryFormKey1.currentState.validate()){
         sendData();
       }
       else{
@@ -151,8 +158,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       await http.post(Uri.parse(ApiService.mockDataPostStockReceiveEntry),
           body: json.encode({
             "Voucher Type": selectVoucherType1.strName,
-            "Received By": selectVoucherType2.strName,
-            "Godown": selectVoucherType3.strName,
+            "Received By": selectReceivedBy.Name,
+            "Godown": selectGodown.GodName,
             "Cost Center":selectItemCostCenter.strName,
             "Item": selectItemCurrentStatus.strItemName,
             "ReqQuantity": reqQty.text,
@@ -224,7 +231,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     ?.map<DropdownMenuItem<VoucherType>>((e) {
                                   return DropdownMenuItem<VoucherType>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.V_Type),
                                   );
                                 })?.toList() ??[],
                               );
@@ -241,25 +248,25 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                 child: Container(
                   height: 52, width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
+                  child: FutureBuilder<List<ReceivedBy>>(
+                    future: receivedByDropdownBloc.receivedByDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc2.selectedState,
+                        return StreamBuilder<ReceivedBy>(
+                          stream: receivedByDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<ReceivedBy>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                padding: selectReceivedBy!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectReceivedBy,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<ReceivedBy>>((e) {
+                                  return DropdownMenuItem<ReceivedBy>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );
@@ -276,25 +283,26 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                 child: Container(
                   height: 52, width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Godown>>(
+                      // future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
+                    future: godownDropdownBloc.godownDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc3.selectedState,
+                        return StreamBuilder<Godown>(
+                            stream: godownDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Godown>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType3!=null ? 2 : 11,
+                                padding: selectGodown!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType3,
+                                value: selectGodown,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<Godown>>((e) {
+                                  return DropdownMenuItem<Godown>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.GodName),
                                   );
                                 })?.toList() ??[],
                               );
@@ -329,7 +337,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
                                   return DropdownMenuItem<ItemCostCenter>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );

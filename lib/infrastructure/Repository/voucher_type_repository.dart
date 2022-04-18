@@ -13,7 +13,7 @@ class VoucherTypeRepository {
 
   Future<List<VoucherType>> getData() async {
     try {
-      final response = await client.get(Uri.parse(ApiService.mockDataVoucherTypeURL));
+      final response = await client.get(Uri.parse(ApiService.getVoucherTypenewURL));
       final items = (jsonDecode(response.body) as List)
           .map((e) => VoucherType.fromJson(e))
           .toList();

@@ -14,18 +14,26 @@ class ItemCostCenter {
   ItemCostCenter({
     this.strSubCode,
     this.strName,
+    this.Code,
+    this.Name
   });
 
   String strSubCode;
   String strName;
+  String Code;
+  String Name;
 
   factory ItemCostCenter.fromJson(Map<String, dynamic> json) => ItemCostCenter(
     strSubCode: json["StrSubCode"],
     strName: json["StrName"],
+    Code: json["Code"],
+    Name: json["Name"],
   );
 
   Map<String, dynamic> toJson() => {
     "StrSubCode": strSubCode,
     "StrName": strName,
+    "Code": Code,
+    "Name": Name
   };
 }
