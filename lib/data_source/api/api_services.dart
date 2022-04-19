@@ -34,6 +34,9 @@ class ApiService{
   static const String getItemCostCenterURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCostCenter","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"N","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
   static const String  getItemCostCenternewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord=${'{"StrFilter":"CostCenter","StrSiteCode":"AD","StrV_Type":""}'}";
+
+  static const String getStockIssueCostCenternewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"CostCenter","StrSiteCode":"AD","StrV_Type":""}'}";
+
 // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";

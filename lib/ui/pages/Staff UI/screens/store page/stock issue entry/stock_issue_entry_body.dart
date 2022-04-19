@@ -341,7 +341,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         (e) {
                                       return DropdownMenuItem<ItemCostCenter>(
                                         value: e,
-                                        child: Text(e.strName),
+                                        child: Text(e.Name),
                                       );
                                     })?.toList() ??
                                     [],
