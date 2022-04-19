@@ -65,14 +65,14 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(content: Text('Submitting...')),
+                const SnackBar(content: Text(text01)),
               );
           }
           if (state.status.isSubmissionInProgress) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(content: Text('Submitting...')),
+                const SnackBar(content: Text(text01)),
               );
           }
         },
@@ -177,13 +177,13 @@ class PhoneNumberInput extends StatelessWidget {
             focusedBorder:
                 outlineBorder(), //floatingLabelBehavior: FloatingLabelBehavior.never,
             prefix: Padding(padding: phoneTextFieldPadding1),
-            hintText: "Enter Mobile Number",
+            hintText: text02,
             //helperText:
             hintStyle: const TextStyle(
               color: primaryColor2,
             ),
             errorText: state.phoneNumber.invalid
-                ? 'Please ensure the number entered is valid'
+                ? text03
                 : null,
           ),
           keyboardType: TextInputType.number,
@@ -250,7 +250,7 @@ class _OtpInputState extends State<OtpInput> {
               padding: phoneTextFieldPadding1,
             ),
             errorText: state.otp.invalid
-                ? '''otp must be at least 5 characters'''
+                ? text04
                 : null,
           ),
           onChanged: (value) {
@@ -282,7 +282,7 @@ class SubmitButton1 extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomePage()));
           },
-          text: "Sign In",
+          text: text05,
         );
       },
     );
@@ -308,7 +308,7 @@ class SubmitButton2 extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomePageStaff()));
           },
-          text: "Sign In Staff",
+          text: text06,
         );
       },
     );
