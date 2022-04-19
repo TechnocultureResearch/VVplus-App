@@ -1,5 +1,13 @@
 // login page
 
+const String text01 = "Submitting...";
+const String text02 = "Enter Mobile Number";
+const String text03 = "Please ensure the number entered is valid";
+const String text04 = "OTP must be at least 5 characters";
+const String text05 = "Sign in";
+const String text06 = "Staff Sign in";
+
+
 // for App Bar Text
 
 const String appText1 = "Customer Care";
@@ -75,7 +83,7 @@ const String text52 = "Purchase";
 const String text53 = "Store";
 const String text54 = "Sales";
 const String text55 = "Contractors";
-const String text56 = "Payroll not on Dataman";
+const String text56 = "Approval Requests";
 const String text57 = "Marketing To Eng. not on Dataman";
 
 // use in purchase page

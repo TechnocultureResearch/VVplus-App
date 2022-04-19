@@ -119,6 +119,15 @@ class HomeBody extends StatelessWidget{
               ),
             ],
           ),
+          roundedButtonHome(
+            text56,
+                () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ContractorsPage()));
+            },
+          ),
         ],
       ),
     );
