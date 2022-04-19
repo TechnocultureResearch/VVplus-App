@@ -17,6 +17,8 @@ class ApiService{
 
   static const String getReceivedBynewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord=${'{"StrFilter":"ReceivedBy","StrSiteCode":"AD","StrV_Type":""}'}";
 
+  static const String getIssuedTonewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"IssuedTo","StrSiteCode":"AD","StrV_Type":" ISU "}'}";
+
   static const String getStockIssueTonewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"IssuedTo","StrSiteCode":"AD","StrV_Type":" ISU "}'}";
 
   static const String getItemNameURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";

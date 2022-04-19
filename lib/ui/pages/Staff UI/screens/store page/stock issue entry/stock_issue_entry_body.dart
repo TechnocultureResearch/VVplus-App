@@ -4,12 +4,14 @@ import 'dart:convert';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/issued_to_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/stock_issue_entry_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
+import 'package:vvplus_app/infrastructure/Models/issued_to_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -42,12 +44,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  IssuedToDropdownBloc issuedToDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
 
   VoucherType selectVoucherType1;
   VoucherType selectVoucherType2;
+  IssuedTo selectIssuedTo;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -83,6 +87,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     });
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
+    issuedToDropdownBloc = IssuedToDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
@@ -105,9 +110,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     });
   }
 
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(IssuedTo state) {
     setState(() {
-      selectVoucherType2 = state;
+      selectIssuedTo = state;
     });
   }
 
@@ -137,7 +142,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectVoucherType2!=null && selectVoucherType3!=null && selectItemCostCenter!=null && stockIssueEntryFormKey.currentState.validate()){
+      if(selectVoucherType1!=null && selectIssuedTo!=null && selectVoucherType3!=null && selectItemCostCenter!=null && stockIssueEntryFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -154,7 +159,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       await http.post(Uri.parse(ApiService.mockDataPostStockIssueEntry),
           body: json.encode({
             "Voucher Type": selectVoucherType1.strName,
-            "Issue By": selectVoucherType2.strName,
+            "Issue By": selectIssuedTo.Name,
             "Godown": selectVoucherType3.strName,
             "Cost Center":selectItemCostCenter.strName,
             "Item": selectItemCurrentStatus.strItemName,
@@ -245,25 +250,25 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   height: 52,
                   width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<IssuedTo>>(
+                      future: issuedToDropdownBloc.issuedToDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<IssuedTo>(
+                            stream: issuedToDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<IssuedTo>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                padding: selectIssuedTo!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectIssuedTo,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<IssuedTo>>((e) {
+                                  return DropdownMenuItem<IssuedTo>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??
                                     [],
