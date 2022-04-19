@@ -67,7 +67,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   _calculation() {
     setState(() {
       //value1 = double.parse(reqQty.text);
-      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.dblQty));
+      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.PurchaseRate));
       StringAmount= _amount.toStringAsFixed(3);
     },);
     print(_amount);
@@ -161,10 +161,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
             "Received By": selectReceivedBy.Name,
             "Godown": selectGodown.GodName,
             "Cost Center":selectItemCostCenter.strName,
-            "Item": selectItemCurrentStatus.strItemName,
+            "Item": selectItemCurrentStatus.Name,
             "ReqQuantity": reqQty.text,
             "Unit": selectItemCurrentStatus.strUnit,
-            "Rate": selectItemCurrentStatus.dblQty,
+            "Rate": selectItemCurrentStatus.PurchaseRate,
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } on SocketException {
@@ -389,7 +389,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                               ?.map<DropdownMenuItem<ItemCurrentStatus>>((e) {
                                             return DropdownMenuItem<ItemCurrentStatus>(
                                               value: e,
-                                              child: Text(e.strItemName),
+                                              child: Text(e.Name),
                                             );
                                           })?.toList() ??[],
                                         );
@@ -443,7 +443,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                               child: Container(
                                   height: 50, padding: padding1, decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.strUnit))),
+                                      child: Text(selectItemCurrentStatus.SKU))),
                             ):
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -471,7 +471,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                 child: Container(
                                     height: 50, padding: padding1, decoration: decoration1(),
                                     child: Center(
-                                        child: Text(selectItemCurrentStatus.dblQty))),
+                                        child: Text(selectItemCurrentStatus.PurchaseRate))),
                               ),
                             ):
                             Padding(
@@ -538,9 +538,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
 
               //-----------------------------------------------------------
               pressed? AddItemContainer(
-                itemNameText: selectItemCurrentStatus.strItemName,
+                itemNameText: selectItemCurrentStatus.Name,
                 orderQtyText: reqQty.text,
-                rateText: selectItemCurrentStatus.dblQty,
+                rateText: selectItemCurrentStatus.PurchaseRate,
                 amountText: StringAmount.toString(),
               ) : const SizedBox(),
 
