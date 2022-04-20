@@ -46,7 +46,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   IssuedToDropdownBloc issuedToDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
@@ -70,10 +69,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   _calculation() {
     setState(() {
       //value1 = double.parse(reqQty.text);
-      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.dblQty));
+      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.PurchaseRate));
       StringAmount= _amount.toStringAsFixed(3);
     },);
-    print(_amount);
   }
 
   @override
@@ -90,7 +88,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     issuedToDropdownBloc = IssuedToDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
-    voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     _amount = 0;
@@ -163,8 +160,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
             "Voucher Type": selectVoucherType1.strName,
             "Issue By": selectIssuedTo.Name,
             "Godown": selectGodown.GodName,
-            "Cost Center":selectItemCostCenter.strName,
-            "Item": selectItemCurrentStatus.strItemName,
+            "Cost Center":selectItemCostCenter.Name,
+            "Item": selectItemCurrentStatus.Name,
             "ReqQuantity": reqQty.text,
             "Unit": selectItemCurrentStatus.strUnit,
             "Rate": selectItemCurrentStatus.dblQty,
@@ -323,10 +320,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc.itemCostCenterData,
+                      future: itemCostCenterDropdownBloc.itemCostCenterStockIssueEntryData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc.selectedState,
+                            stream: itemCostCenterDropdownBloc.selectedCostCenterState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
@@ -375,12 +372,11 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                             width: 343,
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemCurrentStatus>>(
-                                future: dropdownBlocItemCurrentStatus
-                                    .itemCurrentStatusDropdowndata,
+                                future: dropdownBlocItemCurrentStatus.itemCurrentStatusStockIssueEntryDropdownData,
                                 builder: (context, snapshot) {
                                   return StreamBuilder<ItemCurrentStatus>(
                                       stream:
-                                      dropdownBlocItemCurrentStatus.selectedState,
+                                      dropdownBlocItemCurrentStatus.selectedStateitemCurrentStatus,
                                       builder: (context, item) {
                                         return SearchChoices<
                                             ItemCurrentStatus>.single(
@@ -398,7 +394,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                             return DropdownMenuItem<
                                                 ItemCurrentStatus>(
                                               value: e,
-                                              child: Text(e.strItemName),
+                                              child: Text(e.Name),
                                             );
                                           })?.toList() ??
                                               [],
@@ -449,7 +445,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                   padding: padding1,
                                   decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.strUnit))),
+                                      child: Text(selectItemCurrentStatus.SKU))),
                                 )
                                 : SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -484,7 +480,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                     decoration: decoration1(),
                                     child: Center(
                                         child: Text(
-                                            selectItemCurrentStatus.dblQty))),
+                                            selectItemCurrentStatus.PurchaseRate))),
                               ),
                             )
                                 : Padding(
@@ -552,9 +548,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               ),
               //-----------------------------------------------------------
               pressed? AddItemContainer(
-                itemNameText: selectItemCurrentStatus.strItemName,
+                itemNameText: selectItemCurrentStatus.Name,
                 orderQtyText: reqQty.text,
-                rateText: selectItemCurrentStatus.dblQty,
+                rateText: selectItemCurrentStatus.PurchaseRate,
                 amountText: StringAmount.toString(),
               ) : const SizedBox(),
 

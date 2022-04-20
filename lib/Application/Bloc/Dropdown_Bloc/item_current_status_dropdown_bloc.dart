@@ -6,17 +6,25 @@ import 'package:vvplus_app/infrastructure/Repository/item_current_status_reposit
 
 class ItemCurrentStatusDropdownBloc {
   final itemCurrentStatusDropdownRepository = ItemCurrentStatusRepository();
-  final itemCurrentStatusDropdownData = BehaviorSubject<ItemCurrentStatus>();
+  final itemCurrentStatusDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
+  final itemCurrentStatusStockIssueEntryDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
 
   Future<List<ItemCurrentStatus>> itemCurrentStatusDropdowndata;
-  Stream<ItemCurrentStatus> get selectedState => itemCurrentStatusDropdownData;
-  void selectedStateEvent(ItemCurrentStatus state) => itemCurrentStatusDropdownData.add(state);
+  Future<List<ItemCurrentStatus>> itemCurrentStatusStockIssueEntryDropdownData;
+
+  Stream<ItemCurrentStatus> get selectedStateitemCurrentStatus => itemCurrentStatusStockIssueEntryDropdownGetData;
+  void selectedStateitemCurrentStatusEvent(ItemCurrentStatus state) => itemCurrentStatusStockIssueEntryDropdownGetData.add(state);
+
+  Stream<ItemCurrentStatus> get selectedState => itemCurrentStatusDropdownGetData;
+  void selectedStateEvent(ItemCurrentStatus state) => itemCurrentStatusDropdownGetData.add(state);
 
   ItemCurrentStatusDropdownBloc() {
     itemCurrentStatusDropdowndata = itemCurrentStatusDropdownRepository.getData();
+    itemCurrentStatusStockIssueEntryDropdownData = itemCurrentStatusDropdownRepository.getStockissueItemData();
   }
 
   void dispose() {
-    itemCurrentStatusDropdownData.close();
+    itemCurrentStatusDropdownGetData.close();
+    itemCurrentStatusStockIssueEntryDropdownGetData.close();
   }
 }

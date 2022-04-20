@@ -21,6 +21,18 @@ class ItemCurrentStatusRepository {
       rethrow;
     }
   }
+  
+  Future<List<ItemCurrentStatus>> getStockissueItemData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getStockIssueItemCurrentStatusnewURL));
+      final items = (jsonDecode(response.body) as List)
+      .map((e) => ItemCurrentStatus.fromJson(e))
+      .toList();
+      return items;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 Future<List<ItemCurrentStatus>> createUser( String strItemName, double dblQty,String strUnit) async{
   final response = await http.post(Uri.parse(ApiService.getItemCurrentStatusURL), body: {

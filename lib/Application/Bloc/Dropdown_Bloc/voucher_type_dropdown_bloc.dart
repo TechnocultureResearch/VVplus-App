@@ -11,6 +11,7 @@ class VoucherTypeDropdownBloc {
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
+
   Stream<VoucherType> get selecteddState => voucherTypeStockIssueDropdownGetData;
   void selecteddStateEvent(VoucherType state) => voucherTypeStockIssueDropdownGetData.add(state);
 
