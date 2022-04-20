@@ -7,6 +7,8 @@ class ApiService{
 
   static const String getDepartmentNameURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Department","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
+  static const String getDepartmentNamenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetDRM?StrRecord=${'{"StrFilter":"PartyName","StrSiteCode":"AD"}'}";
+
   static const String getVoucherTypenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord= ${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrV_Type":""}'}";
 
   static const String getVouchertypeStockIssuenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrV_Type":""}'}";

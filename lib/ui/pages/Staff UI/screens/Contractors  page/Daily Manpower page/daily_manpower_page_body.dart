@@ -220,7 +220,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                                     ?.map<DropdownMenuItem<DepartmentName>>((e) {
                                   return DropdownMenuItem<DepartmentName>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );

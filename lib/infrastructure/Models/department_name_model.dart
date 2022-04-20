@@ -14,18 +14,22 @@ class DepartmentName {
   DepartmentName({
     this.strSubCode,
     this.strName,
+    this.Name,
   });
 
   String strSubCode;
   String strName;
+  String Name;
 
   factory DepartmentName.fromJson(Map<String, dynamic> json) => DepartmentName(
     strSubCode: json["StrSubCode"],
     strName: json["StrName"],
+    Name: json["Name"],
   );
 
   Map<String, dynamic> toJson() => {
     "StrSubCode": strSubCode,
     "StrName": strName,
+    "Name": Name,
   };
 }
