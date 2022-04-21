@@ -254,7 +254,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                     ),
                   ),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsHeadText("Credit Account (customer name)"),
 
@@ -292,11 +292,11 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                     ),
                   ),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsHeadText("Debit Account (company):"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsHeadText("Drawn Bank"),
 
@@ -334,11 +334,11 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                     ),
                   ),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsHeadText("Customer Info:"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsHeadText("Cheque No."),
 

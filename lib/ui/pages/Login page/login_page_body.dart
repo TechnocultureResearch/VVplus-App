@@ -136,17 +136,8 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SubmitButton1(),
-                    SizedBox(
-                      width: 20,
-                    ),
                     SubmitButton2(),
-                  ],
-                ),
-              ],
+          ],
             ),
           ),
         ),
@@ -264,30 +255,30 @@ class _OtpInputState extends State<OtpInput> {
   }
 }
 
-class SubmitButton1 extends StatelessWidget {
-  const SubmitButton1({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return RoundedButtonInput(
-          color1: primaryColor1,
-          fontsize1: 14,
-          size1: 0.37,
-          horizontal1: 30,
-          vertical1: 17,
-          press: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
-          },
-          text: text05,
-        );
-      },
-    );
-  }
-}
+// class SubmitButton1 extends StatelessWidget {
+//   const SubmitButton1({Key key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<LoginBloc, LoginState>(
+//       buildWhen: (previous, current) => previous.status != current.status,
+//       builder: (context, state) {
+//         return RoundedButtonInput(
+//           color1: primaryColor1,
+//           fontsize1: 14,
+//           size1: 0.37,
+//           horizontal1: 30,
+//           vertical1: 17,
+//           press: () {
+//             Navigator.push(context,
+//                 MaterialPageRoute(builder: (context) => const HomePage()));
+//           },
+//           text: text05,
+//         );
+//       },
+//     );
+//   }
+// }
 
 //Submit button class
 class SubmitButton2 extends StatelessWidget {
@@ -301,7 +292,7 @@ class SubmitButton2 extends StatelessWidget {
         return RoundedButtonInput(
           color1: primaryColor1,
           fontsize1: 14,
-          size1: 0.37,
+          size1: 0.4,
           horizontal1: 30,
           vertical1: 17,
           press: () {

@@ -5,7 +5,7 @@ const String text02 = "Enter Mobile Number";
 const String text03 = "Please ensure the number entered is valid";
 const String text04 = "OTP must be at least 5 characters";
 const String text05 = "Sign in";
-const String text06 = "Staff Sign in";
+const String text06 = "Sign in";
 
 
 // for App Bar Text
@@ -92,6 +92,14 @@ const String text38 = "Material Request Entry";
 const String text39 = "Material Request Approval";
 const String text40 = "Place Purchase Order";
 const String text41 = "Goods Recepit Entry";
+const String text042 = "Indent Type";
+const String text043 = "Clear all";
+const String textHint = "Search here";
+const String text045 = "Indent Date";
+const String text046 = "Enter Detail";
+const String text047 = "Enter Correct Detail";
+const String text048 = "Item";
+const String text049 = "Request Quantity";
 
 // use in Store page
 

@@ -4,7 +4,7 @@ import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 AppBar appBarSatff(String appBarText) {
   return AppBar(
     centerTitle: true,
-    toolbarHeight: 100,
+    toolbarHeight: 60,
     title: Text(
       appBarText,
       style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),

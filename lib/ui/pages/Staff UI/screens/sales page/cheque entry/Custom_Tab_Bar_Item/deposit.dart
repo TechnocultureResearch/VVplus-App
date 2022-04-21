@@ -184,31 +184,31 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                     ),
                   ),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsDetailText("Bank: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsDetailText("Name of Customer: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsDetailText("Cheque Date: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsDetailText("Bank: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsDetailText("Amount: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
                   formsDetailText("Site: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
 
-                  Padding(padding: paddingForms),
+                  Padding(padding: paddingFormsVertical),
 
 
                   formsHeadText("Desposit Date ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),

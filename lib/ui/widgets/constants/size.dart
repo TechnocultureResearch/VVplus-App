@@ -18,7 +18,7 @@ class SizeConfig {
 
 // padding1,5,6,7 is used in newComplaint screen
 
-var padding1 = const EdgeInsets.only(left: 35,right: 36);
+var padding1 = const EdgeInsets.only(left: 35,right: 35);
 var padding5 = const EdgeInsets.only(left: 50,right: 36,top: 12); // used in dropdownMenu item
 var padding6 = const EdgeInsets.only(left: 50,right: 36,top: 5);  // used in dropdownMenu item
 var padding7 = const EdgeInsets.only(left: 55,right: 36,top: 10); // used in dropdownMenu item
@@ -34,7 +34,7 @@ var phoneTextFieldPadding1 = const EdgeInsets.symmetric(horizontal: 8);
 var padding4 = const EdgeInsets.symmetric(horizontal: 40);
 
 //forms padding
-var paddingForms = const EdgeInsets.symmetric(vertical: 10);
+var paddingFormsVertical = const EdgeInsets.symmetric(vertical: 10);
 var paddingForms2 = const EdgeInsets.symmetric(vertical: 5);
 var paddingForms3 = const EdgeInsets.only(top: 32,left: 45,right: 35);
 
