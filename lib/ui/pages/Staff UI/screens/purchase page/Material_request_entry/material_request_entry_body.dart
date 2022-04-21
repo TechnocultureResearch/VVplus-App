@@ -83,7 +83,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     _calculation() {
     setState(() {
       //value1 = double.parse(reqQty.text);
-      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.dblQty));
+      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.PurchaseRate));
       StringAmount= _amount.toStringAsFixed(3);
     },);
     print(_amount);
@@ -131,7 +131,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
           body: json.encode({
             "IndentSubCode":selectIndentName.strSubCode,
             "IntendDate":intendDateInput.text,
-            "ItemName":selectItemCurrentStatus.strItemName,
+            "ItemName":selectItemCurrentStatus.Name,
             "ReqQty":reqQty.text,
             "ItemUnit":selectItemCurrentStatus.strUnit,
             "Rate":selectItemCurrentStatus.dblQty,
@@ -184,7 +184,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   void onDataChange4(ItemCurrentStatus state) {
     setState(() {
-      selectItemCurrentStatus.strCostCenterName = state as String;
+      selectItemCurrentStatus.Code = state as String;
     });
   }
   Future<void> _refresh() async{
@@ -334,7 +334,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                   ?.map<DropdownMenuItem<ItemCurrentStatus>>((e) {
                                                 return DropdownMenuItem<ItemCurrentStatus>(
                                                   value: e,
-                                                  child: Text(e.strItemName),
+                                                  child: Text(e.Name),
                                                 );
                                               })?.toList() ??[],
                                             );
@@ -346,54 +346,58 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                             ),
                             SizedBox(height: 10,),
                             formsHeadText("Request Qty. "),
-                            Padding(
-                              padding: padding1,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                        // width: 130,
-                                        height: 50,
-                                        decoration: decoration1(),
+                            // yahan se copy
+                            Row(
+                              children: [
 
-                                        child: StreamBuilder<String>(
-                                            stream: bloc.requestQty,
-                                            builder: (context, snapshot) {
-                                              return TextFormField(
-                                                onEditingComplete: (){
-                                                  _calculation();
-                                                },
-                                                // initialValue: "no",
-                                                controller: reqQty,
-                                                decoration: InputDecoration(
-                                                  errorText: snapshot.error,
-                                                ),
-                                                onChanged: bloc.changerequestQty,
-                                                keyboardType: TextInputType.number,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 35),
 
-                                                //onSaved: selectItemCurrentStatus.strItemName,
+                                  child: Container(
+                                    height: 50,
+                                    padding: padding1,
+                                    decoration: decoration1(),
 
-                                                style: simpleTextStyle7(),
-                                              );
-                                            }
-                                        ),
+
+                                    child: SizedBox(
+                                      width: 130,
+
+                                      child: StreamBuilder<String>(
+                                          stream: bloc.requestQty,
+                                          builder: (context, snapshot) {
+                                            return TextFormField(
+                                              onEditingComplete: (){
+                                                _calculation();
+                                              },
+                                              // initialValue: "no",
+                                              controller: reqQty,
+                                              decoration: InputDecoration(
+                                                errorText: snapshot.error,
+                                              ),
+                                              onChanged: bloc.changerequestQty,
+                                              keyboardType: TextInputType.number,
+
+                                              //onSaved: selectItemCurrentStatus.strItemName,
+
+                                              style: simpleTextStyle7(),
+                                            );
+                                          }
                                       ),
+                                    ),
                                   ),
-                                  selectItemCurrentStatus!=null ? Container(
+                                ),
+                                selectItemCurrentStatus!=null ? Expanded(
+                                  // scrollDirection: Axis.horizontal,
+                                  child: Container(
                                       height: 50, padding: padding1, decoration: decoration1(),
                                       child: Center(
-                                          child: Text(selectItemCurrentStatus.strUnit)
-                                      )
-                                  ):
-                                      SizedBox(width: 30,),
-                                  Container(
-                                      height: 50, padding: padding1, decoration: decoration1(),
-                                      child: const Center(
-                                          child: Text("No."))),
-
-                                ],
-                              ),
+                                          child: Text(selectItemCurrentStatus.SKU))),
+                                ):
+                                Container(
+                                    height: 50, padding: padding1, decoration: decoration1(),
+                                    child: const Center(
+                                        child: Text("No"))),
+                              ],
                             ),
                             SizedBox(height: 15),
                             Row(
@@ -406,7 +410,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                       selectItemCurrentStatus!=null ? Container(
                                           height: 50, padding: const EdgeInsets.symmetric(horizontal: 25), decoration: decoration1(),
                                           child: Center(
-                                              child: Text(selectItemCurrentStatus.dblQty))):
+                                              child: Text(selectItemCurrentStatus.PurchaseRate))):
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 35.0),
                                         child: Container(
@@ -470,7 +474,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 pressed? AddItemContainer(
                   itemNameText: selectItemCurrentStatus.strItemName,
                   orderQtyText: reqQty.text,
-                  rateText: selectItemCurrentStatus.dblQty,
+                  rateText: selectItemCurrentStatus.PurchaseRate,
                   amountText: StringAmount.toString(),
                 ) : const SizedBox(),
                 //============================================================ popup container
