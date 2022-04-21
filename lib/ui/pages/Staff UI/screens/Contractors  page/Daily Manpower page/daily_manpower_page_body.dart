@@ -238,10 +238,10 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                   height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc.itemCostCenterData,
+                      future: itemCostCenterDropdownBloc.costCenterDailyManpowerData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc.selectedState,
+                            stream: itemCostCenterDropdownBloc.selectedCostCenterDailyManpowerState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
@@ -255,7 +255,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                                     ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
                                   return DropdownMenuItem<ItemCostCenter>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );

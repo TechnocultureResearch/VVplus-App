@@ -39,6 +39,7 @@ class ApiService{
 
   static const String getStockIssueCostCenternewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockIssue?StrRecord=${'{"StrFilter":"CostCenter","StrSiteCode":"AD","StrV_Type":""}'}";
 
+  static const String getDailyManpowerCostCenternewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetDRM?StrRecord=${'{"StrFilter":"CostCenter","StrSiteCode":"AD"}'}";
 // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
