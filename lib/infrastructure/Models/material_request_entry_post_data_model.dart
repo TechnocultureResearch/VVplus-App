@@ -4,9 +4,12 @@
 
 import 'dart:convert';
 
-List<MaterialRequestEntryPostData> materialRequestEntryPostDataFromJson(String str) => List<MaterialRequestEntryPostData>.from(json.decode(str).map((x) => MaterialRequestEntryPostData.fromJson(x)));
+List<MaterialRequestEntryPostData> materialRequestEntryPostDataFromJson(String str) =>
+    List<MaterialRequestEntryPostData>.from(json.decode(str).map((x) =>
+        MaterialRequestEntryPostData.fromJson(x)));
 
-String materialRequestEntryPostDataToJson(List<MaterialRequestEntryPostData> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String materialRequestEntryPostDataToJson(List<MaterialRequestEntryPostData> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class MaterialRequestEntryPostData {
   MaterialRequestEntryPostData({

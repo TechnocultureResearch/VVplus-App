@@ -8,6 +8,7 @@ class DepartmentNameDropdownBloc {
   final departmentNameGetData = BehaviorSubject<DepartmentName>();
 
   Future<List<DepartmentName>> departmentNameData;
+
   Stream<DepartmentName> get selectedState => departmentNameGetData;
   void selectedStateEvent(DepartmentName state) => departmentNameGetData.add(state);
 

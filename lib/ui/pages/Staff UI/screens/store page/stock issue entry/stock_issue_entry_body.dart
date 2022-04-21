@@ -4,12 +4,16 @@ import 'dart:convert';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/issued_to_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/stock_issue_entry_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
+import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
+import 'package:vvplus_app/infrastructure/Models/issued_to_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -41,13 +45,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   final stockIssueEntryFormKey = GlobalKey<FormState>();
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
+  IssuedToDropdownBloc issuedToDropdownBloc;
+  GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
 
   VoucherType selectVoucherType1;
-  VoucherType selectVoucherType2;
+  IssuedTo selectIssuedTo;
+  Godown selectGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -64,10 +69,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   _calculation() {
     setState(() {
       //value1 = double.parse(reqQty.text);
-      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.dblQty));
+      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.PurchaseRate));
       StringAmount= _amount.toStringAsFixed(3);
     },);
-    print(_amount);
   }
 
   @override
@@ -82,8 +86,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       setState(() => isActive = isActive);
     });
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
+    issuedToDropdownBloc = IssuedToDropdownBloc();
+    godownDropdownBloc = GodownDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     _amount = 0;
@@ -105,15 +109,15 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     });
   }
 
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(IssuedTo state) {
     setState(() {
-      selectVoucherType2 = state;
+      selectIssuedTo = state;
     });
   }
 
-  void onDataChange3(VoucherType state) {
+  void onDataChange3(Godown state) {
     setState(() {
-      selectVoucherType3 = state;
+      selectGodown = state;
     });
   }
 
@@ -137,7 +141,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectVoucherType2!=null && selectVoucherType3!=null && selectItemCostCenter!=null && stockIssueEntryFormKey.currentState.validate()){
+      if(selectVoucherType1!=null && selectIssuedTo!=null && selectGodown!=null && selectItemCostCenter!=null && stockIssueEntryFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -154,10 +158,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       await http.post(Uri.parse(ApiService.mockDataPostStockIssueEntry),
           body: json.encode({
             "Voucher Type": selectVoucherType1.strName,
-            "Issue By": selectVoucherType2.strName,
-            "Godown": selectVoucherType3.strName,
-            "Cost Center":selectItemCostCenter.strName,
-            "Item": selectItemCurrentStatus.strItemName,
+            "Issue By": selectIssuedTo.Name,
+            "Godown": selectGodown.GodName,
+            "Cost Center":selectItemCostCenter.Name,
+            "Item": selectItemCurrentStatus.Name,
             "ReqQuantity": reqQty.text,
             "Unit": selectItemCurrentStatus.strUnit,
             "Rate": selectItemCurrentStatus.dblQty,
@@ -211,10 +215,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc1.voucherTypeStockIssueDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                            stream: voucherTypeDropdownBloc1.selecteddState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
@@ -228,7 +232,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                     ?.map<DropdownMenuItem<VoucherType>>((e) {
                                   return DropdownMenuItem<VoucherType>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.V_Type),
                                   );
                                 })?.toList() ??
                                     [],
@@ -245,25 +249,25 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   height: 52,
                   width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<IssuedTo>>(
+                      future: issuedToDropdownBloc.issuedToDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<IssuedTo>(
+                            stream: issuedToDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<IssuedTo>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                padding: selectIssuedTo!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectIssuedTo,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<IssuedTo>>((e) {
+                                  return DropdownMenuItem<IssuedTo>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??
                                     [],
@@ -280,25 +284,25 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   height: 52,
                   width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Godown>>(
+                      future: godownDropdownBloc.godownDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<Godown>(
+                            stream: godownDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Godown>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType3!=null ? 2 : 11,
+                                padding: selectGodown!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType3,
+                                value: selectGodown,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<Godown>>((e) {
+                                  return DropdownMenuItem<Godown>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.GodName),
                                   );
                                 })?.toList() ??
                                     [],
@@ -316,10 +320,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc.itemCostCenterData,
+                      future: itemCostCenterDropdownBloc.itemCostCenterStockIssueEntryData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc.selectedState,
+                            stream: itemCostCenterDropdownBloc.selectedCostCenterState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
@@ -334,7 +338,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         (e) {
                                       return DropdownMenuItem<ItemCostCenter>(
                                         value: e,
-                                        child: Text(e.strName),
+                                        child: Text(e.Name),
                                       );
                                     })?.toList() ??
                                     [],
@@ -368,12 +372,11 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                             width: 343,
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemCurrentStatus>>(
-                                future: dropdownBlocItemCurrentStatus
-                                    .itemCurrentStatusDropdowndata,
+                                future: dropdownBlocItemCurrentStatus.itemCurrentStatusStockIssueEntryDropdownData,
                                 builder: (context, snapshot) {
                                   return StreamBuilder<ItemCurrentStatus>(
                                       stream:
-                                      dropdownBlocItemCurrentStatus.selectedState,
+                                      dropdownBlocItemCurrentStatus.selectedStateitemCurrentStatus,
                                       builder: (context, item) {
                                         return SearchChoices<
                                             ItemCurrentStatus>.single(
@@ -391,7 +394,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                             return DropdownMenuItem<
                                                 ItemCurrentStatus>(
                                               value: e,
-                                              child: Text(e.strItemName),
+                                              child: Text(e.Name),
                                             );
                                           })?.toList() ??
                                               [],
@@ -442,7 +445,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                   padding: padding1,
                                   decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.strUnit))),
+                                      child: Text(selectItemCurrentStatus.SKU))),
                                 )
                                 : SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -477,7 +480,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                     decoration: decoration1(),
                                     child: Center(
                                         child: Text(
-                                            selectItemCurrentStatus.dblQty))),
+                                            selectItemCurrentStatus.PurchaseRate))),
                               ),
                             )
                                 : Padding(
@@ -545,9 +548,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               ),
               //-----------------------------------------------------------
               pressed? AddItemContainer(
-                itemNameText: selectItemCurrentStatus.strItemName,
+                itemNameText: selectItemCurrentStatus.Name,
                 orderQtyText: reqQty.text,
-                rateText: selectItemCurrentStatus.dblQty,
+                rateText: selectItemCurrentStatus.PurchaseRate,
                 amountText: StringAmount.toString(),
               ) : const SizedBox(),
 
