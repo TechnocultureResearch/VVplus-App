@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/resource_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Contractors_page_bloc/daily_manpower_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
@@ -15,6 +16,7 @@ import 'package:vvplus_app/domain/common/common_text.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
+import 'package:vvplus_app/infrastructure/Models/resource_type_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -44,18 +46,20 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
 
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc;
+  // VoucherTypeDropdownBloc voucherTypeDropdownBloc;
+  ResourceTypeDropdownBloc resourceTypeDropdownBloc;
 
   ItemCostCenter selectItemCostCenter;
-  VoucherType selectVoucherType;
+  // VoucherType selectVoucherType;
+  ResourceType selectResourceType;
   DepartmentName selectDepartmentName;
 
   var subscription;
   var connectionStatus;
 
-  void onDataChange1(VoucherType state) {
+  void onDataChange1(ResourceType state) {
     setState(() {
-      selectVoucherType = state;
+      selectResourceType = state;
     });
   }
   void onDataChange2(DepartmentName state) {
@@ -78,7 +82,8 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
     dateInput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
-    voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
+    // voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
+    resourceTypeDropdownBloc = ResourceTypeDropdownBloc();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       setState(() => connectionStatus = result );
     });
@@ -91,8 +96,8 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectDepartmentName!=null && selectItemCostCenter!=null && selectVoucherType!=null && dailyManPowerFormKey.currentState.validate()){
-        sendData(dateInput.text,selectDepartmentName.strSubCode,selectItemCostCenter.strSubCode,selectVoucherType.strSubCode,_qty.text,_remarks.text);
+      if(selectDepartmentName!=null && selectItemCostCenter!=null && selectResourceType!=null && dailyManPowerFormKey.currentState.validate()){
+        sendData(dateInput.text,selectDepartmentName.strSubCode,selectItemCostCenter.strSubCode,selectResourceType.Name,_qty.text,_remarks.text);
       }
       else{
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
@@ -266,32 +271,31 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                 ),
               ),
               sizedbox1,
-
               formsHeadText("Resource Type"),
               Padding(
                 padding: padding1,
                 child: Container(
                   height: 52, width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc.voucherTypeDropdownData,
+                  child: FutureBuilder<List<ResourceType>>(
+                      future: resourceTypeDropdownBloc.resourceTypeData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc.selectedState,
+                        return StreamBuilder<ResourceType>(
+                            stream: resourceTypeDropdownBloc.selectedResourceTypeState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<ResourceType>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
-                                padding: selectVoucherType!=null ? 2 : 11,
+                                padding: selectResourceType!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType,
+                                value: selectResourceType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<ResourceType>>((e) {
+                                  return DropdownMenuItem<ResourceType>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );
