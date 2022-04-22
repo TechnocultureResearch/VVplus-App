@@ -8,9 +8,11 @@ class VoucherTypeDropdownBloc {
   final voucherTypeDropdownRepository = VoucherTypeRepository();
   final voucherTypeDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeStockIssueDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeChequeReceiveDropdownGetData = BehaviorSubject<VoucherType>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
+  Future<List<VoucherType>> voucherTypeChequeReceiveDropdownData;
 
   Stream<VoucherType> get selecteddState => voucherTypeStockIssueDropdownGetData;
   void selecteddStateEvent(VoucherType state) => voucherTypeStockIssueDropdownGetData.add(state);
@@ -18,9 +20,13 @@ class VoucherTypeDropdownBloc {
   Stream<VoucherType> get selectedState => voucherTypeDropdownGetData;
   void selectedStateEvent(VoucherType state) => voucherTypeDropdownGetData.add(state);
 
+  Stream<VoucherType> get selectedChequeReceiveState => voucherTypeChequeReceiveDropdownGetData;
+  void selectedChequeReceiveStateEvent(VoucherType state) => voucherTypeChequeReceiveDropdownGetData.add(state);
+
   VoucherTypeDropdownBloc() {
     voucherTypeDropdownData = voucherTypeDropdownRepository.getData();
     voucherTypeStockIssueDropdownData = voucherTypeDropdownRepository.getStockIssueVoucherData();
+    voucherTypeChequeReceiveDropdownData = voucherTypeDropdownRepository.getChequeReceiveVoucherData();
   }
 
   void dispose() {
