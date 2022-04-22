@@ -6,11 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/payment_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/cheque_entry_update_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
+import 'package:vvplus_app/infrastructure/Models/payment_type_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -39,17 +41,19 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   final TextEditingController amountInput = TextEditingController();
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
+  PaymentTypeDropdownBloc paymentTypeDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
 
   VoucherType selectVoucherType1;
+  PaymentType selectPaymentType;
   ItemCostCenter selectItemCostCenter;
   VoucherType selectVoucherType;
   DepartmentName selectDepartmentName;
   final receiveFormKey = GlobalKey<FormState>();
 
-  void onDataChange1(VoucherType state) {
+  void onDataChange1(PaymentType state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectPaymentType = state;
     });
   }
   void onDataChange2(VoucherType state) {
@@ -67,6 +71,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     chequeReceivingDateInput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
+    paymentTypeDropdownBloc = PaymentTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     super.initState();
   }
@@ -82,7 +87,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     });
   }
   verifyDetail(){
-      if(selectVoucherType!=null && selectDepartmentName!=null && selectItemCostCenter!=null && receiveFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectPaymentType!=null && selectDepartmentName!=null && selectItemCostCenter!=null && receiveFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -94,9 +99,9 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostChequeReceive),
           body: json.encode({
-            "VoucherType": selectVoucherType.strSubCode,
+            "VoucherType": selectVoucherType.V_Type,
             "ChequeReceivingDate": chequeReceivingDateInput.text,
-            "PaymentType": selectVoucherType.strSubCode,
+            "PaymentType": selectPaymentType.Name,
             "CreditAmount": selectDepartmentName.strSubCode,
             "DrawnBank": selectItemCostCenter.strSubCode,
             "ChequeNo" : chequeNoInput.text,
@@ -153,24 +158,24 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                       height: 55, width: 343,
                       decoration: decorationForms(),
                       child: FutureBuilder<List<VoucherType>>(
-                          future: voucherTypeDropdownBloc.voucherTypeDropdownData,
+                          future: voucherTypeDropdownBloc.voucherTypeChequeReceiveDropdownData,
                           builder: (context, snapshot) {
                             return StreamBuilder<VoucherType>(
-                                stream: voucherTypeDropdownBloc.selectedState,
+                                stream: voucherTypeDropdownBloc.selectedChequeReceiveState,
                                 builder: (context, item) {
                                   return SearchChoices<VoucherType>.single(
                                     icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
                                     padding: selectVoucherType!=null ? 2 : 11,
                                     isExpanded: true,
                                     hint: "Search here",
-                                    value: selectVoucherType1,
+                                    value: selectVoucherType,
                                     displayClearIcon: false,
-                                    onChanged: onDataChange1,
+                                    onChanged: onDataChange2,
                                     items: snapshot?.data
                                         ?.map<DropdownMenuItem<VoucherType>>((e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName),
+                                        child: Text(e.V_Type),
                                       );
                                     })?.toList() ??[],
                                   );
@@ -225,25 +230,25 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                     child: Container(
                       height: 52, width: 343,
                       decoration: decorationForms(),
-                      child: FutureBuilder<List<VoucherType>>(
-                          future: voucherTypeDropdownBloc.voucherTypeDropdownData,
+                      child: FutureBuilder<List<PaymentType>>(
+                          future: paymentTypeDropdownBloc.paymentTypeDropdownData,
                           builder: (context, snapshot) {
-                            return StreamBuilder<VoucherType>(
-                                stream: voucherTypeDropdownBloc.selectedState,
+                            return StreamBuilder<PaymentType>(
+                                stream: paymentTypeDropdownBloc.selectedPaymentTypeState,
                                 builder: (context, item) {
-                                  return SearchChoices<VoucherType>.single(
+                                  return SearchChoices<PaymentType>.single(
                                     icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectVoucherType!=null ? 2 : 11,
+                                    padding: selectPaymentType!=null ? 2 : 11,
                                     isExpanded: true,
                                     hint: "Search here",
-                                    value: selectVoucherType,
+                                    value: selectPaymentType,
                                     displayClearIcon: false,
-                                    onChanged: onDataChange2,
+                                    onChanged: onDataChange1,
                                     items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                      return DropdownMenuItem<VoucherType>(
+                                        ?.map<DropdownMenuItem<PaymentType>>((e) {
+                                      return DropdownMenuItem<PaymentType>(
                                         value: e,
-                                        child: Text(e.strName),
+                                        child: Text(e.Name),
                                       );
                                     })?.toList() ??[],
                                   );
