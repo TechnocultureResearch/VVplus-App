@@ -408,7 +408,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                     children: [
                                       formsHeadText("Rate"),
                                       selectItemCurrentStatus!=null ? Container(
-                                          height: 50, padding: const EdgeInsets.symmetric(horizontal: 25), decoration: decoration1(),
+                                          height: 50, padding: const EdgeInsets.symmetric(horizontal: 25),
+                                          decoration: decoration1(),
                                           child: Center(
                                               child: Text(selectItemCurrentStatus.PurchaseRate))):
                                       Padding(
