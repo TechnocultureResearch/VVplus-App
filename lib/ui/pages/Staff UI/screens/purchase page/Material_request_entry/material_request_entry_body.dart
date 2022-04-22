@@ -133,9 +133,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
             "IntendDate":intendDateInput.text,
             "ItemName":selectItemCurrentStatus.Name,
             "ReqQty":reqQty.text,
-            "ItemUnit":selectItemCurrentStatus.strUnit,
-            "Rate":selectItemCurrentStatus.dblQty,
-            "ItemSubCode":selectItemCostCenter.strSubCode,
+            "ItemUnit":selectItemCurrentStatus.SKU,
+            "Rate":selectItemCurrentStatus.PurchaseRate,
+            "ItemSubCode":selectItemCostCenter.Code,
             "ReqDate":reqDateInput.text,
             "Remarks":remarks.text
           }));
@@ -472,7 +472,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 ),
 
                 pressed? AddItemContainer(
-                  itemNameText: selectItemCurrentStatus.strItemName,
+                  itemNameText: selectItemCurrentStatus.Name,
                   orderQtyText: reqQty.text,
                   rateText: selectItemCurrentStatus.PurchaseRate,
                   amountText: StringAmount.toString(),
@@ -506,7 +506,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                       ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
                                     return DropdownMenuItem<ItemCostCenter>(
                                       value: e,
-                                      child: Text(e.strName),
+                                      child: Text(e.Name),
                                     );
                                   })?.toList() ??[],
                                 );
