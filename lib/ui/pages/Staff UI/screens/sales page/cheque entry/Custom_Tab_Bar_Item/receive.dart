@@ -10,6 +10,7 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/payment_type_dropdown_
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/cheque_entry_update_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/credit_acc_model.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/payment_type_model.dart';
@@ -28,6 +29,8 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../../Application/Bloc/Dropdown_Bloc/credit_account_dropdown_bloc.dart';
+
 class ChequeEntryReceiveBody extends StatefulWidget {
   const ChequeEntryReceiveBody({Key key}) : super(key: key);
   @override
@@ -42,9 +45,11 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   PaymentTypeDropdownBloc paymentTypeDropdownBloc;
+  CreditAccountDropdownBloc creditAccountDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
 
   VoucherType selectVoucherType1;
+  CreditAccount selectCreditAccount;
   PaymentType selectPaymentType;
   ItemCostCenter selectItemCostCenter;
   VoucherType selectVoucherType;
@@ -61,9 +66,9 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
       selectVoucherType = state;
     });
   }
-  void onDataChange3(ItemCostCenter state) {
+  void onDataChange3(CreditAccount state) {
     setState(() {
-      selectItemCostCenter = state;
+      selectCreditAccount = state;
     });
   }
   @override
@@ -72,6 +77,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     paymentTypeDropdownBloc = PaymentTypeDropdownBloc();
+    creditAccountDropdownBloc = CreditAccountDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     super.initState();
   }
@@ -87,7 +93,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     });
   }
   verifyDetail(){
-      if(selectVoucherType!=null && selectPaymentType!=null && selectDepartmentName!=null && selectItemCostCenter!=null && receiveFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectPaymentType!=null && selectDepartmentName!=null && selectCreditAccount!=null && receiveFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -102,7 +108,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
             "VoucherType": selectVoucherType.V_Type,
             "ChequeReceivingDate": chequeReceivingDateInput.text,
             "PaymentType": selectPaymentType.Name,
-            "CreditAmount": selectDepartmentName.strSubCode,
+            "CreditAmount": selectCreditAccount.Name,
             "DrawnBank": selectItemCostCenter.strSubCode,
             "ChequeNo" : chequeNoInput.text,
             "Amount": amountInput.text
@@ -268,25 +274,25 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                     child: Container(
                       height: 52, width: 343,
                       decoration: decorationForms(),
-                      child: FutureBuilder<List<DepartmentName>>(
-                          future: departmentNameDropdownBloc.departmentNameData,
+                      child: FutureBuilder<List<CreditAccount>>(
+                          future: creditAccountDropdownBloc.creditAccountDropdownData,
                           builder: (context, snapshot) {
-                            return StreamBuilder<DepartmentName>(
-                                stream: departmentNameDropdownBloc.selectedState,
+                            return StreamBuilder<CreditAccount>(
+                                stream: creditAccountDropdownBloc.selectedCreditAccountState,
                                 builder: (context, item) {
-                                  return SearchChoices<DepartmentName>.single(
+                                  return SearchChoices<CreditAccount>.single(
                                     icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectDepartmentName!=null ? 2 : 11,
+                                    padding: selectCreditAccount!=null ? 2 : 11,
                                     isExpanded: true,
                                     hint: "Search here",
-                                    value: selectDepartmentName,
+                                    value: selectCreditAccount,
                                     displayClearIcon: false,
-                                    onChanged: onDataChange1,
+                                    onChanged: onDataChange3,
                                     items: snapshot?.data
-                                        ?.map<DropdownMenuItem<DepartmentName>>((e) {
-                                      return DropdownMenuItem<DepartmentName>(
+                                        ?.map<DropdownMenuItem<CreditAccount>>((e) {
+                                      return DropdownMenuItem<CreditAccount>(
                                         value: e,
-                                        child: Text(e.strName),
+                                        child: Text(e.Name),
                                       );
                                     })?.toList() ??[],
                                   );
