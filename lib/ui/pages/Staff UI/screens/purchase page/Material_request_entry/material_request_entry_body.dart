@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables, non_constant_identifier_names, deprecated_member_use
 
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -351,7 +352,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                               children: [
 
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                                  padding: const EdgeInsets.symmetric(horizontal: 40),
 
                                   child: Container(
                                     height: 50,
@@ -360,43 +361,49 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
 
                                     child: SizedBox(
-                                      width: 130,
+                                      width: 100,
 
                                       child: StreamBuilder<String>(
                                           stream: bloc.requestQty,
                                           builder: (context, snapshot) {
-                                            return TextFormField(
-                                              onEditingComplete: (){
-                                                _calculation();
-                                              },
-                                              // initialValue: "no",
-                                              controller: reqQty,
-                                              decoration: InputDecoration(
-                                                errorText: snapshot.error,
+                                            return Expanded(
+                                              child: TextFormField(
+                                                onEditingComplete: (){
+                                                  _calculation();
+                                                },
+                                                // initialValue: "no",
+                                                controller: reqQty,
+                                                decoration: InputDecoration(
+                                                  errorText: snapshot.error,
+                                                ),
+                                                onChanged: bloc.changerequestQty,
+                                                keyboardType: TextInputType.number,
+
+                                                //onSaved: selectItemCurrentStatus.strItemName,
+
+                                                style: simpleTextStyle7(),
                                               ),
-                                              onChanged: bloc.changerequestQty,
-                                              keyboardType: TextInputType.number,
-
-                                              //onSaved: selectItemCurrentStatus.strItemName,
-
-                                              style: simpleTextStyle7(),
                                             );
                                           }
                                       ),
                                     ),
                                   ),
                                 ),
-                                selectItemCurrentStatus!=null ? Expanded(
-                                  // scrollDirection: Axis.horizontal,
-                                  child: Container(
-                                      height: 50, padding: padding1, decoration: decoration1(),
-                                      child: Center(
-                                          child: Text(selectItemCurrentStatus.SKU))),
+                                selectItemCurrentStatus!=null ? Container(
+                                    height: 50,  decoration: decoration1(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                      child: Center(child: Text(selectItemCurrentStatus.SKU)),
+                                    )
                                 ):
                                 Container(
-                                    height: 50, padding: padding1, decoration: decoration1(),
-                                    child: const Center(
-                                        child: Text("No"))),
+                                    height: 50, decoration: decoration1(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                      child: Center
+                                        (child: Text("Piece")),
+                                    )
+                                ),
                               ],
                             ),
                             SizedBox(height: 15),
@@ -407,13 +414,17 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       formsHeadText("Rate"),
-                                      selectItemCurrentStatus!=null ? Container(
-                                          height: 50, padding: const EdgeInsets.symmetric(horizontal: 25),
-                                          decoration: decoration1(),
-                                          child: Center(
-                                              child: Text(selectItemCurrentStatus.PurchaseRate))):
+                                      selectItemCurrentStatus!=null ? Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                                        child: Container(
+                                            height: 50,
+                                            // padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                                            decoration: decoration1(),
+                                            child: Center(
+                                                child: Text(selectItemCurrentStatus.PurchaseRate))),
+                                      ):
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                                        padding: const EdgeInsets.symmetric(horizontal: 40),
                                         child: Container(
                                             height: 50, decoration: decoration1(),
 
