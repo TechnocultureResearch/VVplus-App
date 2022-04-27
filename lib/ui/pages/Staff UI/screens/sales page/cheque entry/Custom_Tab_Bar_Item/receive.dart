@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/drawn_bank_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/payment_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/cheque_
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/credit_acc_model.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
+import 'package:vvplus_app/infrastructure/Models/drawn_bank_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/payment_type_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -47,11 +49,13 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   PaymentTypeDropdownBloc paymentTypeDropdownBloc;
   CreditAccountDropdownBloc creditAccountDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
+  DrawnBankDropdownBloc drawnBankDropdownBloc;
 
   VoucherType selectVoucherType1;
   CreditAccount selectCreditAccount;
   PaymentType selectPaymentType;
   ItemCostCenter selectItemCostCenter;
+  DrawnBank selectDrawnBank;
   VoucherType selectVoucherType;
   DepartmentName selectDepartmentName;
   final receiveFormKey = GlobalKey<FormState>();
@@ -71,6 +75,11 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
       selectCreditAccount = state;
     });
   }
+  void onDataChange4(DrawnBank state){
+    setState(() {
+      selectDrawnBank = state;
+    });
+  }
   @override
   void initState() {
     chequeReceivingDateInput.text = "";
@@ -79,6 +88,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     paymentTypeDropdownBloc = PaymentTypeDropdownBloc();
     creditAccountDropdownBloc = CreditAccountDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
+    drawnBankDropdownBloc = DrawnBankDropdownBloc();
     super.initState();
   }
   @override
@@ -93,7 +103,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     });
   }
   verifyDetail(){
-      if(selectVoucherType!=null && selectPaymentType!=null && selectDepartmentName!=null && selectCreditAccount!=null && receiveFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectDrawnBank!=null && selectPaymentType!=null && selectDepartmentName!=null && selectCreditAccount!=null && receiveFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -109,7 +119,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
             "ChequeReceivingDate": chequeReceivingDateInput.text,
             "PaymentType": selectPaymentType.Name,
             "CreditAmount": selectCreditAccount.Name,
-            "DrawnBank": selectItemCostCenter.strSubCode,
+            "DrawnBank": selectDrawnBank.StrName,
             "ChequeNo" : chequeNoInput.text,
             "Amount": amountInput.text
           }));
@@ -316,25 +326,27 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                     child: Container(
                       height: 52, width: 343,
                       decoration: decorationForms(),
-                      child: FutureBuilder<List<ItemCostCenter>>(
-                          future: itemCostCenterDropdownBloc.itemCostCenterData,
+                      child: FutureBuilder<List<DrawnBank>>(
+                          // future: itemCostCenterDropdownBloc.itemCostCenterData,
+                          future: drawnBankDropdownBloc.drawnBankDropdownData,
                           builder: (context, snapshot) {
-                            return StreamBuilder<ItemCostCenter>(
-                                stream: itemCostCenterDropdownBloc.selectedState,
+                            return StreamBuilder<DrawnBank>(
+                                // stream: itemCostCenterDropdownBloc.selectedState,
+                              stream: drawnBankDropdownBloc.selectedDrawnBankState,
                                 builder: (context, item) {
-                                  return SearchChoices<ItemCostCenter>.single(
+                                  return SearchChoices<DrawnBank>.single(
                                     icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectItemCostCenter!=null ? 2 : 11,
+                                    padding: selectDrawnBank!=null ? 2 : 11,
                                     isExpanded: true,
                                     hint: "Search here",
-                                    value: selectItemCostCenter,
+                                    value: selectDrawnBank,
                                     displayClearIcon: false,
-                                    onChanged: onDataChange3,
+                                    onChanged: onDataChange4,
                                     items: snapshot?.data
-                                        ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                      return DropdownMenuItem<ItemCostCenter>(
+                                        ?.map<DropdownMenuItem<DrawnBank>>((e) {
+                                      return DropdownMenuItem<DrawnBank>(
                                         value: e,
-                                        child: Text(e.strName),
+                                        child: Text(e.StrName),
                                       );
                                     })?.toList() ??[],
                                   );
