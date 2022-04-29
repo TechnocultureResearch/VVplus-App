@@ -11,7 +11,7 @@ class StageDropdownBloc{
  Stream<Stage> get selectedStageState => stageDropdownGetData;
  void selectedStageStateEvent(Stage state) => stageDropdownGetData.add(state);
 
- CreditAccountDropdownBloc(){
+ StageDropdownBloc(){
    stageDropdownData = stageDropdownRepository.getStageData();
  }
 

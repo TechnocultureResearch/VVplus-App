@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/extra_work_entry_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
+import 'package:vvplus_app/infrastructure/Models/stage_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -41,10 +43,12 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
 
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  StageDropdownBloc stageDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
 
   DepartmentName selectDepartmentName;
   VoucherType selectVoucherType1;
+  Stage selectStage;
   VoucherType selectVoucherType2;
   var subscription;
   var connectionStatus;
@@ -59,6 +63,11 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       selectVoucherType1 = state;
     });
   }
+  void onDataChange4(Stage state){
+    setState(() {
+      selectStage;
+    });
+  }
   void onDataChange3(VoucherType state) {
     setState(() {
       selectVoucherType2 = state;
@@ -69,6 +78,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
     dateinput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    stageDropdownBloc = StageDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       setState(() => connectionStatus = result );
@@ -90,7 +100,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectDepartmentName!=null && selectVoucherType1!=null && selectVoucherType2!=null && extraWorkEntryFormKey.currentState.validate()){
+      if(selectDepartmentName!=null && selectStage!=null && selectVoucherType2!=null && extraWorkEntryFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -108,7 +118,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
           body: json.encode({
             "VoucherType": _voucherType.text,
             "BookingId": selectDepartmentName.strSubCode,
-            "StagePurpose": selectVoucherType1.strSubCode,
+            "StagePurpose": selectStage.SearchCode,
             "Overhead": selectVoucherType2.strSubCode,
             "DateOfEstimate": dateinput.text,
             "BaseAmount": _baseAmount.text,
@@ -246,25 +256,25 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 child: Container(
                   height: 52, width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Stage>>(
+                      future: stageDropdownBloc.stageDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<Stage>(
+                            stream: stageDropdownBloc.selectedStageState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Stage>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                                padding: selectStage!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectStage,
                                 displayClearIcon: false,
-                                onChanged: onDataChange2,
+                                onChanged: onDataChange4,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<Stage>>((e) {
+                                  return DropdownMenuItem<Stage>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.SearchCode),
                                   );
                                 })?.toList() ??[],
                               );
