@@ -128,17 +128,23 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   Future<dynamic> sendData() async{
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostMaterialRequestEntryURL),
+      await http.post(Uri.parse(ApiService.postMaterialRequestEntryURL),
           body: json.encode({
-            "IndentSubCode":selectIndentName.strSubCode,
-            "IntendDate":intendDateInput.text,
-            "ItemName":selectItemCurrentStatus.Name,
-            "ReqQty":reqQty.text,
-            "ItemUnit":selectItemCurrentStatus.SKU,
-            "Rate":selectItemCurrentStatus.PurchaseRate,
-            "ItemSubCode":selectItemCostCenter.Code,
-            "ReqDate":reqDateInput.text,
-            "Remarks":remarks.text
+            "StrRecord":{"StrVType":selectIndentName.strSubCode,"StrVDate":intendDateInput.text,
+            "StrSiteCode":"AD","StrReceiveFrom":"SM149",'{StrIndGrid}':[{"StrItemCode":selectItemCostCenter.Code,
+            "DblQuantity":reqQty.text,"DblAmt":selectItemCurrentStatus.PurchaseRate,
+              "DblRate":selectItemCurrentStatus.PurchaseRate,"StrCostCenterCode":selectItemCostCenter.Code,
+              "StrGodown":"AD1","StrRemark":"Remark1",}],"StrPreparedBy":remarks.text
+            }
+            // "IndentSubCode":selectIndentName.strSubCode,
+            // "IntendDate":intendDateInput.text,
+            // "ItemName":selectItemCurrentStatus.Name,
+            // "ReqQty":reqQty.text,
+            // "ItemUnit":selectItemCurrentStatus.SKU,
+            // "Rate":selectItemCurrentStatus.PurchaseRate,
+            // "ItemSubCode":selectItemCostCenter.Code,
+            // "ReqDate":reqDateInput.text,
+            // "Remarks":remarks.text
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } on SocketException {
@@ -299,185 +305,183 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 //============================================================ FormsContainer
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: SafeArea(
-                    child: Expanded(
-                      child: Container(
-                        // width: SizeConfig.getWidth(context),
-                        decoration: BoxDecoration(
-                          color: storeContainerColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(padding: EdgeInsets.all(10)),
-                            formsHeadText(text048),
-                            Padding(
-                              padding: padding1,
-                              child: Container(
-                                // height: 52, width: 343,
-                                decoration: decorationForms(),
-                                child: FutureBuilder<List<ItemCurrentStatus>>(
-                                    future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,
-                                    builder: (context, snapshot) {
-                                      return StreamBuilder<ItemCurrentStatus>(
-                                          stream: dropdownBlocItemCurrentStatus.selectedState,
-                                          builder: (context, item) {
-                                            return SearchChoices<ItemCurrentStatus>.single(
-                                              icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                              padding: selectItemCurrentStatus!=null ? 2 : 11,
-                                              isExpanded: true,
-                                              hint: textHint,
-                                              value: selectItemCurrentStatus,
-                                              displayClearIcon: false,
-                                              onChanged: onDataChange2,
-                                              items: snapshot?.data
-                                                  ?.map<DropdownMenuItem<ItemCurrentStatus>>((e) {
-                                                return DropdownMenuItem<ItemCurrentStatus>(
-                                                  value: e,
-                                                  child: Text(e.Name),
-                                                );
-                                              })?.toList() ??[],
-                                            );
-                                          }
-                                      );
-                                    }
-                                ),
+                  child: Expanded(
+                    child: Container(
+                      // width: SizeConfig.getWidth(context),
+                      decoration: BoxDecoration(
+                        color: storeContainerColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(padding: EdgeInsets.all(10)),
+                          formsHeadText(text048),
+                          Padding(
+                            padding: padding1,
+                            child: Container(
+                              // height: 52, width: 343,
+                              decoration: decorationForms(),
+                              child: FutureBuilder<List<ItemCurrentStatus>>(
+                                  future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,
+                                  builder: (context, snapshot) {
+                                    return StreamBuilder<ItemCurrentStatus>(
+                                        stream: dropdownBlocItemCurrentStatus.selectedState,
+                                        builder: (context, item) {
+                                          return SearchChoices<ItemCurrentStatus>.single(
+                                            icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
+                                            padding: selectItemCurrentStatus!=null ? 2 : 11,
+                                            isExpanded: true,
+                                            hint: textHint,
+                                            value: selectItemCurrentStatus,
+                                            displayClearIcon: false,
+                                            onChanged: onDataChange2,
+                                            items: snapshot?.data
+                                                ?.map<DropdownMenuItem<ItemCurrentStatus>>((e) {
+                                              return DropdownMenuItem<ItemCurrentStatus>(
+                                                value: e,
+                                                child: Text(e.Name),
+                                              );
+                                            })?.toList() ??[],
+                                          );
+                                        }
+                                    );
+                                  }
                               ),
                             ),
-                            SizedBox(height: 10,),
-                            formsHeadText("Request Qty. "),
-                            // yahan se copy
-                            Row(
-                              children: [
+                          ),
+                          SizedBox(height: 10,),
+                          formsHeadText("Request Qty. "),
+                          // yahan se copy
+                          Row(
+                            children: [
 
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 40),
 
-                                  child: Container(
-                                    height: 50,
-                                    padding: padding1,
-                                    decoration: decoration1(),
+                                child: Container(
+                                  height: 50,
+                                  padding: padding1,
+                                  decoration: decoration1(),
 
 
-                                    child: SizedBox(
-                                      width: 100,
+                                  child: SizedBox(
+                                    width: 100,
 
-                                      child: StreamBuilder<String>(
-                                          stream: bloc.requestQty,
-                                          builder: (context, snapshot) {
-                                            return Expanded(
-                                              child: TextFormField(
-                                                onEditingComplete: (){
-                                                  _calculation();
-                                                },
-                                                // initialValue: "no",
-                                                controller: reqQty,
-                                                decoration: InputDecoration(
-                                                  errorText: snapshot.error,
-                                                ),
-                                                onChanged: bloc.changerequestQty,
-                                                keyboardType: TextInputType.number,
-
-                                                //onSaved: selectItemCurrentStatus.strItemName,
-
-                                                style: simpleTextStyle7(),
+                                    child: StreamBuilder<String>(
+                                        stream: bloc.requestQty,
+                                        builder: (context, snapshot) {
+                                          return Expanded(
+                                            child: TextFormField(
+                                              onEditingComplete: (){
+                                                _calculation();
+                                              },
+                                              // initialValue: "no",
+                                              controller: reqQty,
+                                              decoration: InputDecoration(
+                                                errorText: snapshot.error,
                                               ),
-                                            );
-                                          }
-                                      ),
+                                              onChanged: bloc.changerequestQty,
+                                              keyboardType: TextInputType.number,
+
+                                              //onSaved: selectItemCurrentStatus.strItemName,
+
+                                              style: simpleTextStyle7(),
+                                            ),
+                                          );
+                                        }
                                     ),
                                   ),
                                 ),
-                                selectItemCurrentStatus!=null ? Container(
-                                    height: 50,  decoration: decoration1(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                                      child: Center(child: Text(selectItemCurrentStatus.SKU)),
-                                    )
-                                ):
-                                Container(
-                                    height: 50, decoration: decoration1(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                                      child: Center
-                                        (child: Text("Piece")),
-                                    )
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 15),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      formsHeadText("Rate"),
-                                      selectItemCurrentStatus!=null ? Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                                        child: Container(
-                                            height: 50,
-                                            // padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                                            decoration: decoration1(),
-                                            child: Center(
-                                                child: Text(selectItemCurrentStatus.PurchaseRate))),
-                                      ):
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                                        child: Container(
-                                            height: 50, decoration: decoration1(),
+                              ),
+                              selectItemCurrentStatus!=null ? Container(
+                                  height: 50,  decoration: decoration1(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                    child: Center(child: Text(selectItemCurrentStatus.SKU)),
+                                  )
+                              ):
+                              Container(
+                                  height: 50, decoration: decoration1(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                    child: Center
+                                      (child: Text("Unit")),
+                                  )
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    formsHeadText("Rate"),
+                                    selectItemCurrentStatus!=null ? Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                                      child: Container(
+                                          height: 50,
+                                          // padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                                          decoration: decoration1(),
+                                          child: Center(
+                                              child: Text(selectItemCurrentStatus.PurchaseRate))),
+                                    ):
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                                      child: Container(
+                                          height: 50, decoration: decoration1(),
 
-                                            child: const Center(
-                                                child: Text("00000000.00"))),
-                                      ),
-                                    ],
-                                  ),
+                                          child: const Center(
+                                              child: Text("00000000.00"))),
+                                    ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                  child: Column(
-                                    children: [
-                                      formsHeadText("Amount:"),
-                                      Text("$StringAmount",
-                                        style: containerTextStyle1(),
-                                      ),
-                                    ],
-                                  ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                child: Column(
+                                  children: [
+                                    formsHeadText("Amount:"),
+                                    Text("$StringAmount",
+                                      style: containerTextStyle1(),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RaisedButton(
-                                  onPressed: () {reqQty.clear();},
-                                  elevation: 0.0,
-                                  color: storeContainerColor,
-                                  child: raisedButtonText("Clear This Item"),
-                                ),
-                                       RoundedButtonInput(
-                                        text: "Add Item to List",
-                                        press: (
-                                            selectItemCurrentStatus !=null)&&(isActive)
-                                            ? () {
-                                          _calculation();
-                                          setState(() {
-                                            pressed = true;
-                                          });
-                                        } : null,
-                                        fontsize1: 12,
-                                        size1: 0.4,
-                                        horizontal1: 30,
-                                        vertical1: 10,
-                                        color1: Colors.orange,
-                                        textColor1: textColor1,
-                                      ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RaisedButton(
+                                onPressed: () {reqQty.clear();},
+                                elevation: 0.0,
+                                color: storeContainerColor,
+                                child: raisedButtonText("Clear This Item"),
+                              ),
+                                     RoundedButtonInput(
+                                      text: "Add Item to List",
+                                      press: (
+                                          selectItemCurrentStatus !=null)&&(isActive)
+                                          ? () {
+                                        _calculation();
+                                        setState(() {
+                                          pressed = true;
+                                        });
+                                      } : null,
+                                      fontsize1: 12,
+                                      size1: 0.4,
+                                      horizontal1: 30,
+                                      vertical1: 10,
+                                      color1: Colors.orange,
+                                      textColor1: textColor1,
+                                    ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -497,34 +501,35 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 formsHeadText("Choose Phase (Cost Center)"),
                 Padding(
                   padding: padding1,
-                  child: Container(
-                    height: 52, width: 343,
-                    decoration: decorationForms(),
-                    child: FutureBuilder<List<ItemCostCenter>>(
-                        future: dropdownBlocItemCostCenter.itemCostCenterData,
-                        builder: (context, snapshot) {
-                          return StreamBuilder<ItemCostCenter>(
-                              stream: dropdownBlocItemCostCenter.selectedState,
-                              builder: (context, item) {
-                                return SearchChoices<ItemCostCenter>.single(
-                                  icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                  padding: selectItemCostCenter!=null ? 2 : 11,
-                                  isExpanded: true,
-                                  hint: "Search here",
-                                  value: selectItemCostCenter,
-                                  displayClearIcon: false,
-                                  onChanged: onDataChange3,
-                                  items: snapshot?.data
-                                      ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                    return DropdownMenuItem<ItemCostCenter>(
-                                      value: e,
-                                      child: Text(e.Name),
-                                    );
-                                  })?.toList() ??[],
-                                );
-                              }
-                          );
-                        }
+                  child: Expanded(
+                    child: Container(
+                      decoration: decorationForms(),
+                      child: FutureBuilder<List<ItemCostCenter>>(
+                          future: dropdownBlocItemCostCenter.itemCostCenterData,
+                          builder: (context, snapshot) {
+                            return StreamBuilder<ItemCostCenter>(
+                                stream: dropdownBlocItemCostCenter.selectedState,
+                                builder: (context, item) {
+                                  return SearchChoices<ItemCostCenter>.single(
+                                    icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
+                                    padding: selectItemCostCenter!=null ? 2 : 11,
+                                    isExpanded: true,
+                                    hint: "Search here",
+                                    value: selectItemCostCenter,
+                                    displayClearIcon: false,
+                                    onChanged: onDataChange3,
+                                    items: snapshot?.data
+                                        ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
+                                      return DropdownMenuItem<ItemCostCenter>(
+                                        value: e,
+                                        child: Text(e.Name),
+                                      );
+                                    })?.toList() ??[],
+                                  );
+                                }
+                            );
+                          }
+                      ),
                     ),
                   ),
                 ),
@@ -603,7 +608,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 10),
                     child: roundedButtonHome(
                         "Submit",
-                            (){verifyDetail();})
+                            (){sendData();})
                 ),
               ],
             ),
