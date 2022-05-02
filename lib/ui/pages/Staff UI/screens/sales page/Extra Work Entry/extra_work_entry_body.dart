@@ -208,7 +208,6 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<DepartmentName>>(
                       future: departmentNameDropdownBloc.departmentNameData,
@@ -254,7 +253,6 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<Stage>>(
                       future: stageDropdownBloc.stageDropdownData,
@@ -289,7 +287,6 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
@@ -299,7 +296,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                padding: selectVoucherType2!=null ? 2 : 10,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType2,

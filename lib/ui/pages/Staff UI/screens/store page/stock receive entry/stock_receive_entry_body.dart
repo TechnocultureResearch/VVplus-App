@@ -230,7 +230,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -265,7 +264,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ReceivedBy>>(
                     future: receivedByDropdownBloc.receivedByDropDownData,
@@ -300,7 +298,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<Godown>>(
                       // future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
@@ -336,7 +333,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc.itemCostCenterData,
@@ -374,7 +370,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Container(
-                    height: 378,
                     width: SizeConfig.getWidth(context),
                     decoration: BoxDecoration(
                       color: storeContainerColor,
@@ -388,7 +383,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                         Padding(
                           padding: padding1,
                           child: Container(
-                            height: 52, width: 343,
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemCurrentStatus>>(
                                 future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,

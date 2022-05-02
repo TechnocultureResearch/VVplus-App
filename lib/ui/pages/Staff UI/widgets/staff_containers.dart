@@ -16,8 +16,8 @@ import 'package:vvplus_app/ui/widgets/constants/size.dart';
 BoxDecoration decorationForms() {
   return BoxDecoration(
     color: primaryColor8,
-    borderRadius: BorderRadius.circular(5),
-    border: Border.all(color: primaryColor9, width: 0),
+    borderRadius: BorderRadius.circular(8),
+    border: Border.all(color: primaryColor9, width: 0,),
 
   );
 }

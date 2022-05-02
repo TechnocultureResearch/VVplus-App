@@ -144,7 +144,6 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc.voucherTypeDropdownData,
@@ -212,7 +211,6 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -247,7 +245,6 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<IndentorName>>(
                       future: dropdownBlocIndentorName.indentorNameDropdownData,

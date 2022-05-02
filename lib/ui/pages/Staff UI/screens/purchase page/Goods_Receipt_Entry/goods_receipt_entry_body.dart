@@ -173,7 +173,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc.voucherTypeDropdownData,
@@ -241,7 +240,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               sizedbox1,
               formsHeadText("Party Bill No"),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: SizedBox(
@@ -276,7 +274,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   ),
                 ),
               ),
-
+sizedbox1,
               formsHeadText("Party Bill Date"),
               Container(
                 padding: dateFieldPadding,
@@ -315,7 +313,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -350,7 +347,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
@@ -383,7 +379,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               sizedbox1,
               formsHeadText("Vehicle No."),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: SizedBox(
@@ -418,12 +413,11 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   ),
                 ),
               ),
-
+sizedbox1,
               formsHeadText("Godown"),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
