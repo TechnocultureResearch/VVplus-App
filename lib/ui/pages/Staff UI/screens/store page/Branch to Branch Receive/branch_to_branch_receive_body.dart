@@ -165,7 +165,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -200,7 +199,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
@@ -235,7 +233,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
@@ -270,7 +267,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<IndentorName>>(
                       future: indentorNameDropdownBloc.indentorNameDropdownData,
@@ -303,11 +299,9 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
               sizedbox1,
               formsHeadText("Gate Entry No."),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: SizedBox(
-                  width: 320,
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
@@ -338,14 +332,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                   ),
                 ),
               ),
-
+sizedbox1,
               formsHeadText("Vehicle No."),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: SizedBox(
-                  width: 320,
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
@@ -376,14 +368,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                   ),
                 ),
               ),
-
+sizedbox1,
               formsHeadText("Remarks"),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: SizedBox(
-                  width: 320,
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
