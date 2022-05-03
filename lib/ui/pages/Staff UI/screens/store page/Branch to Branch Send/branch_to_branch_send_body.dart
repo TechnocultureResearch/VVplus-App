@@ -204,7 +204,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -273,7 +272,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc1.itemCostCenterData,
@@ -308,7 +306,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc2.itemCostCenterData,
@@ -344,7 +341,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
@@ -382,7 +378,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc3.itemCostCenterData,
@@ -417,7 +412,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc4.itemCostCenterData,
@@ -452,7 +446,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
@@ -487,7 +480,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc4.voucherTypeDropdownData,
@@ -522,7 +514,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<IndentorName>>(
                       future: indentorNameDropdownBloc.indentorNameDropdownData,
