@@ -226,7 +226,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -295,7 +294,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -330,7 +328,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -365,7 +362,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc1.itemCostCenterData,
@@ -400,7 +396,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc2.itemCostCenterData,
@@ -435,7 +430,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc3.itemCostCenterData,
@@ -472,7 +466,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Container(
-                    height: 378,
                     width: SizeConfig.getWidth(context),
                     decoration: BoxDecoration(
                       color: storeContainerColor,
@@ -486,7 +479,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                         Padding(
                           padding: padding1,
                           child: Container(
-                            height: 52, width: 343,
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemCurrentStatus>>(
                                 future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,

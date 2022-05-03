@@ -211,8 +211,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52,
-                  width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeStockIssueDropdownData,
@@ -246,8 +244,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52,
-                  width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<IssuedTo>>(
                       future: issuedToDropdownBloc.issuedToDropDownData,
@@ -281,8 +277,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52,
-                  width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<Godown>>(
                       future: godownDropdownBloc.godownDropDownData,
@@ -316,8 +310,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52,
-                  width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc.itemCostCenterStockIssueEntryData,
@@ -354,7 +346,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Container(
-                    height: 378,
                     width: SizeConfig.getWidth(context),
                     decoration: BoxDecoration(
                       color: storeContainerColor,
@@ -368,8 +359,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                         Padding(
                           padding: padding1,
                           child: Container(
-                            height: 52,
-                            width: 343,
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemCurrentStatus>>(
                                 future: dropdownBlocItemCurrentStatus.itemCurrentStatusStockIssueEntryDropdownData,
@@ -410,7 +399,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 35),
                               child: Container(
-                                height: 50,
                                 padding: padding1,
                                 decoration: decoration1(),
                                 child: SizedBox(
@@ -489,7 +477,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Container(
-                                    height: 50,
+                                  height: 50,
                                     padding: padding1,
                                     decoration: decoration1(),
                                     child: const Center(child: Text("No"))),
