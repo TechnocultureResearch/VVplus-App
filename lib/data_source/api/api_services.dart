@@ -51,6 +51,11 @@ class ApiService{
 
   static const String getDrawnBanknewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetChequeReceiving?StrRecord=${'{"StrFilter":"DrawnBank","StrSiteCode":"AD","StrV_Type":"","StrCustCode":"AD22"}'}";
 
+  static const String postMaterialRequestEntryURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive";
+
+  static const String getStagenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"Stage","StrSiteCode":"AD","StrDueDate":"2022-04-25"}'}";
+
+  static const String getBookingIdnewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"BookingNo","StrSiteCode":"AD","StrDueDate":""}'}";
   // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
