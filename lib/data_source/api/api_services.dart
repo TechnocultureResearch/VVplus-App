@@ -56,7 +56,17 @@ class ApiService{
   static const String getStagenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"Stage","StrSiteCode":"AD","StrDueDate":"2022-04-25"}'}";
 
   static const String getBookingIdnewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"BookingNo","StrSiteCode":"AD","StrDueDate":""}'}";
-  // mock database get url
+
+  static const String getExtraWorkVouchernewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrDueDate":""}'}";
+
+  static const String getTaxOHnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"TaxOH","StrSiteCode":"AD","StrDueDate":""}'}";
+
+  static const String getPhasetoPhaseVoucherTypenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD"}'}";
+
+  static const String getPhaseToPhaseIssuedTonewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"IssuedTo","StrSiteCode":"AD"}'}";
+
+  static const String getPhaseToPhaseFromGodownnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord= ${'{"StrFilter":"Godown","StrSiteCode":"AD"}'}";
+ // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
 
