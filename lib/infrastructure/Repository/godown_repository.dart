@@ -30,4 +30,15 @@ class GodownRepository{
       rethrow;
     }
   }
+  Future<List<Godown>> getPhaseToPhaseFromGodownData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseFromGodownnewURL));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => Godown.fromJson(e)).toList();
+      return items;
+    }
+    catch(e){
+      rethrow;
+    }
+  }
 }
