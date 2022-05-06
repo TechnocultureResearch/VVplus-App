@@ -31,14 +31,13 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-
-class PhaseToPhaseTransferBody extends StatefulWidget{
+class PhaseToPhaseTransferBody extends StatefulWidget {
   const PhaseToPhaseTransferBody({Key key}) : super(key: key);
   @override
   State<PhaseToPhaseTransferBody> createState() => MyPhaseToPhaseTransferBody();
 }
-class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
 
+class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   TextEditingController dateinput = TextEditingController();
   TextEditingController remarks = TextEditingController();
   TextEditingController reqQty = TextEditingController();
@@ -68,11 +67,14 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   bool pressed = false;
 
   _calculation() {
-    setState(() {
-      //value1 = double.parse(reqQty.text);
-      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.dblQty));
-      StringAmount= _amount.toStringAsFixed(3);
-    },);
+    setState(
+      () {
+        //value1 = double.parse(reqQty.text);
+        _amount = (double.parse(reqQty.text) *
+            double.parse(selectItemCurrentStatus.dblQty));
+        StringAmount = _amount.toStringAsFixed(3);
+      },
+    );
     print(_amount);
   }
 
@@ -96,41 +98,50 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dateinput.text = "";
     _amount = 0;
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
+
   void onDataChange1(VoucherType state) {
     setState(() {
       selectVoucherType1 = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType2 = state;
     });
   }
+
   void onDataChange3(VoucherType state) {
     setState(() {
       selectVoucherType3 = state;
     });
   }
+
   void onDataChange4(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter1 = state;
     });
   }
+
   void onDataChange5(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter2 = state;
     });
   }
+
   void onDataChange6(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter3 = state;
@@ -139,30 +150,37 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
 
   void onDataChange7(ItemCurrentStatus state) {
     setState(() {
-      selectItemCurrentStatus= state;
+      selectItemCurrentStatus = state;
     });
   }
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectVoucherType2!=null && selectVoucherType3!=null && selectItemCostCenter1!=null && selectItemCostCenter2!=null && selectItemCostCenter3!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (selectVoucherType1 != null &&
+          selectVoucherType2 != null &&
+          selectVoucherType3 != null &&
+          selectItemCostCenter1 != null &&
+          selectItemCostCenter2 != null &&
+          selectItemCostCenter3 != null &&
+          selectItemCurrentStatus != null &&
+          phaseToPhaseTransferFormKey.currentState.validate()) {
         sendData();
-      }
-      else{
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostPhaseToPhaseTransfer),
           body: json.encode({
@@ -176,7 +194,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
             "Item": selectItemCurrentStatus.strItemName,
             "ReqQty": reqQty.text,
             "Rate": selectItemCurrentStatus.dblQty,
-            "Remarks":remarks.text
+            "Remarks": remarks.text
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } on SocketException {
@@ -234,25 +252,27 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             stream: voucherTypeDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType1 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -261,11 +281,11 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateinput.text) {
+                    if (val != dateinput.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -275,17 +295,17 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
@@ -302,25 +322,27 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             stream: voucherTypeDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType2 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType2,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -336,25 +358,28 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             stream: voucherTypeDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
-                                padding: selectVoucherType3!=null ? 2 : 11,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  size: 30,
+                                ),
+                                padding: selectVoucherType3 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType3,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -370,25 +395,27 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             stream: itemCostCenterDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectItemCostCenter1!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectItemCostCenter1 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter1,
                                 displayClearIcon: false,
                                 onChanged: onDataChange4,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                  return DropdownMenuItem<ItemCostCenter>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<ItemCostCenter>>(
+                                            (e) {
+                                      return DropdownMenuItem<ItemCostCenter>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -404,25 +431,27 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             stream: itemCostCenterDropdownBloc2.selectedState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectItemCostCenter2!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectItemCostCenter2 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter2,
                                 displayClearIcon: false,
                                 onChanged: onDataChange5,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                  return DropdownMenuItem<ItemCostCenter>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<ItemCostCenter>>(
+                                            (e) {
+                                      return DropdownMenuItem<ItemCostCenter>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -438,218 +467,244 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             stream: itemCostCenterDropdownBloc3.selectedState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectItemCostCenter3!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectItemCostCenter3 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter3,
                                 displayClearIcon: false,
                                 onChanged: onDataChange6,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                  return DropdownMenuItem<ItemCostCenter>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<ItemCostCenter>>(
+                                            (e) {
+                                      return DropdownMenuItem<ItemCostCenter>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
               //--------------------------------------------------------
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    width: SizeConfig.getWidth(context),
-                    decoration: BoxDecoration(
-                      color: storeContainerColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(padding: EdgeInsets.all(10)),
-                        formsHeadText("Item "),
-                        Padding(
-                          padding: padding1,
-                          child: Container(
-                            decoration: decorationForms(),
-                            child: FutureBuilder<List<ItemCurrentStatus>>(
-                                future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,
-                                builder: (context, snapshot) {
-                                  return StreamBuilder<ItemCurrentStatus>(
-                                      stream: dropdownBlocItemCurrentStatus.selectedState,
-                                      builder: (context, item) {
-                                        return SearchChoices<ItemCurrentStatus>.single(
-                                          icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                          padding: selectItemCurrentStatus!=null ? 2 : 11,
-                                          isExpanded: true,
-                                          hint: "Search here",
-                                          value: selectItemCurrentStatus,
-                                          displayClearIcon: false,
-                                          onChanged: onDataChange7,
-                                          items: snapshot?.data
-                                              ?.map<DropdownMenuItem<ItemCurrentStatus>>((e) {
-                                            return DropdownMenuItem<ItemCurrentStatus>(
-                                              value: e,
-                                              child: Text(e.strItemName),
-                                            );
-                                          })?.toList() ??[],
-                                        );
-                                      }
-                                  );
-                                }
+                child: Container(
+                  height: 378,
+                  width: SizeConfig.getWidth(context),
+                  decoration: BoxDecoration(
+                    color: storeContainerColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(padding: EdgeInsets.all(10)),
+                      formsHeadText("Item "),
+                      Padding(
+                        padding: padding1,
+                        child: Container(
+                          // height: 52,
+                          // width: 343,
+                          decoration: decorationForms(),
+                          child: FutureBuilder<List<ItemCurrentStatus>>(
+                              future: dropdownBlocItemCurrentStatus
+                                  .itemCurrentStatusDropdowndata,
+                              builder: (context, snapshot) {
+                                return StreamBuilder<ItemCurrentStatus>(
+                                    stream: dropdownBlocItemCurrentStatus
+                                        .selectedState,
+                                    builder: (context, item) {
+                                      return SearchChoices<
+                                          ItemCurrentStatus>.single(
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down_sharp,
+                                            size: 30),
+                                        padding: selectItemCurrentStatus != null
+                                            ? 2
+                                            : 11,
+                                        isExpanded: true,
+                                        hint: "Search here",
+                                        value: selectItemCurrentStatus,
+                                        displayClearIcon: false,
+                                        onChanged: onDataChange7,
+                                        items: snapshot?.data?.map<
+                                                DropdownMenuItem<
+                                                    ItemCurrentStatus>>((e) {
+                                              return DropdownMenuItem<
+                                                  ItemCurrentStatus>(
+                                                value: e,
+                                                child:
+                                                    Text(e.strItemName ?? ''),
+                                              );
+                                            })?.toList() ??
+                                            [],
+                                      );
+                                    });
+                              }),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      formsHeadText("Request Qty. "),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 35),
+                            child: Container(
+                              height: 50,
+                              padding: padding1,
+                              decoration: decoration1(),
+                              child: SizedBox(
+                                width: 100,
+                                child: StreamBuilder<String>(
+                                    stream: bloc.requestQty,
+                                    builder: (context, snapshot) {
+                                      return TextFormField(
+                                        onEditingComplete: () {
+                                          _calculation();
+                                        },
+                                        // initialValue: "no",
+                                        controller: reqQty,
+                                        decoration: InputDecoration(
+                                          errorText: snapshot.error,
+                                        ),
+                                        onChanged: bloc.changerequestQty,
+                                        keyboardType: TextInputType.number,
+                                        //onSaved: selectItemCurrentStatus.strItemName,
+
+                                        style: simpleTextStyle7(),
+                                      );
+                                    }),
+                              ),
                             ),
                           ),
-                        ),
-                        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                        formsHeadText("Request Qty. "),
-                        Row(
-                          children: [
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 35),
-
-                              child: Container(
-                                height: 50,
-                                padding: padding1,
-                                decoration: decoration1(),
-
-                                child: SizedBox(
-                                  width: 130,
-
-                                  child: StreamBuilder<String>(
-                                      stream: bloc.requestQty,
-                                      builder: (context, snapshot) {
-                                        return TextFormField(
-                                          onEditingComplete: (){
-                                            _calculation();
-                                          },
-                                          // initialValue: "no",
-                                          controller: reqQty,
-                                          decoration: InputDecoration(
-                                            errorText: snapshot.error,
-                                          ),
-                                          onChanged: bloc.changerequestQty,
-                                          keyboardType: TextInputType.number,
-                                          //onSaved: selectItemCurrentStatus.strItemName,
-
-                                          style: simpleTextStyle7(),
-                                        );
-                                      }
-                                  ),
-                                ),
-                              ),
-                            ),
-                            selectItemCurrentStatus!=null ? SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                  height: 50, padding: padding1, decoration: decoration1(),
+                          selectItemCurrentStatus != null
+                              ? Container(
+                                  height: 50,
+                                  width: 65,
+                                  // padding: padding1,
+                                  decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.strUnit))),
-                            ):
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                  height: 50, padding: padding1, decoration: decoration1(),
-                                  child: const Center(
-                                      child: Text("No"))),
+                                      child: Text(
+                                          selectItemCurrentStatus.strUnit)))
+                              : Container(
+                                  height: 50,
+                                  width: 65,
+                                  //padding: padding1,
+                                  decoration: decoration1(),
+                                  child: const Center(child: Text("No"))),
+                        ],
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      // Row(
+                      //   children: [
+                      //     formsHeadText("Rate"),
+                      //     const Padding(
+                      //         padding: EdgeInsets.symmetric(horizontal: 30)),
+                      //     formsHeadText("Amount:"),
+                      //   ],
+                      // ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              formsHeadText("Rate"),
+                              selectItemCurrentStatus != null
+                                  ? Container(
+                                      height: 50,
+                                      width: 65,
+                                      padding: padding1,
+                                      decoration: decoration1(),
+                                      child: Center(
+                                          child: Text(
+                                              selectItemCurrentStatus.dblQty)))
+                                  : Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40),
+                                      child: Container(
+                                          height: 50,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 11.0),
+                                          decoration: decoration1(),
+                                          child:
+                                              const Center(child: Text("No"))),
+                                    ),
+                            ],
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Column(
+                              children: [
+                                formsHeadText("Amount:"),
+                                Text(
+                                  "$StringAmount",
+                                  style: containerTextStyle1(),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                        Row(
-                          children: [
-                            formsHeadText("Rate"),
-                            const Padding(padding: EdgeInsets.symmetric(horizontal: 30)),
-                            formsHeadText("Amount:"),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            selectItemCurrentStatus!=null ? Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 40),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                    height: 50, padding: padding1, decoration: decoration1(),
-                                    child: Center(
-                                        child: Text(selectItemCurrentStatus.dblQty))),
-                              ),
-                            ):
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 40),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                    height: 50, padding: padding1, decoration: decoration1(),
-                                    child: const Center(
-                                        child: Text("No"))),
-                              ),
-                            ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child:Text("$StringAmount",
-                                style: containerTextStyle1(),),
-                            ),
-                          ],
-                        ),
-                        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-
-                        Row(
-                          children: [
-                            const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                            RaisedButton(
-                              onPressed: () {},
-                              elevation: 0.0,
-                              color: storeContainerColor,
-                              child: raisedButtonText("Clear This Item"),
-
-                            ),
-
-
-                            StreamBuilder<bool>(
-                                stream: bloc.submitCheck,
-                                builder: (context, snapshot) {
-                                  return RoundedButtonInput(
-                                    text: "Add Item to List",
-                                    press: (selectItemCurrentStatus !=null)&&(isActive)
-                                        ? () {
-                                      _calculation();
-                                      setState(() {
-                                        pressed = true;
-                                      });
-                                    } : null,
-                                    fontsize1: 12,
-                                    size1: 0.5,
-                                    horizontal1: 30,
-                                    vertical1: 10,
-                                    color1: Colors.orange,
-                                    textColor1: textColor1,
-                                  );
-                                }
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      Row(
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10)),
+                          RaisedButton(
+                            onPressed: () {},
+                            elevation: 0.0,
+                            color: storeContainerColor,
+                            child: raisedButtonText("Clear This Item"),
+                          ),
+                          StreamBuilder<bool>(
+                              stream: bloc.submitCheck,
+                              builder: (context, snapshot) {
+                                return RoundedButtonInput(
+                                  text: "Add Item to List",
+                                  press: (selectItemCurrentStatus != null) &&
+                                          (isActive)
+                                      ? () {
+                                          _calculation();
+                                          setState(() {
+                                            pressed = true;
+                                          });
+                                        }
+                                      : null,
+                                  fontsize1: 12,
+                                  size1: 0.5,
+                                  horizontal1: 30,
+                                  vertical1: 10,
+                                  color1: Colors.orange,
+                                  textColor1: textColor1,
+                                );
+                              }),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
               //--------------------------------------------------------
 
-              pressed? AddItemContainer(
-                itemNameText: selectItemCurrentStatus.strItemName,
-                orderQtyText: reqQty.text,
-                rateText: selectItemCurrentStatus.dblQty,
-                amountText:StringAmount.toString(),
-              ) : const SizedBox(),
+              pressed
+                  ? AddItemContainer(
+                      itemNameText: selectItemCurrentStatus.strItemName,
+                      orderQtyText: reqQty.text,
+                      rateText: selectItemCurrentStatus.dblQty,
+                      amountText: StringAmount.toString(),
+                    )
+                  : const SizedBox(),
 
               sizedbox1,
               formsHeadText("Total Amount:"),
@@ -665,11 +720,12 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != remarks.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -683,8 +739,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
@@ -694,12 +749,13 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               sizedbox1,
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Submit",(){verifyDetail();},roundedButtonHomeColor1)),
+                  child: roundedButtonHome2("Submit", () {
+                    verifyDetail();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),
       ),
     );
   }
-
 }

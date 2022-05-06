@@ -6,13 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
-import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/booking_id_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/extra_work_entry_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
-import 'package:vvplus_app/infrastructure/Models/booking_id_model.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/stage_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -47,12 +45,10 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   StageDropdownBloc stageDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
-  BookingIdDropdownBloc bookingIdDropdownBloc;
 
   DepartmentName selectDepartmentName;
   VoucherType selectVoucherType1;
   Stage selectStage;
-  BookingIdModel selectBookingId;
   VoucherType selectVoucherType2;
   var subscription;
   var connectionStatus;
@@ -84,7 +80,6 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     stageDropdownBloc = StageDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
-    bookingIdDropdownBloc = BookingIdDropdownBloc();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       setState(() => connectionStatus = result );
     });
@@ -105,7 +100,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectBookingId!=null && selectStage!=null && selectVoucherType2!=null && extraWorkEntryFormKey.currentState.validate()){
+      if(selectDepartmentName!=null && selectStage!=null && selectVoucherType2!=null && extraWorkEntryFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -122,7 +117,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       await http.post(Uri.parse(ApiService.mockDataPostExtraWorkEntry),
           body: json.encode({
             "VoucherType": _voucherType.text,
-            "BookingId": selectBookingId.DocId,
+            "BookingId": selectDepartmentName.strSubCode,
             "StagePurpose": selectStage.SearchCode,
             "Overhead": selectVoucherType2.strSubCode,
             "DateOfEstimate": dateinput.text,
@@ -214,25 +209,25 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<BookingIdModel>>(
-                      future: bookingIdDropdownBloc.bookingIdDropdownData,
+                  child: FutureBuilder<List<DepartmentName>>(
+                      future: departmentNameDropdownBloc.departmentNameData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<BookingIdModel>(
-                            stream: bookingIdDropdownBloc.selectedBookingIdState,
+                        return StreamBuilder<DepartmentName>(
+                            stream: departmentNameDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<BookingIdModel>.single(
+                              return SearchChoices<DepartmentName>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30),
-                                padding: selectBookingId!=null ? 2 : 11,
+                                padding: selectDepartmentName!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectBookingId,
+                                value: selectDepartmentName,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<BookingIdModel>>((e) {
-                                  return DropdownMenuItem<BookingIdModel>(
+                                    ?.map<DropdownMenuItem<DepartmentName>>((e) {
+                                  return DropdownMenuItem<DepartmentName>(
                                     value: e,
-                                    child: Text(e.DocId),
+                                    child: Text(e.strSubCode),
                                   );
                                 })?.toList() ??[],
                               );
