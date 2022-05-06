@@ -10,13 +10,20 @@ import '../../../infrastructure/Repository/received_by_repository.dart';
 class IssuedToDropdownBloc{
   final issuedToDropdownRepository = IssuedToRepository();
   final issuedToDropDownGetData = BehaviorSubject<IssuedTo>();
+  final issuedToPhaseToPhaseDropDownGetData = BehaviorSubject<IssuedTo>();
 
   Future<List<IssuedTo>> issuedToDropDownData;
+  Future<List<IssuedTo>> issuedToPhaseToPhaseDropDownData;
+
   Stream<IssuedTo> get selectedState => issuedToDropDownGetData;
   void selectedStateEvent(IssuedTo state)=> issuedToDropDownGetData.add(state);
 
+  Stream<IssuedTo> get selectedPhaseToPhaseState => issuedToPhaseToPhaseDropDownGetData;
+  void selectedPhaseToPhaseStateEvent(IssuedTo state) => issuedToPhaseToPhaseDropDownGetData.add(state);
+
   IssuedToDropdownBloc(){
     issuedToDropDownData = issuedToDropdownRepository.getData();
+    issuedToPhaseToPhaseDropDownData = issuedToDropdownRepository.getPhaseToPhaseData();
   }
   void dispose(){
     issuedToDropDownGetData.close();

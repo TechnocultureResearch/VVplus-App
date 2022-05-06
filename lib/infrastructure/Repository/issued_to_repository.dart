@@ -22,4 +22,15 @@ class IssuedToRepository{
       rethrow;
     }
   }
+  Future<List<IssuedTo>> getPhaseToPhaseData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseIssuedTonewURL));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => IssuedTo.fromJson(e))
+      .toList();
+      return items;
+    }catch(e) {
+      rethrow;
+    }
+  }
 }
