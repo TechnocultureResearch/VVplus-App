@@ -9,10 +9,14 @@ class VoucherTypeDropdownBloc {
   final voucherTypeDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeStockIssueDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeChequeReceiveDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeExtraWorkEntryDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypePhaseToPhaseDropdownGetData = BehaviorSubject<VoucherType>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
   Future<List<VoucherType>> voucherTypeChequeReceiveDropdownData;
+  Future<List<VoucherType>> voucherTypeExtraWorkEntryDropdownData;
+  Future<List<VoucherType>> voucherTypePhaseToPhaseDropdownData;
 
   Stream<VoucherType> get selecteddState => voucherTypeStockIssueDropdownGetData;
   void selecteddStateEvent(VoucherType state) => voucherTypeStockIssueDropdownGetData.add(state);
@@ -23,10 +27,18 @@ class VoucherTypeDropdownBloc {
   Stream<VoucherType> get selectedChequeReceiveState => voucherTypeChequeReceiveDropdownGetData;
   void selectedChequeReceiveStateEvent(VoucherType state) => voucherTypeChequeReceiveDropdownGetData.add(state);
 
+  Stream<VoucherType> get selectedExtraEorkEntryState => voucherTypePhaseToPhaseDropdownGetData;
+  void selectedExtraworkentryStateEvent(VoucherType state)  => voucherTypeExtraWorkEntryDropdownGetData.add(state);
+
+  Stream<VoucherType> get selectedPhaseToPhaseState => voucherTypeExtraWorkEntryDropdownGetData;
+  void selectedPhaseToPhaseStateEvent(VoucherType state) => voucherTypePhaseToPhaseDropdownGetData.add(state);
+
   VoucherTypeDropdownBloc() {
     voucherTypeDropdownData = voucherTypeDropdownRepository.getData();
     voucherTypeStockIssueDropdownData = voucherTypeDropdownRepository.getStockIssueVoucherData();
     voucherTypeChequeReceiveDropdownData = voucherTypeDropdownRepository.getChequeReceiveVoucherData();
+    voucherTypeExtraWorkEntryDropdownData = voucherTypeDropdownRepository.getExtraworkEntryVoucherData();
+    voucherTypePhaseToPhaseDropdownData = voucherTypeDropdownRepository.getPhaseToPhaseData();
   }
 
   void dispose() {

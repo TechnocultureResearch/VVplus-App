@@ -6,11 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/issued_to_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/phase_to_phase_transfer_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -31,6 +34,8 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../infrastructure/Models/issued_to_model.dart';
+
 
 class PhaseToPhaseTransferBody extends StatefulWidget{
   const PhaseToPhaseTransferBody({Key key}) : super(key: key);
@@ -44,16 +49,20 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   TextEditingController reqQty = TextEditingController();
   final phaseToPhaseTransferFormKey = GlobalKey<FormState>();
 
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  IssuedToDropdownBloc issuedToDropdownBloc;
+  GodownDropdownBloc godownDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc1;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc3;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
 
-  VoucherType selectVoucherType1;
+  VoucherType selectVoucherType;
   VoucherType selectVoucherType2;
+  IssuedTo selectIssuedTo;
+  Godown selectFromGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter1;
   ItemCostCenter selectItemCostCenter2;
@@ -87,8 +96,10 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       setState(() => isActive = isActive);
     });
 
-    voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
+    issuedToDropdownBloc = IssuedToDropdownBloc();
+    godownDropdownBloc = GodownDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc1 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
@@ -108,17 +119,17 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   }
   void onDataChange1(VoucherType state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectVoucherType = state;
     });
   }
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(IssuedTo state) {
     setState(() {
-      selectVoucherType2 = state;
+      selectIssuedTo = state;
     });
   }
-  void onDataChange3(VoucherType state) {
+  void onDataChange3(Godown state) {
     setState(() {
-      selectVoucherType3 = state;
+      selectFromGodown = state;
     });
   }
   void onDataChange4(ItemCostCenter state) {
@@ -150,7 +161,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectVoucherType2!=null && selectVoucherType3!=null && selectItemCostCenter1!=null && selectItemCostCenter2!=null && selectItemCostCenter3!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectIssuedTo!=null && selectFromGodown!=null && selectItemCostCenter1!=null && selectItemCostCenter2!=null && selectItemCostCenter3!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -166,10 +177,10 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostPhaseToPhaseTransfer),
           body: json.encode({
-            "Voucher Type": selectVoucherType1.strSubCode,
+            "Voucher Type": selectVoucherType.V_Type,
             "Date": dateinput.text,
-            "IssueToWhichStaff": selectVoucherType2.strSubCode,
-            "FromWhichPhase": selectVoucherType3.strSubCode,
+            "IssueToWhichStaff": selectIssuedTo.Name,
+            "FromWhichPhase": selectFromGodown.GodCode,
             "LocationFrom": selectItemCostCenter1.strSubCode,
             "ToPhase": selectItemCostCenter2.strSubCode,
             "LocationTo": selectItemCostCenter3.strSubCode,
@@ -228,24 +239,24 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc.voucherTypePhaseToPhaseDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                            stream: voucherTypeDropdownBloc.selectedPhaseToPhaseState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                                padding: selectVoucherType!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectVoucherType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
                                     ?.map<DropdownMenuItem<VoucherType>>((e) {
                                   return DropdownMenuItem<VoucherType>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.V_Type),
                                   );
                                 })?.toList() ??[],
                               );
@@ -295,25 +306,25 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<IssuedTo>>(
+                      future: issuedToDropdownBloc.issuedToPhaseToPhaseDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<IssuedTo>(
+                            stream: issuedToDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<IssuedTo>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                padding: selectIssuedTo!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectIssuedTo,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<IssuedTo>>((e) {
+                                  return DropdownMenuItem<IssuedTo>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );
@@ -329,25 +340,25 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Godown>>(
+                      future: godownDropdownBloc.godownPhaseToPhaseFromData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<Godown>(
+                            stream: godownDropdownBloc.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Godown>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
-                                padding: selectVoucherType3!=null ? 2 : 11,
+                                padding: selectFromGodown!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType3,
+                                value: selectFromGodown,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<Godown>>((e) {
+                                  return DropdownMenuItem<Godown>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.GodName),
                                   );
                                 })?.toList() ??[],
                               );
