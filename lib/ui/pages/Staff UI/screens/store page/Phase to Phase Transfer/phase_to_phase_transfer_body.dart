@@ -63,6 +63,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   VoucherType selectVoucherType2;
   IssuedTo selectIssuedTo;
   Godown selectFromGodown;
+  Godown selectToGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectFromItemCostCenter;
   ItemCostCenter selectItemCostCenter2;
@@ -137,9 +138,9 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       selectFromItemCostCenter = state;
     });
   }
-  void onDataChange5(ItemCostCenter state) {
+  void onDataChange5(Godown state) {
     setState(() {
-      selectItemCostCenter2 = state;
+      selectToGodown = state;
     });
   }
   void onDataChange6(ItemCostCenter state) {
@@ -161,7 +162,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType!=null && selectIssuedTo!=null && selectFromGodown!=null && selectFromItemCostCenter!=null && selectItemCostCenter2!=null && selectItemCostCenter3!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectIssuedTo!=null && selectFromGodown!=null && selectFromItemCostCenter!=null && selectToGodown!=null && selectItemCostCenter3!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -182,7 +183,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
             "IssueToWhichStaff": selectIssuedTo.Name,
             "FromWhichPhase": selectFromGodown.GodCode,
             "LocationFrom": selectFromItemCostCenter.Code,
-            "ToPhase": selectItemCostCenter2.strSubCode,
+            "ToPhase": selectToGodown.GodCode,
             "LocationTo": selectItemCostCenter3.strSubCode,
             "Item": selectItemCurrentStatus.strItemName,
             "ReqQty": reqQty.text,
