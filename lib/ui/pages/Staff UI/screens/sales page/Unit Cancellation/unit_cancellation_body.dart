@@ -5,10 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/booking_id_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/change_applicable_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/unit_cancellation_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/booking_id_model.dart';
+import 'package:vvplus_app/infrastructure/Models/change_applicable_model.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
@@ -31,6 +35,7 @@ class UnitCancellationBody extends StatefulWidget {
   @override
   State<UnitCancellationBody> createState() => MyUnitCancellationBody();
 }
+
 class MyUnitCancellationBody extends State<UnitCancellationBody> {
   TextEditingController dateinput = TextEditingController();
   TextEditingController dueDate = TextEditingController();
@@ -40,10 +45,14 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   final unitCancellationFormKey = GlobalKey<FormState>();
+  BookingIdDropdownBloc bookingIdDropdownBloc3;
+  ChangeApplicableDropdownBloc changeApplicableDropdownBloc4;
 
   DepartmentName selectDepartmentName;
   VoucherType selectVoucherType1;
   VoucherType selectVoucherType2;
+  BookingIdModel selectBookingNo;
+  ChangeApplicable selectChangeApplicable;
   var subscription;
   var connectionStatus;
 
@@ -52,67 +61,106 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
       selectDepartmentName = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType1 = state;
     });
   }
+
   void onDataChange3(VoucherType state) {
     setState(() {
       selectVoucherType2 = state;
     });
   }
+
+  void onDataChange4(BookingIdModel state) {
+    setState(() {
+      selectBookingNo = state;
+    });
+  }
+
+  void onDataChange5(ChangeApplicable state) {
+    setState(() {
+      selectChangeApplicable = state;
+    });
+  }
+
   @override
   void initState() {
     dateinput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    bookingIdDropdownBloc3 = BookingIdDropdownBloc();
+    changeApplicableDropdownBloc4 = ChangeApplicableDropdownBloc();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
+
   int valueChoose = 4;
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectDepartmentName!=null && selectVoucherType1!=null && unitCancellationFormKey.currentState.validate()){
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (/*selectDepartmentName != null &&
+          selectVoucherType1 != null &&*/
+          selectBookingNo != null &&
+              selectChangeApplicable != null &&
+              unitCancellationFormKey.currentState.validate()) {
         sendData();
-      }
-      else{
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostUnitCancellation),
-          body: json.encode({
-            "CancellationDate": dateinput.text,
-            "BookingId": selectDepartmentName.strSubCode,
-            "ChangeApplicable": selectVoucherType1.strSubCode,
-            "DueDate": dueDate.text,
-            "BaseAmmount": baseAmount.text,
-            "Remarks": remarks.text
+      var url = Uri.parse(
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation?StrRecord=  ${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"2022-04-22","StrBookingNo":"DADUBOOK 2016       1","StrChangeApplicable":"M","StrDueDate":"2022-04-22","DblBaseAmt":"10000","DblTaxAmt":"450",StrTaxGrid:  [{"StrOH":"95","StrTaxOHCode":"59","DblTaxPer":"4.5","DblRC_TaxPer":"4.5","StrROff":"H","DblAmt":450,"StrSubCode":"GY1"}],"DblNetAmt":"10450","StrRemark":"Remarkkk","StrBookingDate":"2016-04-21","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1”}'}");
+      //'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation?StrRecord=  ${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"2022-04-22","StrBookingNo":"DADUBOOK 2016       1","StrChangeApplicable":"M",  "StrDueDate":"2022-04-22","DblBaseAmt":"10000","DblTaxAmt":"450",StrTaxGrid:  [{"StrOH":"95","StrTaxOHCode":"59","DblTaxPer":"4.5","DblRC_TaxPer":"4.5","StrROff":"H","DblAmt":450,"StrSubCode":"GY1"}],"DblNetAmt":"10450","StrRemark":"Remarkkk","StrBookingDate":"2016-04-21","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1”}'}');
 
-          }));
-      Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+      //"http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation?StrRecord={%22StrVType%22:%22UCANC%22,%22StrSiteCode%22:%22AD%22,%22StrCancelDate%22:%222022-04-22%22,%22StrBookingNo%22:%22DADUBOOK%202016%20%20%20%20%20%20%201%22,%22StrChangeApplicable%22:%22M%22,%20%22StrDueDate%22:%222022-04-22%22,%22DblBaseAmt%22:%2210000%22,%22DblTaxAmt%22:%22450%22,StrTaxGrid:%20[{%22StrOH%22:%2295%22,%22StrTaxOHCode%22:%2259%22,%22DblTaxPer%22:%224.5%22,%22DblRC_TaxPer%22:%224.5%22,%22StrROff%22:%22H%22,%22DblAmt%22:450,%22StrSubCode%22:%22GY1%22}],%22DblNetAmt%22:%2210450%22,%22StrRemark%22:%22Remarkkk%22,%22StrBookingDate%22:%222016-04-21%22,%22StrPreparedBy%22:%22SA%22,%22StrCustomer%22:%22AD22%22,%22StrCostCenter%22:%22AD1%22}" /*       ApiService.postDataPostUnitCancellation*/);
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      // await http.post(Uri.parse(ApiService.mockDataPostUnitCancellation),
+      //     body: json.encode({
+      //       "CancellationDate": dateinput.text,
+      //       "BookingId": selectDepartmentName.strSubCode,
+      //       "ChangeApplicable": selectVoucherType1.strSubCode,
+      //       "DueDate": dueDate.text,
+      //       "BaseAmmount": baseAmount.text,
+      //       "Remarks": remarks.text
+      //  }));
+      //Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
+    } catch (e) {
+      rethrow;
     } on SocketException {
       Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
     } on HttpException {
@@ -121,6 +169,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final bloc = UnitCancellationProvider.of(context);
@@ -143,10 +192,12 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     RaisedButton(
-                      onPressed: () {dateinput.clear();
-                      dueDate.clear();
-                      baseAmount.clear();
-                      remarks.clear();},
+                      onPressed: () {
+                        dateinput.clear();
+                        dueDate.clear();
+                        baseAmount.clear();
+                        remarks.clear();
+                      },
                       elevation: 0.0,
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
@@ -159,11 +210,11 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateinput.text) {
+                    if (val != dateinput.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -173,17 +224,17 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
@@ -191,83 +242,92 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
+                  // height: 52,
+                  // width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<DepartmentName>>(
-                      future: departmentNameDropdownBloc.departmentNameData,
+                  child: FutureBuilder<List<BookingIdModel>>(
+                      future: bookingIdDropdownBloc3.bookingIdDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<DepartmentName>(
-                            stream: departmentNameDropdownBloc.selectedState,
+                        return StreamBuilder<BookingIdModel>(
+                            stream:
+                                bookingIdDropdownBloc3.selectedBookingIdState,
                             builder: (context, item) {
-                              return SearchChoices<DepartmentName>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectDepartmentName!=null ? 2 : 11,
+                              return SearchChoices<BookingIdModel>.single(
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 28),
+                                padding: selectBookingNo != null ? 2 : 9,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectDepartmentName,
+                                value: selectBookingNo,
                                 displayClearIcon: false,
-                                onChanged: onDataChange1,
+                                onChanged: onDataChange4,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<DepartmentName>>((e) {
-                                  return DropdownMenuItem<DepartmentName>(
-                                    value: e,
-                                    child: Text(e.strSubCode),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<BookingIdModel>>(
+                                            (e) {
+                                      return DropdownMenuItem<BookingIdModel>(
+                                        value: e,
+                                        child: Text(
+                                          e.DocId ?? '',
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
-
-              selectDepartmentName!=null ?
-              InformationBoxContainer4(
-                text1: selectDepartmentName.strName,
-                text2: selectDepartmentName.strSubCode,
-                text3: selectDepartmentName.strSubCode,
-                text4: selectDepartmentName.strSubCode,
-                text5: selectDepartmentName.strSubCode,
-                text6: selectDepartmentName.strSubCode,
-                text7: selectDepartmentName.strSubCode,
-                text8: selectDepartmentName.strSubCode,
-                text9: selectDepartmentName.strSubCode,
-              ) : const SizedBox(),
+              selectDepartmentName != null
+                  ? InformationBoxContainer4(
+                      text1: selectDepartmentName.strName,
+                      text2: selectDepartmentName.strSubCode,
+                      text3: selectDepartmentName.strSubCode,
+                      text4: selectDepartmentName.strSubCode,
+                      text5: selectDepartmentName.strSubCode,
+                      text6: selectDepartmentName.strSubCode,
+                      text7: selectDepartmentName.strSubCode,
+                      text8: selectDepartmentName.strSubCode,
+                      text9: selectDepartmentName.strSubCode,
+                    )
+                  : const SizedBox(),
               sizedbox1,
               formsHeadText("Change Applicable"),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
+                  // height: 52,
+                  // width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<ChangeApplicable>>(
+                      future:
+                          changeApplicableDropdownBloc4.changeApplicableData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<ChangeApplicable>(
+                            stream: changeApplicableDropdownBloc4.selectedState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                underline: "",
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                              return SearchChoices<ChangeApplicable>.single(
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectChangeApplicable != null ? 2 : 9,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectChangeApplicable,
                                 displayClearIcon: false,
-                                onChanged: onDataChange2,
-                                items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                onChanged: onDataChange5,
+                                items: snapshot?.data?.map<
+                                            DropdownMenuItem<ChangeApplicable>>(
+                                        (e) {
+                                      return DropdownMenuItem<ChangeApplicable>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -276,11 +336,11 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dueDate.text) {
+                    if (val != dueDate.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -290,17 +350,17 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dueDate.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
@@ -315,11 +375,12 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                     stream: bloc.outtextField1,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != baseAmount.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != baseAmount.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -327,14 +388,13 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                       controller: baseAmount,
                       onChanged: bloc.intextField1,
                       decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          errorText: snapshot.error,
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        errorText: snapshot.error,
                         isDense: true,
                         errorBorder: textFieldBorder(),
-
                       ),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
@@ -356,11 +416,12 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                     stream: bloc.outtextField2,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != remarks.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -374,8 +435,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
@@ -385,7 +445,9 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
               sizedbox1,
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Submit",(){verifyDetail();},roundedButtonHomeColor1)),
+                  child: roundedButtonHome2("Submit", () {
+                    verifyDetail();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),

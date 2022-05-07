@@ -68,8 +68,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
     setState(() {
       //value1 = double.parse(reqQty.text);
       _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.PurchaseRate));
-      StringAmount= _amount.toStringAsFixed(3);
-    },);
     print(_amount);
   }
 
