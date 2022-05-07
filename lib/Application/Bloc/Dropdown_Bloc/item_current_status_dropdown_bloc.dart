@@ -8,6 +8,8 @@ class ItemCurrentStatusDropdownBloc {
   final itemCurrentStatusDropdownRepository = ItemCurrentStatusRepository();
   final itemCurrentStatusDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
   final itemCurrentStatusStockIssueEntryDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
+  final itemCurrentStatusMaterialRequestEntryDropdownData = BehaviorSubject<ItemCurrentStatus>();
+  //Todo:itemCurrentStatusMaterialRequestEntryDropdownData api not available
 
   Future<List<ItemCurrentStatus>> itemCurrentStatusDropdowndata;
   Future<List<ItemCurrentStatus>> itemCurrentStatusStockIssueEntryDropdownData;

@@ -43,7 +43,17 @@ class ItemCostCenterRepository {
       rethrow;
     }
   }
-
+Future<List<ItemCostCenter>> getPhaseToPhaseFromCostCenterData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseFromCostCenternewURL));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => ItemCostCenter.fromJson(e)).toList();
+      return items;
+    }
+    catch(e){
+      rethrow;
+    }
+}
 }
 Future<List<ItemCostCenter>> createUser(String strSubCode,String strName) async{
   final response = await http.post(Uri.parse(ApiService.getItemCostCenterURL), body: {
