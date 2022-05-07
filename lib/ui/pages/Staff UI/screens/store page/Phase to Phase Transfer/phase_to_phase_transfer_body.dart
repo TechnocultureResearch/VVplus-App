@@ -409,25 +409,25 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc2.itemCostCenterData,
+                  child: FutureBuilder<List<Godown>>(
+                      future: godownDropdownBloc.godownPhaseToPhaseToData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc2.selectedState,
+                        return StreamBuilder<Godown>(
+                            stream: godownDropdownBloc.selectedPhaseToPhaseToState,
                             builder: (context, item) {
-                              return SearchChoices<ItemCostCenter>.single(
+                              return SearchChoices<Godown>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectItemCostCenter2!=null ? 2 : 11,
+                                padding: selectToGodown!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectItemCostCenter2,
+                                value: selectToGodown,
                                 displayClearIcon: false,
                                 onChanged: onDataChange5,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                  return DropdownMenuItem<ItemCostCenter>(
+                                    ?.map<DropdownMenuItem<Godown>>((e) {
+                                  return DropdownMenuItem<Godown>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.GodName),
                                   );
                                 })?.toList() ??[],
                               );
