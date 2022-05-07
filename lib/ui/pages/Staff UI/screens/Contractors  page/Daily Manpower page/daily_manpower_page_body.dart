@@ -204,7 +204,6 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<DepartmentName>>(
                       future: departmentNameDropdownBloc.departmentNameData,
@@ -240,7 +239,6 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
                       future: itemCostCenterDropdownBloc.costCenterDailyManpowerData,
@@ -275,7 +273,6 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ResourceType>>(
                       future: resourceTypeDropdownBloc.resourceTypeData,

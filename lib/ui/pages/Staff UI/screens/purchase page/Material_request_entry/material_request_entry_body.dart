@@ -320,7 +320,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           Padding(
                             padding: padding1,
                             child: Container(
-                              // height: 52, width: 343,
                               decoration: decorationForms(),
                               child: FutureBuilder<List<ItemCurrentStatus>>(
                                   future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,

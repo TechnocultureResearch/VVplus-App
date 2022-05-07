@@ -18,6 +18,7 @@ import 'package:vvplus_app/infrastructure/Models/received_by_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/item_container/stock_receive_entry_body_item_container.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/add_item_container.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
@@ -31,7 +32,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:vvplus_app/domain/common/common_text.dart';
 
 class StockReceiveEntryBody extends StatefulWidget{
-  const StockReceiveEntryBody({Key key}) : super(key: key);
+  final String Name;
+  const StockReceiveEntryBody({Key key, this.Name}) : super(key: key);
   @override
   State<StockReceiveEntryBody> createState() => MyStockReceiveEntryBody();
 }
@@ -550,6 +552,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               ),
 
               //-----------------------------------------------------------
+              StockReceiveEntryBodyItemContainer(),
               pressed? AddItemContainer(
                 itemNameText: selectItemCurrentStatus.Name,
                 orderQtyText: reqQty.text,

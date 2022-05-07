@@ -9,6 +9,7 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/booking_id_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/taxoh_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/extra_work_entry_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
@@ -31,6 +32,8 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../infrastructure/Models/Tax_oh_model.dart';
+
 class ExtraWorkEntryBody extends StatefulWidget {
   const ExtraWorkEntryBody({Key key}) : super(key: key);
   @override
@@ -44,15 +47,17 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   final extraWorkEntryFormKey = GlobalKey<FormState>();
 
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   StageDropdownBloc stageDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  TAXOHDropdownBloc taxohDropdownBloc;
   BookingIdDropdownBloc bookingIdDropdownBloc;
 
   DepartmentName selectDepartmentName;
-  VoucherType selectVoucherType1;
+  VoucherType selectVoucherType;
   Stage selectStage;
   BookingIdModel selectBookingId;
+  TAXOH selectTaxOh;
   VoucherType selectVoucherType2;
   var subscription;
   var connectionStatus;
@@ -64,7 +69,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   }
   void onDataChange2(VoucherType state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectVoucherType = state;
     });
   }
   void onDataChange4(Stage state){
@@ -72,17 +77,18 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       selectStage;
     });
   }
-  void onDataChange3(VoucherType state) {
+  void onDataChange3(TAXOH state) {
     setState(() {
-      selectVoucherType2 = state;
+      selectTaxOh = state;
     });
   }
   @override
   void initState() {
     dateinput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
-    voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     stageDropdownBloc = StageDropdownBloc();
+    taxohDropdownBloc = TAXOHDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     bookingIdDropdownBloc = BookingIdDropdownBloc();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -105,7 +111,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectBookingId!=null && selectStage!=null && selectVoucherType2!=null && extraWorkEntryFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectBookingId!=null && selectStage!=null && selectTaxOh!=null && extraWorkEntryFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -124,7 +130,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
             "VoucherType": _voucherType.text,
             "BookingId": selectBookingId.DocId,
             "StagePurpose": selectStage.SearchCode,
-            "Overhead": selectVoucherType2.strSubCode,
+            "Overhead": selectTaxOh.Code,
             "DateOfEstimate": dateinput.text,
             "BaseAmount": _baseAmount.text,
             "Remarks": _remarks.text
@@ -172,43 +178,39 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 ),
               ),
               formsHeadText("Voucher Type"),
-              Container(
-                height: 70,
+              Padding(
                 padding: padding1,
-                decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField1,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if(val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if(val != _voucherType.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: _voucherType,
-                      onChanged: bloc.intextField1,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          errorBorder: textFieldBorder(),
-                          isDense: true,
-                          errorText: snapshot.error
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                child: Container(
+                  decoration: decorationForms(),
+                  child: FutureBuilder<List<VoucherType>>(
+                      future: voucherTypeDropdownBloc.voucherTypeExtraWorkEntryDropdownData,
+                      builder: (context, snapshot) {
+                        return StreamBuilder<VoucherType>(
+                            stream: voucherTypeDropdownBloc.selectedExtraEorkEntryState,
+                            builder: (context, item) {
+                              return SearchChoices<VoucherType>.single(
+                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
+                                padding: selectVoucherType!=null ? 2 : 11,
+                                isExpanded: true,
+                                hint: "Search here",
+                                value: selectVoucherType,
+                                displayClearIcon: false,
+                                onChanged: onDataChange2,
+                                items: snapshot?.data
+                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
+                                  return DropdownMenuItem<VoucherType>(
+                                    value: e,
+                                    child: Text(e.V_Type),
+                                  );
+                                })?.toList() ??[],
+                              );
+                            }
+                        );
+                      }
                   ),
                 ),
               ),
-
+sizedbox1,
               formsHeadText("Booking Id"),
               Padding(
                 padding: padding1,
@@ -293,25 +295,25 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
+                  child: FutureBuilder<List<TAXOH>>(
+                      future: taxohDropdownBloc.taxOHDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc2.selectedState,
+                        return StreamBuilder<TAXOH>(
+                            stream: taxohDropdownBloc.selectedTAXOHState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<TAXOH>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 10,
+                                padding: selectTaxOh!=null ? 2 : 10,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectTaxOh,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
+                                    ?.map<DropdownMenuItem<TAXOH>>((e) {
+                                  return DropdownMenuItem<TAXOH>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Code),
                                   );
                                 })?.toList() ??[],
                               );
