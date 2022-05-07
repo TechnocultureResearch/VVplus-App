@@ -26,11 +26,12 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class PlacePurchaseOrderBody extends StatefulWidget{
+class PlacePurchaseOrderBody extends StatefulWidget {
   const PlacePurchaseOrderBody({Key key}) : super(key: key);
   @override
   State<PlacePurchaseOrderBody> createState() => MyPlacePurchaseOrderBody();
 }
+
 class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
   TextEditingController dateinput = TextEditingController();
   TextEditingController dateinput1 = TextEditingController();
@@ -50,11 +51,13 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
       selectVoucherType = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType1 = state;
     });
   }
+
   void onDataChange3(IndentorName state) {
     setState(() {
       selectIndentName = state;
@@ -68,31 +71,37 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     dropdownBlocIndentorName = IndentorNameDropdownBloc();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType!=null && selectVoucherType1!=null && selectIndentName!=null && placePurchaseOrderFormKey.currentState.validate()){
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (selectVoucherType != null &&
+          selectVoucherType1 != null &&
+          selectIndentName != null &&
+          placePurchaseOrderFormKey.currentState.validate()) {
         sendData();
-      }
-      else{
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostPlacePurchaseOrderURL),
           body: json.encode({
@@ -113,10 +122,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     }
   }
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
 
@@ -136,7 +144,6 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               sizedbox1,
               formsHeadText("Voucher No:"),
               sizedbox1,
@@ -152,25 +159,27 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                             stream: voucherTypeDropdownBloc.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -179,11 +188,11 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateinput.text) {
+                    if (val != dateinput.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -193,17 +202,17 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
@@ -219,25 +228,27 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                             stream: voucherTypeDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType1 != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -253,25 +264,27 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                             stream: dropdownBlocIndentorName.selectedState,
                             builder: (context, item) {
                               return SearchChoices<IndentorName>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectIndentName!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectIndentName != null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectIndentName,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<IndentorName>>((e) {
-                                  return DropdownMenuItem<IndentorName>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<IndentorName>>(
+                                            (e) {
+                                      return DropdownMenuItem<IndentorName>(
+                                        value: e,
+                                        child: Text(e.strName ?? ''),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -280,11 +293,11 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateinput1.text) {
+                    if (val != dateinput1.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -294,34 +307,33 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dateinput1.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
-              selectIndentName!=null ?
-              InformationBoxContainer2(
-                text1: selectIndentName.strName,
-                text2: selectIndentName.strSubCode,
-                text3: selectIndentName.strSubCode,
-                text4: selectIndentName.strSubCode,
-                text5: selectIndentName.strSubCode,
-                text6: selectIndentName.strSubCode,
-                text7: selectIndentName.strSubCode,
-                text8: selectIndentName.strSubCode,
-              ) : const SizedBox(),
-
-              selectIndentName!=null ? sizedbox1 : const SizedBox(),
-
+              selectIndentName != null
+                  ? InformationBoxContainer2(
+                      text1: selectIndentName.strName,
+                      text2: selectIndentName.strSubCode,
+                      text3: selectIndentName.strSubCode,
+                      text4: selectIndentName.strSubCode,
+                      text5: selectIndentName.strSubCode,
+                      text6: selectIndentName.strSubCode,
+                      text7: selectIndentName.strSubCode,
+                      text8: selectIndentName.strSubCode,
+                    )
+                  : const SizedBox(),
+              selectIndentName != null ? sizedbox1 : const SizedBox(),
               formsHeadText("Remarks:"),
               Container(
                 height: 70,
@@ -333,11 +345,12 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != remarks.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -351,8 +364,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
@@ -362,12 +374,13 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
               sizedbox1,
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Submit",(){verifyDetail();},roundedButtonHomeColor1)),
+                  child: roundedButtonHome2("Submit", () {
+                    verifyDetail();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),
       ),
     );
   }
-
 }
