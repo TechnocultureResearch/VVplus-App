@@ -66,6 +66,11 @@ class ApiService{
   static const String getPhaseToPhaseIssuedTonewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"IssuedTo","StrSiteCode":"AD"}'}";
 
   static const String getPhaseToPhaseFromGodownnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord= ${'{"StrFilter":"Godown","StrSiteCode":"AD"}'}";
+
+  static const String getPhaseToPhaseToGodownnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"ToGodown","StrSiteCode":"AD"}'}";
+
+   static const String getPhaseToPhaseFromCostCenternewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord= ${'{"StrFilter":"CostCenter","StrSiteCode":"AD"}'}";
+
  // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
