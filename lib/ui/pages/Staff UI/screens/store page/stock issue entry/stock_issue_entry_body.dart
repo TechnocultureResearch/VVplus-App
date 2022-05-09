@@ -555,7 +555,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                             fontsize1: 12,
                             size1: 0.4,
                             horizontal1: 30,
-                            vertical1: 10,
+                            vertical1: 15,
                             color1: Colors.orange,
                             textColor1: textColor1,
                           ),
