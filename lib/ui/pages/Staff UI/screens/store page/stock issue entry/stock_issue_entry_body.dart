@@ -499,7 +499,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                             height: 50,
                                             decoration: decoration1(),
                                             child: const Center(
-                                                child: Text("00000000.00"))),
+                                                child: Text("00.00"))),
                                       ),
                               ],
                             ),
@@ -537,6 +537,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                               stream: bloc.submitCheck,
                               builder: (context, snapshot) {
                                 return*/
+                          SizedBox (width: 10,),
                           RoundedButtonInput(
                             text: "Add Item to List",
                             press:
@@ -552,7 +553,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                             /*press: !snapshot.hasData ? null: (){
                                   } ,*/
                             fontsize1: 12,
-                            size1: 0.5,
+                            size1: 0.4,
                             horizontal1: 30,
                             vertical1: 10,
                             color1: Colors.orange,
