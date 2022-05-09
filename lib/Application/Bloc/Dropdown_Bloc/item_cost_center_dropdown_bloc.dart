@@ -9,11 +9,13 @@ class ItemCostCenterDropdownBloc {
   final itemCostCenterStockIssueEntryGetData = BehaviorSubject<ItemCostCenter>();
   final costCenterDailyManpowerGetData = BehaviorSubject<ItemCostCenter>();
   final fromCostCenterPhaseToPhaseTransferGetData = BehaviorSubject<ItemCostCenter>();
+  final toCostCenterPhaseToPhaseTransferGetData = BehaviorSubject<ItemCostCenter>();
   
   Future<List<ItemCostCenter>> itemCostCenterData;
   Future<List<ItemCostCenter>> itemCostCenterStockIssueEntryData;
   Future<List<ItemCostCenter>> costCenterDailyManpowerData;
   Future<List<ItemCostCenter>> fromCostCenterPhaseToPhaseData;
+  Future<List<ItemCostCenter>> toCostCenterPhaseToPhaseData;
 
   Stream<ItemCostCenter> get selectedCostCenterState => itemCostCenterStockIssueEntryGetData;
   void selectedCostCenterStateEvent(ItemCostCenter state) => itemCostCenterStockIssueEntryGetData.add(state);
@@ -27,16 +29,21 @@ class ItemCostCenterDropdownBloc {
   Stream<ItemCostCenter> get selectedFromCostCenterPhaseToPhaseState => fromCostCenterPhaseToPhaseTransferGetData;
   void selectedFromCostCenterPhaseToPhaseStateEvent(ItemCostCenter state) => fromCostCenterPhaseToPhaseTransferGetData.add(state);
 
+  Stream<ItemCostCenter> get selectedToCostCenterPhaseToPhaseState => toCostCenterPhaseToPhaseTransferGetData;
+  void selectedToCOstCenterPhaseToPhaseStateEvent(ItemCostCenter state) => toCostCenterPhaseToPhaseTransferGetData.add(state);
+
   ItemCostCenterDropdownBloc() {
     itemCostCenterData = itemCostCenterRepository.getData();
     itemCostCenterStockIssueEntryData = itemCostCenterRepository.getStockIssueEntryCostCenterData();
     costCenterDailyManpowerData = itemCostCenterRepository.getDailyManpowerCostCenterData();
     fromCostCenterPhaseToPhaseData = itemCostCenterRepository.getPhaseToPhaseFromCostCenterData();
+    toCostCenterPhaseToPhaseData = itemCostCenterRepository.getPhaseToPhaseToCostCenterData();
   }
 
   void dispose() {
     itemCostCenterGetData.close();
     itemCostCenterStockIssueEntryGetData.close();
     costCenterDailyManpowerGetData.close();
+    toCostCenterPhaseToPhaseTransferGetData.close();
   }
 }
