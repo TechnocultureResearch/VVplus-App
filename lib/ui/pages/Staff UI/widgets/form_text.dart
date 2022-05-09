@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/raisedbutton_text.dart';
 
-Padding formsHeadText(String text){
+Padding formsHeadText(String text) {
   return Padding(
-    padding:const EdgeInsets.symmetric(horizontal:40),
+    padding: const EdgeInsets.symmetric(horizontal: 40),
     child: Text(
       text,
-      style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
+      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
     ),
   );
 }
 
-Padding formsDetailText(String text){
+Padding formsHeadTextNew(String text, double fsize) {
   return Padding(
-    padding:const EdgeInsets.symmetric(horizontal:40),
+    padding: const EdgeInsets.symmetric(horizontal: 40),
     child: Text(
       text,
-      style: const TextStyle(fontWeight: FontWeight.w700,fontSize: 18),
+      style: TextStyle(fontWeight: FontWeight.w500, fontSize: fsize),
+    ),
+  );
+}
+
+Padding formsDetailText(String text) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 40),
+    child: Text(
+      text,
+      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
     ),
   );
 }
