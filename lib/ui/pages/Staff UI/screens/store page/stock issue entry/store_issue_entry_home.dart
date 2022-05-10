@@ -18,7 +18,7 @@ class _StockIssueEntryPageState extends State<StockIssueEntryPage> {
       child: Scaffold(
         appBar: appBarSatff("Stock Issue Entry"),
         body: const StockIssueEntryBody(),
-        bottomNavigationBar: const BottomNavBarStaff(),
+        // bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

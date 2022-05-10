@@ -558,7 +558,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                 rateText: selectItemCurrentStatus.PurchaseRate,
                 amountText: StringAmount.toString(),
               ) : const SizedBox(),
-
               sizedbox1,
               formsHeadText("Total Amount:"),
               sizedbox1,

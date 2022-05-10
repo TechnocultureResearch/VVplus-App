@@ -16,7 +16,7 @@ class _SalesPageState extends State<SalesPage> {
     return Scaffold(
       appBar: appBarSatff("Sales"),
       body: const SalesBody(),
-      bottomNavigationBar: const BottomNavBarStaff(),
+      // bottomNavigationBar: const BottomNavBarStaff(),
     );
   }
 }

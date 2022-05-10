@@ -54,6 +54,7 @@ class PurchaseBody extends StatelessWidget{
     ),
           ),
         ),
+          sizedbox1,
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

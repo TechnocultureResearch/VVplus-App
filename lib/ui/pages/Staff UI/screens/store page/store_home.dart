@@ -18,7 +18,7 @@ class _StorePageState extends State<StorePage> {
       child: Scaffold(
         appBar: appBarSatff("Store"),
         body: const StorePageBody(),
-        bottomNavigationBar: const BottomNavBarStaff(),
+        // bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

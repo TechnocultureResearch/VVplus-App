@@ -18,7 +18,7 @@ class _PhaseToPhaseTransferPageState extends State<PhaseToPhaseTransferPage> {
       child: Scaffold(
         appBar: appBarSatff("Phase to Phase Transfer"),
         body: const PhaseToPhaseTransferBody(),
-        bottomNavigationBar: const BottomNavBarStaff(),
+        // bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

@@ -18,7 +18,7 @@ class _MaterialRequestApprovalState extends State<MaterialRequestApproval> {
       child: Scaffold(
         appBar: appBarSatff("Material Req. Approval"),
         body: const MaterialRequestApprovalBody(),
-        bottomNavigationBar: const BottomNavBarStaff(),
+        // bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }
