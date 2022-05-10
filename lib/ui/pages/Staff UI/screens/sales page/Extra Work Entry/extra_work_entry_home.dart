@@ -13,7 +13,7 @@ class ExtraWorkEntryPage extends StatelessWidget{
       child: Scaffold(
         appBar: appBarSatff("Extra Work Entry"),
         body: const ExtraWorkEntryBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
 

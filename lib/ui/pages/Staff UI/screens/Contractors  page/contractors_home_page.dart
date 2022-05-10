@@ -16,7 +16,7 @@ class _ContractorsPageState extends State<ContractorsPage> {
     return Scaffold(
       appBar: appBarSatff("Contractors"),
       body: const ContractorsBody(),
-      // bottomNavigationBar: const BottomNavBarStaff(),
+      bottomNavigationBar: const BottomNavBarStaff(),
     );
   }
 }

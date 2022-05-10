@@ -13,7 +13,7 @@ class DiscountApprovalPage extends StatelessWidget{
       child: Scaffold(
         appBar: appBarSatff("Discount Approval"),
         body: const DiscountApprovalBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
 

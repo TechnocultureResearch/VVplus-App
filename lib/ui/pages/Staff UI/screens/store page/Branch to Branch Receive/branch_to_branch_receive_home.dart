@@ -18,7 +18,7 @@ class _BranchtoBranchReceivePageState extends State<BranchtoBranchReceivePage> {
       child: Scaffold(
         appBar: appBarSatff("Branch to Branch Receive"),
         body: const BranchtoBranchReceiveBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

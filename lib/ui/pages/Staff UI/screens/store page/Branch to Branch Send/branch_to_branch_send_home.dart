@@ -18,7 +18,7 @@ class _BranchtoBranchSendPageState extends State<BranchtoBranchSendPage> {
       child: Scaffold(
         appBar: appBarSatff("Branch to Branch Send"),
         body: const BranchtoBranchSendBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

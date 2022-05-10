@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:vvplus_app/NavBarTest/ProfileStaff.dart';
 import 'package:vvplus_app/NavBarTest/staff_Navigation.dart';
 
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/home%20page/staff_homepage.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/my_profile.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 
 class BottomNavBarStaff extends StatefulWidget {
@@ -43,7 +43,7 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProfileStaff(),
+            builder: (context) => MyProfileBody(),
           ));
     }
     //  else {

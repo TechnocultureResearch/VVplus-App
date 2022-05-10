@@ -13,7 +13,7 @@ class UnitCancellationPage extends StatelessWidget{
       child: Scaffold(
         appBar: appBarSatff("Unit Cancellation"),
         body: const UnitCancellationBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
 

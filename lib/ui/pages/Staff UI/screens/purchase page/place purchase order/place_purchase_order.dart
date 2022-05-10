@@ -18,7 +18,7 @@ class _PlacePurchaseOrderState extends State<PlacePurchaseOrder> {
       child: Scaffold(
         appBar: appBarSatff("Place Purchase Order"),
         body: const PlacePurchaseOrderBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

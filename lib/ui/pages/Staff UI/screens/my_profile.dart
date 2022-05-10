@@ -14,7 +14,8 @@ class MyProfileBody extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: appBarSatff("My Profile"),
-        body: ListView(
+        body:
+        ListView(
           children: <Widget>[
             Container(
               height: 250,

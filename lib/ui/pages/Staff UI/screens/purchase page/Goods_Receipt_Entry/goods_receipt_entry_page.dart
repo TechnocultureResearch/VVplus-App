@@ -18,7 +18,7 @@ class _GoodsRecepitEntryPageState extends State<GoodsRecepitEntryPage> {
       child: Scaffold(
         appBar: appBarSatff("Goods Recepit Entry"),
         body: const GoodsRecepitEntryBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

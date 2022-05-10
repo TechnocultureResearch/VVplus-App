@@ -13,7 +13,7 @@ class MaterialReqEntry extends StatelessWidget{
       child:Scaffold(
         appBar: appBarSatff("Material Request Entry"),
         body:   const MaterialEntryBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
 

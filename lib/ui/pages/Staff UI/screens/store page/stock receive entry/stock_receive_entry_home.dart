@@ -18,7 +18,7 @@ class _StockReceiveEntryPageState extends State<StockReceiveEntryPage> {
       child: Scaffold(
         appBar: appBarSatff("Stock Receive Entry"),
         body: const StockReceiveEntryBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

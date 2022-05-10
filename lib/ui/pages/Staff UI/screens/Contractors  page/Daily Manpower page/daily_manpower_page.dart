@@ -13,7 +13,7 @@ class DailyManpowerPage extends StatelessWidget{
       child: Scaffold(
         appBar: appBarSatff("Daily Manpower"),
         body: const DailyManpowerBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
 

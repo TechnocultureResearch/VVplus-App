@@ -16,7 +16,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return Scaffold(
       appBar: appBarSatff("Purchase"),
       body: const PurchaseBody(),
-      // bottomNavigationBar: BottomNavigationBar(items: [],),
+      bottomNavigationBar: const BottomNavBarStaff(),
     );
   }
 }
