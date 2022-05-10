@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:vvplus_app/NavBarTest/ProfileStaff.dart';
 import 'package:vvplus_app/NavBarTest/staff_Navigation.dart';
 
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/home%20page/staff_homepage.dart';
@@ -43,7 +44,7 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyProfileBody(),
+            builder: (context) => ProfileStaff(),
           ));
     }
     //  else {
