@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/home%20page/staff_homepage_body.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/place%20purchase%20order/place_purchase_order_body.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/purchase_body.dart';
-import 'package:vvplus_app/ui/widgets/constants/colors.dart';
+
 
 class BottomNavBarStaff extends StatefulWidget {
   const BottomNavBarStaff({Key key}) : super(key: key);
