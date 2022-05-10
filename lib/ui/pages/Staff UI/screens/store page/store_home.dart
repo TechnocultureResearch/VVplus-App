@@ -4,7 +4,7 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/screens/store%20page/store_home_p
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/appbar_staff.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_bottomnavbar.dart';
 
-class StorePage extends StatefulWidget{
+class StorePage extends StatefulWidget {
   const StorePage({Key key}) : super(key: key);
 
   @override
@@ -18,9 +18,8 @@ class _StorePageState extends State<StorePage> {
       child: Scaffold(
         appBar: appBarSatff("Store"),
         body: const StorePageBody(),
-        // bottomNavigationBar: const BottomNavBarStaff(),
+        bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }
 }
-

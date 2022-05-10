@@ -3,7 +3,7 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/purchase_
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/appbar_staff.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_bottomnavbar.dart';
 
-class PurchasePage extends StatefulWidget{
+class PurchasePage extends StatefulWidget {
   const PurchasePage({Key key}) : super(key: key);
 
   @override
@@ -14,10 +14,8 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarSatff("Purchase"),
-      body: const PurchaseBody(),
-      // bottomNavigationBar: BottomNavigationBar(items: [],),
-    );
+        appBar: appBarSatff("Purchase"),
+        body: const PurchaseBody(),
+        bottomNavigationBar: BottomNavBarStaff());
   }
 }
-

@@ -3,7 +3,7 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/screens/Contractors%20%20page/con
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/appbar_staff.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_bottomnavbar.dart';
 
-class ContractorsPage extends StatefulWidget{
+class ContractorsPage extends StatefulWidget {
   const ContractorsPage({Key key}) : super(key: key);
 
   @override
@@ -16,8 +16,7 @@ class _ContractorsPageState extends State<ContractorsPage> {
     return Scaffold(
       appBar: appBarSatff("Contractors"),
       body: const ContractorsBody(),
-      // bottomNavigationBar: const BottomNavBarStaff(),
+      bottomNavigationBar: const BottomNavBarStaff(),
     );
   }
 }
-

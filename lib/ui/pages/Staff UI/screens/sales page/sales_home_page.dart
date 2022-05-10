@@ -3,7 +3,7 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/screens/sales%20page/sales_home_b
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/appbar_staff.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_bottomnavbar.dart';
 
-class SalesPage extends StatefulWidget{
+class SalesPage extends StatefulWidget {
   const SalesPage({Key key}) : super(key: key);
 
   @override
@@ -16,8 +16,7 @@ class _SalesPageState extends State<SalesPage> {
     return Scaffold(
       appBar: appBarSatff("Sales"),
       body: const SalesBody(),
-      // bottomNavigationBar: const BottomNavBarStaff(),
+      bottomNavigationBar: const BottomNavBarStaff(),
     );
   }
 }
-
