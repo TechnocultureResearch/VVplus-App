@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/home%20page/staff_homepage_body.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/place%20purchase%20order/place_purchase_order_body.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/purchase_body.dart';
@@ -26,10 +25,10 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff>{
   @override
   void initState() {
     pages = [
-      //
-      // HomeBody(),
-      // MyProfileBody(),
-      // HomeBody(), MyProfileBody()
+
+      HomeBody(),
+      HomeBody(),
+      HomeBody(), HomeBody()
     ];
     super.initState();
   }
@@ -87,10 +86,10 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff>{
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              IconButton(onPressed: () => changeActivePage(0), icon: Icon(Icons.home)),
-              IconButton(onPressed: () => changeActivePage(1), icon: Icon(Icons.notifications)),
-              IconButton(onPressed: () => changeActivePage(2), icon: Icon(Icons.check)),
-              IconButton(onPressed: () => changeActivePage(3), icon: Icon(Icons.account_circle)),
+              IconButton(onPressed: () => changeActivePage(0), icon: Icon(Icons.home),iconSize: 29,),
+              IconButton(onPressed: () => changeActivePage(1), icon: Icon(Icons.notifications),iconSize: 29,),
+              IconButton(onPressed: () => changeActivePage(2), icon: Icon(Icons.check),iconSize: 29,),
+              IconButton(onPressed: () => changeActivePage(3), icon: Icon(Icons.account_circle),iconSize: 29,),
             ],
           ),
         ),
