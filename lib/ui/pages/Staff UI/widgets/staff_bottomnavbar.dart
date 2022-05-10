@@ -120,6 +120,19 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
       currentIndex: _selectedIndex,
       selectedItemColor: Colors.grey,
       onTap: _onItemTapped,
+      // onTap: (index) {
+      //   if (index == 0) {
+      //     BlocProvider.of<NavigationCubit>(context)
+      //         .getNavBarItem(NavbarItem.home);
+      //   } else if (index == 1) {
+      //     BlocProvider.of<NavigationCubit>(context)
+      //         .getNavBarItem(NavbarItem.settings);
+      //   } else if (index == 2) {
+      //     BlocProvider.of<NavigationCubit>(context)
+      //         .getNavBarItem(NavbarItem.profile);
+      //   }
+      // },
+      // ),
     );
   }
 }
