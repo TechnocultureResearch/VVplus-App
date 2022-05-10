@@ -17,7 +17,7 @@ class MyChequeEntry extends State<ChequeEntry> {
       child: Scaffold(
         appBar: appBarSatff("Cheque Entry/Update"),
         body: const ChequeEntryBody(),
-        bottomNavigationBar: const BottomNavBarStaff(),
+        // bottomNavigationBar: const BottomNavBarStaff(),
       ),
     );
   }

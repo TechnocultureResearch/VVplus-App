@@ -9,6 +9,7 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/booking_id_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
+//import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/taxoh_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/extra_work_entry_bloc.dart';
@@ -39,6 +40,7 @@ class ExtraWorkEntryBody extends StatefulWidget {
   @override
   State<ExtraWorkEntryBody> createState() => MyExtraWorkEntryBody();
 }
+
 class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   final TextEditingController dateinput = TextEditingController();
   final TextEditingController _voucherType = TextEditingController();
@@ -61,27 +63,37 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   VoucherType selectVoucherType2;
   var subscription;
   var connectionStatus;
-
+  //var size, height, width;
   void onDataChange1(DepartmentName state) {
     setState(() {
       selectDepartmentName = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType = state;
     });
   }
-  void onDataChange4(Stage state){
+
+  void onDataChange4(Stage state) {
     setState(() {
-      selectStage;
+      selectStage = state;
     });
   }
+
   void onDataChange3(TAXOH state) {
     setState(() {
       selectTaxOh = state;
     });
   }
+
+  void onDataChange5(BookingIdModel state) {
+    setState(() {
+      selectBookingId = state;
+    });
+  }
+
   @override
   void initState() {
     dateinput.text = "";
@@ -91,39 +103,44 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
     taxohDropdownBloc = TAXOHDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     bookingIdDropdownBloc = BookingIdDropdownBloc();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
-  int valueChoose = 4;
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType!=null && selectBookingId!=null && selectStage!=null && selectTaxOh!=null && extraWorkEntryFormKey.currentState.validate()){
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (selectVoucherType != null &&
+          selectBookingId != null &&
+          selectStage != null &&
+          selectTaxOh != null &&
+          extraWorkEntryFormKey.currentState.validate()) {
         sendData();
-      }
-      else{
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostExtraWorkEntry),
           body: json.encode({
@@ -144,8 +161,12 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    // size = MediaQuery.of(context).size;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     final bloc = SalesExtraWorkEntryProvider.of(context);
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
@@ -166,10 +187,12 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     RaisedButton(
-                      onPressed: () {dateinput.clear();
-                      _voucherType.clear();
-                       _remarks.clear();
-                      _baseAmount.clear();},
+                      onPressed: () {
+                        dateinput.clear();
+                        _voucherType.clear();
+                        _remarks.clear();
+                        _baseAmount.clear();
+                      },
                       elevation: 0.0,
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
@@ -177,41 +200,51 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                   ],
                 ),
               ),
-              formsHeadText("Voucher Type"),
+              formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
+                  // height: height * .076,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc.voucherTypeExtraWorkEntryDropdownData,
+                      future: voucherTypeDropdownBloc
+                          .voucherTypeExtraWorkEntryDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc.selectedExtraEorkEntryState,
+                            stream: voucherTypeDropdownBloc
+                                .selectedExtraEorkEntryState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.V_Type),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(e.V_Type),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
-sizedbox1,
-              formsHeadText("Booking Id"),
+              sizedbox1,
+              formsHeadTextNew("Booking Id", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -220,43 +253,56 @@ sizedbox1,
                       future: bookingIdDropdownBloc.bookingIdDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<BookingIdModel>(
-                            stream: bookingIdDropdownBloc.selectedBookingIdState,
+                            stream:
+                                bookingIdDropdownBloc.selectedBookingIdState,
                             builder: (context, item) {
                               return SearchChoices<BookingIdModel>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30),
-                                padding: selectBookingId!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 28),
+                                padding: selectBookingId != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectBookingId,
                                 displayClearIcon: false,
-                                onChanged: onDataChange1,
+                                onChanged: onDataChange5,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<BookingIdModel>>((e) {
-                                  return DropdownMenuItem<BookingIdModel>(
-                                    value: e,
-                                    child: Text(e.DocId),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<BookingIdModel>>(
+                                            (e) {
+                                      return DropdownMenuItem<BookingIdModel>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            e.DocId ?? '',
+                                          ),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
-              selectDepartmentName!=null ?
-              InformationBoxContainer3(
-                text1: selectDepartmentName.strSubCode,
-                text2: selectDepartmentName.strSubCode,
-                text3: selectDepartmentName.strSubCode,
-                text4: selectDepartmentName.strSubCode,
-                text5: selectDepartmentName.strSubCode,
-                text6: selectDepartmentName.strSubCode,
-                text7: selectDepartmentName.strSubCode,
-                text8: selectDepartmentName.strName,
-              ) : const SizedBox(),
+              selectDepartmentName != null
+                  ? InformationBoxContainer3(
+                      text1: selectDepartmentName.strSubCode,
+                      text2: selectDepartmentName.strSubCode,
+                      text3: selectDepartmentName.strSubCode,
+                      text4: selectDepartmentName.strSubCode,
+                      text5: selectDepartmentName.strSubCode,
+                      text6: selectDepartmentName.strSubCode,
+                      text7: selectDepartmentName.strSubCode,
+                      text8: selectDepartmentName.strName,
+                    )
+                  : const SizedBox(),
               sizedbox1,
-              formsHeadText("Stage (purpose? extra work? extra land?)"),
+              formsHeadTextNew(
+                  "Stage (purpose? extra work? extra land?)", width * .045),
+
               Padding(
                 padding: padding1,
                 child: Container(
@@ -268,29 +314,35 @@ sizedbox1,
                             stream: stageDropdownBloc.selectedStageState,
                             builder: (context, item) {
                               return SearchChoices<Stage>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectStage!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectStage != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectStage,
                                 displayClearIcon: false,
                                 onChanged: onDataChange4,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<Stage>>((e) {
-                                  return DropdownMenuItem<Stage>(
-                                    value: e,
-                                    child: Text(e.SearchCode),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<Stage>>((e) {
+                                      return DropdownMenuItem<Stage>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(e.SearchCode ?? ''),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Overhead"),
+              formsHeadTextNew("Overhead", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -302,38 +354,44 @@ sizedbox1,
                             stream: taxohDropdownBloc.selectedTAXOHState,
                             builder: (context, item) {
                               return SearchChoices<TAXOH>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectTaxOh!=null ? 2 : 10,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectTaxOh != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectTaxOh,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<TAXOH>>((e) {
-                                  return DropdownMenuItem<TAXOH>(
-                                    value: e,
-                                    child: Text(e.Code),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<TAXOH>>((e) {
+                                      return DropdownMenuItem<TAXOH>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(e.Code),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Date of Estimate"),
+              formsHeadTextNew("Date of Estimate", width * .045),
               Container(
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateinput.text) {
+                    if (val != dateinput.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -343,37 +401,37 @@ sizedbox1,
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
-
-              formsHeadText("Base Amount"),
+              formsHeadTextNew("Base Amount", width * .045),
               Container(
-                height: 70,
+                //height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: SizedBox(
-                  width: 320,
+                  //width: 320,
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField2,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != _baseAmount.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != _baseAmount.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -387,19 +445,21 @@ sizedbox1,
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
                   ),
                 ),
               ),
-              formsHeadText("Tax:"),
               sizedbox1,
-              formsHeadText("Net Amount:"),
+              formsHeadTextNew("Tax:", width * .045),
               sizedbox1,
-              formsHeadText("Remarks"),
+              //formsHeadText("Net Amount:"),
+              formsHeadTextNew("Net Amount:", width * .045),
+              sizedbox1,
+              //formsHeadText("Remarks"),
+              formsHeadTextNew("Remarks", width * .045),
               Container(
                 height: 70,
                 padding: padding1,
@@ -410,11 +470,12 @@ sizedbox1,
                     stream: bloc.outtextField3,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != _remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != _remarks.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -422,11 +483,11 @@ sizedbox1,
                       controller: _remarks,
                       onChanged: bloc.intextField3,
                       decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          errorText: snapshot.error,
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        errorText: snapshot.error,
                         isDense: true,
                         errorBorder: textFieldBorder(),
                       ),
@@ -436,10 +497,12 @@ sizedbox1,
                   ),
                 ),
               ),
-              sizedbox1,
+
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Submit",(){verifyDetail();},roundedButtonHomeColor1)),
+                  child: roundedButtonHome2("Submit", () {
+                    verifyDetail();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),

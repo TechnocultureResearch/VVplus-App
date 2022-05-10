@@ -55,8 +55,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   GodownDropdownBloc godownDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
-  ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
-  ItemCostCenterDropdownBloc itemCostCenterDropdownBloc3;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
 
   VoucherType selectVoucherType;
@@ -66,8 +64,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   Godown selectToGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectFromItemCostCenter;
-  ItemCostCenter selectItemCostCenter2;
-  ItemCostCenter selectItemCostCenter3;
+  ItemCostCenter selectToItemCostCenter;
   ItemCurrentStatus selectItemCurrentStatus;
   var subscription;
   var connectionStatus;
@@ -103,8 +100,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     godownDropdownBloc = GodownDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
-    itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
-    itemCostCenterDropdownBloc3 = ItemCostCenterDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dateinput.text = "";
     _amount = 0;
@@ -145,7 +140,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   }
   void onDataChange6(ItemCostCenter state) {
     setState(() {
-      selectItemCostCenter3 = state;
+      selectToItemCostCenter = state;
     });
   }
 
@@ -162,7 +157,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType!=null && selectIssuedTo!=null && selectFromGodown!=null && selectFromItemCostCenter!=null && selectToGodown!=null && selectItemCostCenter3!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
+      if(selectVoucherType!=null && selectIssuedTo!=null && selectFromGodown!=null && selectFromItemCostCenter!=null && selectToGodown!=null && selectToItemCostCenter!=null && selectItemCurrentStatus!=null && phaseToPhaseTransferFormKey.currentState.validate()){
         sendData();
       }
       else{
@@ -184,10 +179,10 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
             "FromWhichPhase": selectFromGodown.GodCode,
             "LocationFrom": selectFromItemCostCenter.Code,
             "ToPhase": selectToGodown.GodCode,
-            "LocationTo": selectItemCostCenter3.strSubCode,
+            "LocationTo": selectToItemCostCenter.Code,
             "Item": selectItemCurrentStatus.strItemName,
             "ReqQty": reqQty.text,
-            "Rate": selectItemCurrentStatus.dblQty,
+            "Rate": selectItemCurrentStatus.PurchaseRate,
             "Remarks":remarks.text
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
@@ -444,24 +439,24 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc3.itemCostCenterData,
+                      future: itemCostCenterDropdownBloc.toCostCenterPhaseToPhaseData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc3.selectedState,
+                            stream: itemCostCenterDropdownBloc.selectedToCostCenterPhaseToPhaseState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectItemCostCenter3!=null ? 2 : 11,
+                                padding: selectToItemCostCenter!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectItemCostCenter3,
+                                value: selectToItemCostCenter,
                                 displayClearIcon: false,
                                 onChanged: onDataChange6,
                                 items: snapshot?.data
                                     ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
                                   return DropdownMenuItem<ItemCostCenter>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.Name),
                                   );
                                 })?.toList() ??[],
                               );
@@ -493,10 +488,10 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                           child: Container(
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemCurrentStatus>>(
-                                future: dropdownBlocItemCurrentStatus.itemCurrentStatusDropdowndata,
+                                future: dropdownBlocItemCurrentStatus.itemCurrenStatusPhaseToPhaseDropdownData,
                                 builder: (context, snapshot) {
                                   return StreamBuilder<ItemCurrentStatus>(
-                                      stream: dropdownBlocItemCurrentStatus.selectedState,
+                                      stream: dropdownBlocItemCurrentStatus.selectedItemPhaseToPhaseState,
                                       builder: (context, item) {
                                         return SearchChoices<ItemCurrentStatus>.single(
                                           icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
@@ -510,7 +505,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                               ?.map<DropdownMenuItem<ItemCurrentStatus>>((e) {
                                             return DropdownMenuItem<ItemCurrentStatus>(
                                               value: e,
-                                              child: Text(e.strItemName),
+                                              child: Text(e.Name),
                                             );
                                           })?.toList() ??[],
                                         );
@@ -564,7 +559,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                               child: Container(
                                   height: 50, padding: padding1, decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.strUnit))),
+                                      child: Text(selectItemCurrentStatus.SKU))),
                             ):
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -592,7 +587,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                 child: Container(
                                     height: 50, padding: padding1, decoration: decoration1(),
                                     child: Center(
-                                        child: Text(selectItemCurrentStatus.dblQty))),
+                                        child: Text(selectItemCurrentStatus.PurchaseRate))),
                               ),
                             ):
                             Padding(
@@ -659,7 +654,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               pressed? AddItemContainer(
                 itemNameText: selectItemCurrentStatus.strItemName,
                 orderQtyText: reqQty.text,
-                rateText: selectItemCurrentStatus.dblQty,
+                rateText: selectItemCurrentStatus.PurchaseRate,
                 amountText:StringAmount.toString(),
               ) : const SizedBox(),
 
