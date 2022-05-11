@@ -149,11 +149,16 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       selectItemCurrentStatus= state;
     });
   }
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
-    });
+  Future<void> _refresh() {
+    selectVoucherType = null;
+    selectToGodown = null ;
+    selectIssuedTo = null ;
+    selectFromGodown = null;
+    selectToItemCostCenter = null;
+    selectFromItemCostCenter = null;
+    selectItemCurrentStatus = null;
+    reqQty.clear();
+    remarks.clear();
   }
   verifyDetail(){
     if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
@@ -220,9 +225,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        dateinput.clear();
-                        remarks.clear();
-                        reqQty.clear();
+                          _refresh();
                       },
                       elevation: 0.0,
                       color: Colors.white,
