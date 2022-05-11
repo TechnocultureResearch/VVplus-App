@@ -49,7 +49,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   String StringAmount;
 
   void clearData() {
+    selectIndentName = null;
+    selectItemCurrentStatus = null;
+    selectItemCostCenter = null;
     reqQty.clear();
+    remarks.clear();
   }
 
   TextEditingController intendDateInput = TextEditingController();
@@ -197,11 +201,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   int valueChoose = 4;
 
-  onClear() {
-    reqDateInput.clear();
-    intendDateInput.clear();
-    remarks.clear();
-  }
 
   @override
   void dispose() {
@@ -245,9 +244,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     children: [
                       RaisedButton(
                         onPressed: () {
-                          onClear();
+                          clearData();
                         },
-                        elevation: 5.0,
+                        elevation: 2.0,
                         color: Colors.white,
                         child: raisedButtonText(text043),
                       ),
