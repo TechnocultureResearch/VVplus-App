@@ -5,7 +5,6 @@ import 'package:vvplus_app/NavBarTest/ProfileStaff.dart';
 import 'package:vvplus_app/NavBarTest/staff_Navigation.dart';
 
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/home%20page/staff_homepage.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/screens/my_profile.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 
 class BottomNavBarStaff extends StatefulWidget {
@@ -47,16 +46,7 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
             builder: (context) => ProfileStaff(),
           ));
     }
-    //  else {
-    //   if(_selectedIndex != _pastIndex){
-    //     Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (context) => _screens[_selectedIndex],
-    //         ));
-    //   }
-    //
-    // }
+
     setState(() {
       _pastIndex = _selectedIndex;
     });
@@ -66,7 +56,7 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       //NavigationBar
-      backgroundColor: primaryColor1,
+      backgroundColor: primaryColor3,
       type: BottomNavigationBarType.fixed,
       showUnselectedLabels: true,
       elevation: 10,
@@ -74,46 +64,52 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
         BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
-              color: primaryColor3,
+              size: 32,
+              color: primaryColor2,
             ),
             activeIcon: Icon(
               Icons.home,
-              color: primaryColor5,
+              size: 32,
+              color: primaryColor2,
             ),
             // title: Text('', style: TextStyle(color: primaryColor2))
             label: ''),
         BottomNavigationBarItem(
             icon: Icon(
               Icons.notifications,
-              color: primaryColor3,
+              size: 32,
+              color: primaryColor2,
             ),
             activeIcon: Icon(
               Icons.notifications,
-              color: primaryColor5,
+              size: 32,
+              color: primaryColor4,
             ),
             // title: Text('', style: TextStyle(color: primaryColor2))
             label: ''),
         BottomNavigationBarItem(
             icon: Icon(
               Icons.check,
-              size: 30,
-              color: primaryColor3,
+              size: 32,
+              color: primaryColor2,
             ),
             activeIcon: Icon(
               Icons.check,
-              size: 30,
-              color: primaryColor5,
+              size: 32,
+              color: primaryColor4,
             ),
             // title: Text('', style: TextStyle(color: primaryColor2))
             label: ''),
         BottomNavigationBarItem(
             icon: Icon(
               Icons.account_circle,
-              color: primaryColor3,
+              size: 32,
+              color: primaryColor2,
             ),
             activeIcon: Icon(
               Icons.account_circle,
-              color: primaryColor5,
+              size: 32,
+              color: primaryColor4,
             ),
             // title: Text('', style: TextStyle(color: primaryColor2))
             label: ''),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/screens/my_profile.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_bottomnavbar.dart';
+
+import '../ui/pages/Staff UI/screens/My_Profile/my_profile.dart';
 
 class ProfileStaff extends StatefulWidget {
   @override
