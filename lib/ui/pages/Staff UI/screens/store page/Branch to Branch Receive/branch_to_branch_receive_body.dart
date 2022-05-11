@@ -25,13 +25,14 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class BranchtoBranchReceiveBody extends StatefulWidget{
+class BranchtoBranchReceiveBody extends StatefulWidget {
   const BranchtoBranchReceiveBody({Key key}) : super(key: key);
   @override
-  State<BranchtoBranchReceiveBody> createState() => MyBranchtoBranchReceiveBody();
+  State<BranchtoBranchReceiveBody> createState() =>
+      MyBranchtoBranchReceiveBody();
 }
-class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
 
+class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   final TextEditingController _vehicleNo = TextEditingController();
   final TextEditingController _gateEntryNo = TextEditingController();
   final TextEditingController _remarks = TextEditingController();
@@ -56,59 +57,79 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
+
+  void clearData() {
+    selectVoucherType1 = null;
+    selectVoucherType2 = null;
+    selectVoucherType3 = null;
+    selectIndentorName = null;
+
+    _vehicleNo.clear();
+    _gateEntryNo.clear();
+    _remarks.clear();
+  }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
+
   void onDataChange1(VoucherType state) {
     setState(() {
       selectVoucherType1 = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType2 = state;
     });
   }
+
   void onDataChange3(VoucherType state) {
     setState(() {
       selectVoucherType3 = state;
     });
   }
+
   void onDataChange4(IndentorName state) {
     setState(() {
       selectIndentorName = state;
     });
   }
 
-
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectVoucherType2!=null && selectVoucherType3!=null && selectIndentorName!=null && branchToBranchReceiveFormKey.currentState.validate()){
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (selectVoucherType1 != null &&
+          selectVoucherType2 != null &&
+          selectVoucherType3 != null &&
+          selectIndentorName != null &&
+          branchToBranchReceiveFormKey.currentState.validate()) {
         sendData();
-      }
-      else{
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostBranchToBranchReceive),
           body: json.encode({
@@ -129,9 +150,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BranchToBranchReceiveProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -151,9 +175,9 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     RaisedButton(
-                      onPressed: () {_gateEntryNo.clear();
-                      _remarks.clear();
-                      _vehicleNo.clear();},
+                      onPressed: () {
+                        clearData();
+                      },
                       elevation: 0.0,
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
@@ -161,7 +185,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                   ],
                 ),
               ),
-              formsHeadText("Voucher Type"),
+              formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -173,29 +197,36 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                             stream: voucherTypeDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType1 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Receiving goods from branch "),
+              formsHeadTextNew("Receiving goods from branch ", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -207,29 +238,36 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                             stream: voucherTypeDropdownBloc2.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType2 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType2,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Receiving in Godown"),
+              formsHeadTextNew("Receiving in Godown", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -241,29 +279,36 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                             stream: voucherTypeDropdownBloc3.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType3!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType3 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType3,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Transfer Entry Selection"),
+              formsHeadTextNew("Transfer Entry Selection", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -275,25 +320,32 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                             stream: indentorNameDropdownBloc.selectedState,
                             builder: (context, item) {
                               return SearchChoices<IndentorName>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectIndentorName!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectIndentorName != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectIndentorName,
                                 displayClearIcon: false,
                                 onChanged: onDataChange4,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<IndentorName>>((e) {
-                                  return DropdownMenuItem<IndentorName>(
-                                    value: e,
-                                    child: Text(e.strSubCode),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<IndentorName>>(
+                                            (e) {
+                                      return DropdownMenuItem<IndentorName>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strSubCode ?? ''),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
@@ -306,11 +358,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != _gateEntryNo.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != _gateEntryNo.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -324,16 +377,15 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
                   ),
                 ),
               ),
-sizedbox1,
-              formsHeadText("Vehicle No."),
+              sizedbox1,
+              formsHeadTextNew("Vehicle No.", width * .045),
               Container(
                 padding: padding1,
                 decoration: decoration1(),
@@ -342,11 +394,12 @@ sizedbox1,
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != _vehicleNo.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != _vehicleNo.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -360,16 +413,15 @@ sizedbox1,
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
                   ),
                 ),
               ),
-sizedbox1,
-              formsHeadText("Remarks"),
+              sizedbox1,
+              formsHeadTextNew("Remarks", width * .045),
               Container(
                 padding: padding1,
                 decoration: decoration1(),
@@ -378,11 +430,12 @@ sizedbox1,
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
                       validator: (val) {
-                        if(val.isEmpty) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != _remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
+                        if (val != _remarks.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
                               : "Enter valid detail";
                         }
                         return null;
@@ -396,34 +449,35 @@ sizedbox1,
                           focusedBorder: textFieldBorder(),
                           isDense: true,
                           errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
+                          errorText: snapshot.error),
                       keyboardType: TextInputType.text,
                       style: simpleTextStyle7(),
                     ),
                   ),
                 ),
               ),
-              selectIndentorName!=null ?
-              InformationBoxContainer6(
-                text1: selectIndentorName.strName,
-                text2: selectIndentorName.strSubCode,
-                text3: selectIndentorName.strSubCode,
-                text4: selectIndentorName.strSubCode,
-                text5: selectIndentorName.strSubCode,
-                text6: selectIndentorName.strSubCode,
-                text7: selectIndentorName.strSubCode,
-                //text8: selectIndentorName.strSubCode,
-              ) : const SizedBox(),
+              selectIndentorName != null
+                  ? InformationBoxContainer6(
+                      text1: selectIndentorName.strName,
+                      text2: selectIndentorName.strSubCode,
+                      text3: selectIndentorName.strSubCode,
+                      text4: selectIndentorName.strSubCode,
+                      text5: selectIndentorName.strSubCode,
+                      text6: selectIndentorName.strSubCode,
+                      text7: selectIndentorName.strSubCode,
+                      //text8: selectIndentorName.strSubCode,
+                    )
+                  : const SizedBox(),
               sizedbox1,
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Confirm Receiving",(){verifyDetail();},roundedButtonHomeColor1)),
+                  child: roundedButtonHome2("Confirm Receiving", () {
+                    verifyDetail();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),
       ),
     );
   }
-
 }
