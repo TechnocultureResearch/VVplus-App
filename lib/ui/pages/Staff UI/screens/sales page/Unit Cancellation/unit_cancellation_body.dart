@@ -110,10 +110,16 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
 
   int valueChoose = 4;
 
-  Future<void> _refresh() async {
-    await Future.delayed(const Duration(milliseconds: 800), () {
-      setState(() {});
-    });
+  Future<void> _refresh() {
+    selectDepartmentName = null;
+    selectVoucherType1 = null;
+    selectVoucherType2 = null;
+    selectBookingNo = null;
+    selectChangeApplicable = null;
+    dateinput.clear();
+    dueDate.clear();
+    baseAmount.clear();
+    remarks.clear();
   }
 
   verifyDetail() {
@@ -190,10 +196,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        dateinput.clear();
-                        dueDate.clear();
-                        baseAmount.clear();
-                        remarks.clear();
+                       _refresh();
                       },
                       elevation: 0.0,
                       color: Colors.white,
