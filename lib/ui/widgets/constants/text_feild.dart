@@ -122,14 +122,12 @@ const String text51 = "Daily Manpower";
 
 // use in my profile page
 
-const String text70 = "Attendance";
+const String text70 = "Submit Attendance";
 const String text71 = "Click here to do your daily attendance";
 const String text72 = "Request Advance";
 const String text73 = "Apply here to get result, Emails are not allowed";
-const String text74 = "Request Incentive";
+const String text74 = "File Incentive";
 const String text75 = "Apply here to get result, Emails are not allowed";
 const String text76 = "Leave Application";
-const String text77 = "Attendance";
-const String text78 = "Attendance";
-const String text79 = "Attendance";
+const String text77 = "Apply here to get result, Emails are not allowed";
 

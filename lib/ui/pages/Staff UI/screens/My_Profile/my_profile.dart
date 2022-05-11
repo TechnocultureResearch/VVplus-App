@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/My_Profile/attendance_page.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/My_Profile/file_incentive.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/My_Profile/leave_application.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/My_Profile/request_advance.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/appbar_staff.dart';
 import 'package:vvplus_app/ui/widgets/constants/assets.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/text_feild.dart';
+import 'attendance_page.dart';
+
 
 //   String name = 'User Name';
 
-class MyProfileBody extends StatelessWidget {
-  const MyProfileBody({Key key}) : super(key: key);
-  @override
+bool _flutter = false;
 
+
+class MyProfileBody extends StatefulWidget {
+  const MyProfileBody({Key key}) : super(key: key);
+
+  @override
+  _MyProfileBodyState createState() => _MyProfileBodyState();
+}
+
+class _MyProfileBodyState extends State<MyProfileBody> {
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -43,6 +57,7 @@ class MyProfileBody extends StatelessWidget {
                           NetworkImage('https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4'),
                         ),
                       ),
+
                     ],
                   ),
                   const SizedBox(
@@ -68,26 +83,57 @@ class MyProfileBody extends StatelessWidget {
             ),
             Container(
               child: Column(
-                children: const <Widget>[
-                  ListTile(
-                    title: Text(
-                      text70,
-                      style: TextStyle(
-                        color: Colors.deepOrange,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                children: <Widget>[
+                  Card(
+                    color: Colors.white,
+                    child: SwitchListTile(
+                      title: const Text(text70,style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 20
                       ),
-                    ),
-                    subtitle: Text(
-                      text71,
-                      style: TextStyle(
-                        fontSize: 18,
                       ),
+                      value: _flutter,
+                      activeColor: Colors.red,
+                      inactiveTrackColor: Colors.grey,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _flutter = value;
+                        });
+                      },
                     ),
                   ),
+                  // ListTile(
+                  //   onTap: (){ Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => AttendancePage(),
+                  //       ));
+                  //     },
+                  //   title: Text(
+                  //     text70,
+                  //     style: TextStyle(
+                  //       color: Colors.deepOrange,
+                  //       fontSize: 20,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  //   subtitle: Text(
+                  //     text71,
+                  //     style: TextStyle(
+                  //       fontSize: 18,
+                  //     ),
+                  //   ),
+                  // ),
                   Divider(),
                   ListTile(
-                    title: Text(
+                    onTap: (){ Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RequestAdvance(),
+                        ));
+                    },
+                    title: const Text(
                       text72,
                       style: TextStyle(
                         color: Colors.deepOrange,
@@ -104,6 +150,13 @@ class MyProfileBody extends StatelessWidget {
                   ),
                   Divider(),
                   ListTile(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FileIncentive(),
+                          ));
+                    },
                     title: Text(
                       text74,
                       style: TextStyle(
@@ -120,8 +173,15 @@ class MyProfileBody extends StatelessWidget {
                     ),
                   ),Divider(),
                   ListTile(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LeaveApplication(),
+                          ));
+                    },
                     title: Text(
-                      text74,
+                      text76,
                       style: TextStyle(
                         color: Colors.deepOrange,
                         fontSize: 20,
@@ -129,7 +189,7 @@ class MyProfileBody extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      text75,
+                      text77,
                       style: TextStyle(
                         fontSize: 18,
                       ),
