@@ -230,7 +230,15 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        selectVoucherType1 = null;
+                        selectReceivedBy = null;
+                        selectGodown = null;
+                        selectVoucherType3 = null;
+                        selectItemCostCenter = null;
+                        selectItemCurrentStatus = null;
+                        reqQty.clear();
+                      },
                       elevation: 0.0,
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
