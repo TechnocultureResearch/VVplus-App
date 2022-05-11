@@ -11,14 +11,14 @@ import 'package:vvplus_app/ui/widgets/constants/assets.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 
-
-
 BoxDecoration decorationForms() {
   return BoxDecoration(
     color: primaryColor8,
     borderRadius: BorderRadius.circular(8),
-    border: Border.all(color: primaryColor9, width: 0,),
-
+    border: Border.all(
+      color: primaryColor9,
+      width: 0,
+    ),
   );
 }
 
@@ -27,7 +27,6 @@ BoxDecoration containerDecorationForms() {
     color: primaryColor3,
     borderRadius: BorderRadius.circular(5),
     border: Border.all(color: primaryColor9, width: 1),
-
   );
 }
 
@@ -74,7 +73,9 @@ class _InformationBoxContainer1State extends State<InformationBoxContainer1> {
                       "Ball Valve UPVC\n1’’x1/2’’",
                       style: containerTextStyle1(),
                     ),
-                    const SizedBox(height: 13,),
+                    const SizedBox(
+                      height: 13,
+                    ),
                     Row(
                       //mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,18 +116,23 @@ class _InformationBoxContainer1State extends State<InformationBoxContainer1> {
                                 child: Image.asset(icon15)),
                           ],
                         ),
-
-                        const SizedBox(height: 2,),
+                        const SizedBox(
+                          height: 2,
+                        ),
                         Text(
                           "Req Date: 27 Sept, 2021",
                           style: containerTextStyle2(),
                         ),
-                        const SizedBox(height: 2,),
+                        const SizedBox(
+                          height: 2,
+                        ),
                         Text(
                           "Req Date: 27 Sept, 2021",
                           style: containerTextStyle2(),
                         ),
-                        const SizedBox(height: 2,),
+                        const SizedBox(
+                          height: 2,
+                        ),
                         Text(
                           "Indent No.: 203",
                           style: containerTextStyle2(),
@@ -144,9 +150,7 @@ class _InformationBoxContainer1State extends State<InformationBoxContainer1> {
   }
 }
 
-
 class InformationBoxContainer2 extends StatelessWidget {
-
   final String text1;
   final String text2;
   final String text3;
@@ -155,23 +159,24 @@ class InformationBoxContainer2 extends StatelessWidget {
   final String text6;
   final String text7;
   final String text8;
-  const InformationBoxContainer2({
-    Key key,
-    this.text1,
-    this.text2,
-    this.text3,
-    this.text4,
-    this.text5,
-    this.text6,
-    this.text7,
-    this.text8
-  }) : super(key: key);
+  const InformationBoxContainer2(
+      {Key key,
+      this.text1,
+      this.text2,
+      this.text3,
+      this.text4,
+      this.text5,
+      this.text6,
+      this.text7,
+      this.text8})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 32, left: 11),
       child: Container(
         //alignment: Alignment.center,
+
         height: SizeConfig.getHeight(context) * .167,
         width: SizeConfig.getWidth(context) * .95,
         decoration: BoxDecoration(
@@ -200,7 +205,9 @@ class InformationBoxContainer2 extends StatelessWidget {
                       "Name: $text1",
                       style: containerTextStyle1(),
                     ),
-                    const SizedBox(height: 8,),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Row(
                       children: [
                         Column(
@@ -209,35 +216,47 @@ class InformationBoxContainer2 extends StatelessWidget {
                               "GHSN/SAC: $text2",
                               style: containerTextStyle4(),
                             ),
-                            const SizedBox(height: 2,),
+                            const SizedBox(
+                              height: 2,
+                            ),
                             Text(
                               "Order no.: $text3",
                               style: containerTextStyle3(),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 25,),
+                        const SizedBox(
+                          width: 25,
+                        ),
                         Text(
                           "Order Qty.:\nReceive Qty.:\nRate:\nAmount:\nRemarks:",
                           style: containerTextStyle2(),
                         ),
-                        const SizedBox(width: 10,),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Text(
                           "$text4\n$text5\n$text6\n$text7\n$text8",
                           style: containerTextStyle2(),
                         ),
-                        const SizedBox(width: 24,),
+                        const SizedBox(
+                          width: 24,
+                        ),
                         Row(
                           children: [
                             Column(
                               children: [
                                 Image.asset(icon15),
-                                const SizedBox(height: 12.5,),
+                                const SizedBox(
+                                  height: 12.5,
+                                ),
                                 Text(
                                   "Edit",
                                   style: containerTextStyle5(),
                                 ),
-                                const SizedBox(height: 7,),
+                                const SizedBox(
+                                  height: 7,
+                                ),
                                 Text(
                                   "Inc.Tax",
                                   style: containerTextStyle3(),
@@ -258,8 +277,8 @@ class InformationBoxContainer2 extends StatelessWidget {
     );
   }
 }
-class InformationBoxContainer6 extends StatelessWidget {
 
+class InformationBoxContainer6 extends StatelessWidget {
   final String text1;
   final String text2;
   final String text3;
@@ -268,25 +287,28 @@ class InformationBoxContainer6 extends StatelessWidget {
   final String text6;
   final String text7;
   final String text8;
-  const InformationBoxContainer6({
-    Key key,
-    this.text1,
-    this.text2,
-    this.text3,
-    this.text4,
-    this.text5,
-    this.text6,
-    this.text7,
-    this.text8
-  }) : super(key: key);
+  const InformationBoxContainer6(
+      {Key key,
+      this.text1,
+      this.text2,
+      this.text3,
+      this.text4,
+      this.text5,
+      this.text6,
+      this.text7,
+      this.text8})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.only(top: 32, left: 11),
+      padding: const EdgeInsets.only(top: 30, left: 5, right: 5, bottom: 10),
       child: Container(
         //alignment: Alignment.center,
-        height: SizeConfig.getHeight(context) * .143,
-        width: SizeConfig.getWidth(context) * .95,
+        height: height * .19,
+        // height: SizeConfig.getHeight(context) * .143,
+        width: width * 2,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
           color: primaryColor3,
@@ -298,81 +320,98 @@ class InformationBoxContainer6 extends StatelessWidget {
             ),
           ],
         ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 10),
-                child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Name: $text1",
-                      style: containerTextStyle1(),
-                    ),
-                    const SizedBox(height: 8,),
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "GHSN/SAC: $text2",
-                              style: containerTextStyle4(),
-                            ),
-                            const SizedBox(height: 2,),
-                            Text(
-                              "Order no.: $text3",
-                              style: containerTextStyle3(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 31,),
-                        Text(
-                          "Order Qty.:\nReceive Qty.:\nRate:\nAmount:",
-                          style: containerTextStyle2(),
-                        ),
-                        const SizedBox(width: 10,),
-                        Text(
-                          "$text4\n$text5\n$text6\n$text7",
-                          style: containerTextStyle2(),
-                        ),
-                        const SizedBox(width: 24,),
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                Image.asset(icon15),
-                                const SizedBox(height: 12.5,),
-                                Text(
-                                  "Edit",
-                                  style: containerTextStyle5(),
-                                ),
-                                const SizedBox(height: 7,),
-                                Text(
-                                  "Inc.Tax",
-                                  style: containerTextStyle3(),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 15, right: 5),
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text("$text1",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "GHSN/SAC: $text2",
+                            style: containerTextStyle4(),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            "Order no.: $text3",
+                            style: containerTextStyle3(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Order Qty.:\nReceive Qty.:\nRate:\nAmount:",
+                        style: containerTextStyle2(),
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "$text4\n$text5\n$text6\n$text7",
+                        style: containerTextStyle2(),
+                      ),
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              Image.asset(icon15),
+                              const SizedBox(
+                                height: 12.5,
+                              ),
+                              Text(
+                                "Edit",
+                                style: containerTextStyle5(),
+                              ),
+                              const SizedBox(
+                                height: 7,
+                              ),
+                              Text(
+                                "Inc.Tax",
+                                style: containerTextStyle3(),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-class InformationBoxContainer3 extends StatelessWidget {
 
+class InformationBoxContainer3 extends StatelessWidget {
   final String text1;
   final String text2;
   final String text3;
@@ -381,17 +420,17 @@ class InformationBoxContainer3 extends StatelessWidget {
   final String text6;
   final String text7;
   final String text8;
-  const InformationBoxContainer3({
-    Key key,
-    this.text1,
-    this.text2,
-    this.text3,
-    this.text4,
-    this.text5,
-    this.text6,
-    this.text7,
-    this.text8
-  }) : super(key: key);
+  const InformationBoxContainer3(
+      {Key key,
+      this.text1,
+      this.text2,
+      this.text3,
+      this.text4,
+      this.text5,
+      this.text6,
+      this.text7,
+      this.text8})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -426,7 +465,9 @@ class InformationBoxContainer3 extends StatelessWidget {
                       "Name: $text8",
                       style: containerTextStyle6(),
                     ),
-                    const SizedBox(height: 16,),
+                    const SizedBox(
+                      height: 16,
+                    ),
                     Row(
                       children: [
                         Column(
@@ -435,14 +476,18 @@ class InformationBoxContainer3 extends StatelessWidget {
                               "Booking ID: $text1",
                               style: containerTextStyle3(),
                             ),
-                            const SizedBox(height: 8,),
+                            const SizedBox(
+                              height: 8,
+                            ),
                             Text(
                               "Unit: $text2",
                               style: containerTextStyle3(),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 41,),
+                        const SizedBox(
+                          width: 41,
+                        ),
                         Text(
                           "Booking Date: $text3\nUnit Category: $text4\nFloor: $text5\nName: $text6\nStructure: $text7",
                           style: containerTextStyle2(),
@@ -460,7 +505,6 @@ class InformationBoxContainer3 extends StatelessWidget {
   }
 }
 
-
 class InformationBoxContainer4 extends StatelessWidget {
   final String text1;
   final String text2;
@@ -471,18 +515,18 @@ class InformationBoxContainer4 extends StatelessWidget {
   final String text7;
   final String text8;
   final String text9;
-  const InformationBoxContainer4({
-    Key key,
-    this.text1,
-    this.text2,
-    this.text3,
-    this.text4,
-    this.text5,
-    this.text6,
-    this.text7,
-    this.text8,
-    this.text9
-  }) : super(key: key);
+  const InformationBoxContainer4(
+      {Key key,
+      this.text1,
+      this.text2,
+      this.text3,
+      this.text4,
+      this.text5,
+      this.text6,
+      this.text7,
+      this.text8,
+      this.text9})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -517,7 +561,9 @@ class InformationBoxContainer4 extends StatelessWidget {
                       "Name: $text1",
                       style: containerTextStyle6(),
                     ),
-                    const SizedBox(height: 16,),
+                    const SizedBox(
+                      height: 16,
+                    ),
                     Row(
                       children: [
                         Column(
@@ -526,14 +572,18 @@ class InformationBoxContainer4 extends StatelessWidget {
                               "Booking ID: $text2",
                               style: containerTextStyle3(),
                             ),
-                            const SizedBox(height: 8,),
+                            const SizedBox(
+                              height: 8,
+                            ),
                             Text(
                               "Unit: $text3",
                               style: containerTextStyle3(),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 35,),
+                        const SizedBox(
+                          width: 35,
+                        ),
                         Text(
                           "Booking Date: $text4\nUnit Category: $text5\nFloor: $text6\nPhase: $text7\nUnit Area: $text8\nNet Unit Cost: $text9",
                           style: containerTextStyle2(),
@@ -551,7 +601,6 @@ class InformationBoxContainer4 extends StatelessWidget {
   }
 }
 
-
 class FormsContainer extends StatefulWidget {
   const FormsContainer({Key key}) : super(key: key);
 
@@ -560,7 +609,6 @@ class FormsContainer extends StatefulWidget {
 }
 
 class MyFormsContainer extends State<FormsContainer> {
-
   TextEditingController reqQty = TextEditingController();
   TextEditingController rate = TextEditingController();
 
@@ -589,18 +637,14 @@ class MyFormsContainer extends State<FormsContainer> {
             formsHeadText("Request Qty. "),
             Row(
               children: [
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
-
                   child: Container(
                     height: 50,
                     padding: padding1,
                     decoration: decoration1(),
-
                     child: SizedBox(
                       width: 130,
-
                       child: StreamBuilder<String>(
                           stream: bloc.requestQty,
                           builder: (context, snapshot) {
@@ -613,8 +657,7 @@ class MyFormsContainer extends State<FormsContainer> {
                               keyboardType: TextInputType.number,
                               style: simpleTextStyle7(),
                             );
-                          }
-                      ),
+                          }),
                     ),
                   ),
                 ),
@@ -632,8 +675,8 @@ class MyFormsContainer extends State<FormsContainer> {
                         iconSize: 20,
                         isExpanded: true,
                         iconEnabledColor: primaryColor4,
-                        style: const TextStyle(
-                            color: primaryColor2, fontSize: 12),
+                        style:
+                            const TextStyle(color: primaryColor2, fontSize: 12),
                         value: valueChoose,
                         items: const <DropdownMenuItem<int>>[
                           DropdownMenuItem(
@@ -666,18 +709,14 @@ class MyFormsContainer extends State<FormsContainer> {
             ),
             Row(
               children: [
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
-
                   child: Container(
                     height: 50,
                     padding: padding1,
                     decoration: decoration1(),
-
                     child: SizedBox(
                       width: 100,
-
                       child: StreamBuilder<double>(
                           stream: bloc.ratefield,
                           builder: (context, snapshot) {
@@ -690,48 +729,41 @@ class MyFormsContainer extends State<FormsContainer> {
                               keyboardType: TextInputType.number,
                               style: simpleTextStyle7(),
                             );
-                          }
-                      ),
+                          }),
                     ),
                   ),
                 ),
               ],
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-
             Row(
               children: [
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
                 // ignore: deprecated_member_use
                 RaisedButton(
                   onPressed: () {
-                     reqQty.clear();
+                    reqQty.clear();
                     rate.clear();
                   },
                   elevation: 0.0,
                   color: storeContainerColor,
                   child: raisedButtonText("Clear This Item"),
-
                 ),
-
 
                 StreamBuilder<bool>(
-                  stream: bloc.submitCheck,
-                  builder: (context, snapshot) {
-                    return RoundedButtonInput(
-                      text: "Add Item to List",
-                      press: !snapshot.hasData ? null: (){
-
-                      } ,
-                      fontsize1: 12,
-                      size1: 0.5,
-                      horizontal1: 30,
-                      vertical1: 10,
-                      color1: Colors.orange,
-                      textColor1: textColor1,
-                    );
-                  }
-                ),
+                    stream: bloc.submitCheck,
+                    builder: (context, snapshot) {
+                      return RoundedButtonInput(
+                        text: "Add Item to List",
+                        press: !snapshot.hasData ? null : () {},
+                        fontsize1: 12,
+                        size1: 0.5,
+                        horizontal1: 30,
+                        vertical1: 10,
+                        color1: Colors.orange,
+                        textColor1: textColor1,
+                      );
+                    }),
               ],
             )
           ],
@@ -739,15 +771,12 @@ class MyFormsContainer extends State<FormsContainer> {
       ),
     );
   }
-
 }
-
 
 BoxDecoration decorationFormsCont() {
   return BoxDecoration(
     color: primaryColor3,
     borderRadius: BorderRadius.circular(5),
     border: Border.all(color: primaryColor9, width: 1),
-
   );
 }
