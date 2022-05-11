@@ -90,6 +90,9 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
     super.initState();
   }
   void clearData(){
+   selectItemCostCenter = null;
+   selectResourceType = null;
+   selectDepartmentName = null;
     dateInput.clear();
     _qty.clear();
     _remarks.clear();
