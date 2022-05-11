@@ -194,6 +194,8 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -223,7 +225,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                   ],
                 ),
               ),
-              formsHeadText("Voucher Type"),
+              formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -238,7 +240,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null ? 2 : 11,
+                                padding: selectVoucherType1 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
@@ -249,7 +253,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -259,7 +266,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Voucher No. Date"),
+              formsHeadTextNew("Voucher No. Date", width * .045),
               Container(
                 padding: dateFieldPadding,
                 height: dateFieldHeight,
@@ -292,7 +299,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                   },
                 ),
               ),
-              formsHeadText("From Branch"),
+              formsHeadTextNew("From Branch", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -307,7 +314,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter1 != null ? 2 : 11,
+                                padding: selectItemCostCenter1 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter1,
@@ -318,7 +327,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<ItemCostCenter>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -328,7 +340,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("From Phase"),
+              formsHeadTextNew("From Phase", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -343,7 +355,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter2 != null ? 2 : 11,
+                                padding: selectItemCostCenter2 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter2,
@@ -354,7 +368,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<ItemCostCenter>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -364,7 +381,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("From Godown"),
+              formsHeadTextNew("From Godown", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -380,7 +397,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                   Icons.keyboard_arrow_down_sharp,
                                   size: 30,
                                 ),
-                                padding: selectVoucherType2 != null ? 2 : 11,
+                                padding: selectVoucherType2 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType2,
@@ -391,7 +410,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -401,7 +423,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("To Branch"),
+              formsHeadTextNew("To Branch", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -416,7 +438,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter3 != null ? 2 : 11,
+                                padding: selectItemCostCenter3 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter3,
@@ -427,7 +451,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<ItemCostCenter>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -437,7 +464,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("To Phase"),
+              formsHeadTextNew("To Phase", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -452,7 +479,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter4 != null ? 2 : 11,
+                                padding: selectItemCostCenter4 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter4,
@@ -463,7 +492,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<ItemCostCenter>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -473,7 +505,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("To Godown"),
+              formsHeadTextNew("To Godown", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -488,7 +520,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType3 != null ? 2 : 11,
+                                padding: selectVoucherType3 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType3,
@@ -499,7 +533,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -509,7 +546,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Vehicle No."),
+              formsHeadTextNew("Vehicle No.", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -535,7 +572,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -545,7 +585,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Indent Selection"),
+              formsHeadTextNew("Indent Selection", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -560,7 +600,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectIndentorName != null ? 2 : 11,
+                                padding: selectIndentorName != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectIndentorName,
@@ -571,7 +613,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             (e) {
                                       return DropdownMenuItem<IndentorName>(
                                         value: e,
-                                        child: Text(e.strName ?? ""),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -592,7 +637,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                       //text8: selectIndentorName.strSubCode,
                     )
                   : const SizedBox(),
-              sizedbox1,
+              //sizedbox1,
               Padding(
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
