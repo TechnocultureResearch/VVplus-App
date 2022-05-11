@@ -118,9 +118,14 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(milliseconds: 800), () {
-      setState(() {});
-    });
+    selectDepartmentName = null;
+    selectVoucherType = null;
+    selectStage = null;
+    selectBookingId = null;
+    selectTaxOh = null;
+    selectVoucherType2 = null;
+    _remarks.clear();
+    _baseAmount.clear();
   }
 
   verifyDetail() {
@@ -188,10 +193,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        dateinput.clear();
-                        _voucherType.clear();
-                        _remarks.clear();
-                        _baseAmount.clear();
+                        _refresh();
                       },
                       elevation: 0.0,
                       color: Colors.white,
