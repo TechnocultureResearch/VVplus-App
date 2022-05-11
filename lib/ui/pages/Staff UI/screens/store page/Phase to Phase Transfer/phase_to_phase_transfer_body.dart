@@ -77,7 +77,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   _calculation() {
     setState(() {
       //value1 = double.parse(reqQty.text);
-      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.dblQty));
+      _amount = (double.parse(reqQty.text)*double.parse(selectItemCurrentStatus.PurchaseRate));
       StringAmount= _amount.toStringAsFixed(3);
     },);
     print(_amount);
@@ -198,6 +198,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   @override
   Widget build(BuildContext context) {
     final bloc = PhaseToPhaseTransferProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -519,55 +521,48 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                         formsHeadText("Request Qty. "),
                         Row(
                           children: [
-
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 35),
-
                               child: Container(
-                                height: 50,
                                 padding: padding1,
                                 decoration: decoration1(),
-
-                                child: SizedBox(
-                                  width: 130,
-
+                                child: Container(
+                                  width: width * .28,
                                   child: StreamBuilder<String>(
                                       stream: bloc.requestQty,
                                       builder: (context, snapshot) {
                                         return TextFormField(
-                                          onEditingComplete: (){
+                                          onEditingComplete: () {
                                             _calculation();
                                           },
                                           // initialValue: "no",
                                           controller: reqQty,
+                                          textAlign: TextAlign.center,
+
                                           decoration: InputDecoration(
                                             errorText: snapshot.error,
                                           ),
                                           onChanged: bloc.changerequestQty,
                                           keyboardType: TextInputType.number,
                                           //onSaved: selectItemCurrentStatus.strItemName,
-
                                           style: simpleTextStyle7(),
                                         );
-                                      }
-                                  ),
+                                      }),
                                 ),
                               ),
                             ),
-                            selectItemCurrentStatus!=null ? SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                  height: 50, padding: padding1, decoration: decoration1(),
-                                  child: Center(
-                                      child: Text(selectItemCurrentStatus.SKU))),
-                            ):
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                  height: 50, padding: padding1, decoration: decoration1(),
-                                  child: const Center(
-                                      child: Text("No"))),
-                            ),
+                            selectItemCurrentStatus != null
+                                ? Container(
+                                height: height * .067,
+                                width: width * .18,
+                                decoration: decoration1(),
+                                child: Center(
+                                    child: Text(selectItemCurrentStatus.SKU)))
+                                : Container(
+                                height: height * .067,
+                                width: width * .18,
+                                decoration: decoration1(),
+                                child: const Center(child: Text("No"))),
                           ],
                         ),
                         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
@@ -626,7 +621,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                 builder: (context, snapshot) {
                                   return RoundedButtonInput(
                                     text: "Add Item to List",
-                                    press: (selectItemCurrentStatus !=null)&&(isActive)
+                                    press: (selectItemCurrentStatus !=null)&&
+                                        (isActive)
                                         ? () {
                                       _calculation();
                                       setState(() {
@@ -652,7 +648,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               //--------------------------------------------------------
 
               pressed? AddItemContainer(
-                itemNameText: selectItemCurrentStatus.strItemName,
+                itemNameText: selectItemCurrentStatus.Name,
                 orderQtyText: reqQty.text,
                 rateText: selectItemCurrentStatus.PurchaseRate,
                 amountText:StringAmount.toString(),
