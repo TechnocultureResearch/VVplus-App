@@ -416,12 +416,11 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 ),
               ),
               formsHeadTextNew("Base Amount", width * .045),
-              Container(
-                //height: 70,
+              Padding(
                 padding: padding1,
-                decoration: decoration1(),
-                child: SizedBox(
-                  //width: 320,
+                child: Container(
+                  width: width * .8,
+                  decoration: decoration1(),
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField2,
                     builder: (context, snapshot) => TextFormField(
@@ -464,36 +463,33 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 height: 70,
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField3,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if (val != _remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
-                              ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: _remarks,
-                      onChanged: bloc.intextField3,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: primaryColor8,
-                        enabledBorder: textFieldBorder(),
-                        focusedBorder: textFieldBorder(),
-                        errorText: snapshot.error,
-                        isDense: true,
-                        errorBorder: textFieldBorder(),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField3,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != _remarks.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: _remarks,
+                    onChanged: bloc.intextField3,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: primaryColor8,
+                      enabledBorder: textFieldBorder(),
+                      focusedBorder: textFieldBorder(),
+                      errorText: snapshot.error,
+                      isDense: true,
+                      errorBorder: textFieldBorder(),
                     ),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),

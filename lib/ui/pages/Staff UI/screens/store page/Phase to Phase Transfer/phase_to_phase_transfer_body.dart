@@ -769,12 +769,11 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               formsHeadText("Total Amount:"),
               sizedbox1,
               formsHeadText("Remarks"),
-              Container(
-                height: 70,
+              Padding(
                 padding: padding1,
-                decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
+                child: Container(
+                  width: width * .8,
+                  //decoration: decoration1(),
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField,
                     builder: (context, snapshot) => TextFormField(
