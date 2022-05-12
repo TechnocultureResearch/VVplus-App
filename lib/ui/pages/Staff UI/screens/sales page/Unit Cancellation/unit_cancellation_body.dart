@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +9,7 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/change_applicable_drop
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/unit_cancellation_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/Tax_oh_model.dart';
 import 'package:vvplus_app/infrastructure/Models/booking_id_model.dart';
 import 'package:vvplus_app/infrastructure/Models/change_applicable_model.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
@@ -30,6 +29,8 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../Application/Bloc/Dropdown_Bloc/taxoh_dropdown_bloc.dart';
+
 class UnitCancellationBody extends StatefulWidget {
   const UnitCancellationBody({Key key}) : super(key: key);
   @override
@@ -44,6 +45,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  TAXOHDropdownBloc taxohDropdownBloc;
   final unitCancellationFormKey = GlobalKey<FormState>();
   BookingIdDropdownBloc bookingIdDropdownBloc3;
   ChangeApplicableDropdownBloc changeApplicableDropdownBloc4;
@@ -52,6 +54,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   VoucherType selectVoucherType1;
   VoucherType selectVoucherType2;
   BookingIdModel selectBookingNo;
+  TAXOH selectTAX;
   ChangeApplicable selectChangeApplicable;
   var subscription;
   var connectionStatus;
@@ -68,9 +71,9 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
     });
   }
 
-  void onDataChange3(VoucherType state) {
+  void onDataChange3(TAXOH state){
     setState(() {
-      selectVoucherType2 = state;
+      selectTAX = state;
     });
   }
 
@@ -86,6 +89,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
     });
   }
 
+
   @override
   void initState() {
     dateinput.text = "";
@@ -93,6 +97,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     bookingIdDropdownBloc3 = BookingIdDropdownBloc();
+    taxohDropdownBloc = TAXOHDropdownBloc();
     changeApplicableDropdownBloc4 = ChangeApplicableDropdownBloc();
     subscription = Connectivity()
         .onConnectivityChanged
@@ -115,6 +120,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
     selectVoucherType1 = null;
     selectVoucherType2 = null;
     selectBookingNo = null;
+    selectTAX = null;
     selectChangeApplicable = null;
     dateinput.clear();
     dueDate.clear();
@@ -129,6 +135,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
           selectVoucherType1 != null &&*/
           selectBookingNo != null &&
               selectChangeApplicable != null &&
+              selectTAX != null &&
               unitCancellationFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -402,8 +409,43 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   ),
                 ),
               ),
-              sizedbox1,
-              formsHeadText("Tax:"),
+              formsHeadText("Tax"),
+              Padding(
+                padding: padding1,
+                child: Container(
+                  decoration: decorationForms(),
+                  child: FutureBuilder<List<TAXOH>>(
+                      future: taxohDropdownBloc.taxOHUnitCancelationDropdownData,
+                      builder: (context, snapshot) {
+                        return StreamBuilder<TAXOH>(
+                            stream: taxohDropdownBloc.selectedTAXOHUniCancelationState,
+                            builder: (context, item) {
+                              return SearchChoices<TAXOH>.single(
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectTAX != null ? 2 : 9,
+                                isExpanded: true,
+                                hint: "Search here",
+                                value: selectTAX,
+                                displayClearIcon: false,
+                                onChanged: onDataChange3,
+                                items: snapshot?.data
+                                    ?.map<DropdownMenuItem<TAXOH>>((e) {
+                                  return DropdownMenuItem<TAXOH>(
+                                    value: e,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(e.Code),
+                                    ),
+                                  );
+                                })?.toList() ??
+                                    [],
+                              );
+                            });
+                      }),
+                ),
+              ),
               sizedbox1,
               formsHeadText("Remarks"),
               Container(
