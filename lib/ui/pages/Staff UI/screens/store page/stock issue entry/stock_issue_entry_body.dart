@@ -494,12 +494,16 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                               ? Container(
                                   height: height * .067,
                                   width: width * .18,
+                                  // padding: const EdgeInsets.symmetric(
+                                  //     horizontal: 15.0),
                                   decoration: decoration1(),
                                   child: Center(
                                       child: Text(selectItemCurrentStatus.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 0.0),
                                   decoration: decoration1(),
                                   child: const Center(child: Text("No"))),
                         ],
@@ -580,6 +584,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                               stream: bloc.submitCheck,
                               builder: (context, snapshot) {
                                 return*/
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
                                 press: (selectItemCurrentStatus != null) &&
