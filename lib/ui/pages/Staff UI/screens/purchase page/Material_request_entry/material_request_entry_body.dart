@@ -510,6 +510,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                               stream: bloc.submitCheck,
                               builder: (context, snapshot) {
                                 return*/
+                                const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8)),
                                 RoundedButtonInput(
                                   text: "Add Item to List",
                                   press: (selectItemCurrentStatus != null) &&
