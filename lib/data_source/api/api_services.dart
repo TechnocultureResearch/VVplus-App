@@ -63,6 +63,8 @@ class ApiService{
 
   static const String getChangeApplicableURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetUnitCancellation?StrRecord=${'{"StrFilter":"ChangeApplicable","StrSiteCode":"AD"}'}";
 
+  static const String getTaxOHUnitCancelationnewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetUnitCancellation?StrRecord=${'{"StrFilter":"TaxOH","StrSiteCode":"AD"}'}";
+
   static const String getPhasetoPhaseVoucherTypenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD"}'}";
 
   static const String getPhaseToPhaseIssuedTonewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"IssuedTo","StrSiteCode":"AD"}'}";
