@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
 import 'dart:convert';
+import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
@@ -63,6 +65,12 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   String StringAmount;
 
   void clearData() {
+    selectVoucherType1 = null;
+    selectIssuedTo = null;
+    selectGodown = null;
+    selectVoucherType3 = null;
+    selectItemCostCenter = null;
+    selectItemCurrentStatus = null;
     reqQty.clear();
   }
 
@@ -462,6 +470,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                 child: StreamBuilder<String>(
                                     stream: bloc.requestQty,
                                     builder: (context, snapshot) {
+
                                       return TextFormField(
                                         onEditingComplete: () {
                                           _calculation();
@@ -469,7 +478,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         // initialValue: "no",
                                         controller: reqQty,
                                         textAlign: TextAlign.center,
-
                                         decoration: InputDecoration(
                                           errorText: snapshot.error,
                                         ),
