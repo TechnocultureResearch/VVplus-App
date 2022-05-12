@@ -76,7 +76,9 @@ class ApiService{
    static const String getPhaseToPhaseToCostCenternewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord= ${'{"StrFilter":"ToCostCenter","StrSiteCode":"AD"}'}";
 
    static const String getPhaseToPhaseItemCurrentStatusnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AD"}'}";
- // mock database get url
+
+   static const String getMaterialReqApprovalIndentSelectionnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"VN","StrV_Date":"",StrIndDocID:[{"StrDocID":""},{"StrDocID":""}]}'}";
+   // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
 

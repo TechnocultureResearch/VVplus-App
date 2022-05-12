@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_selection_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
+import 'package:vvplus_app/infrastructure/Models/indent_selection_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/material_request_approval/forms_container_data.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
@@ -20,18 +22,21 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
   TextEditingController dateinput = TextEditingController();
   final materialRequestApprovalFormKey = GlobalKey<FormState>();
   IndentorNameDropdownBloc _dropdownBloc;
+  IndentSelectionDropdownBloc indentSelectionDropdownBloc;
   bool pressAttention = false;
   @override
   void initState() {
 
     dateinput.text = "";
     _dropdownBloc = IndentorNameDropdownBloc();
+    indentSelectionDropdownBloc = IndentSelectionDropdownBloc();
     super.initState();
   }
   IndentorName selectIndentorName;
-  void onDataChange1(IndentorName state) {
+  IndentSelection selectIndentSelection;
+  void onDataChange1(IndentSelection state) {
     setState(() {
-      selectIndentorName = state;
+      selectIndentSelection = state;
     });
   }
   Future<void> _refresh() async{
@@ -95,25 +100,25 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                 child: Container(
                   height: 52, width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<IndentorName>>(
-                      future: _dropdownBloc.indentorNameDropdownData,
+                  child: FutureBuilder<List<IndentSelection>>(
+                      future: indentSelectionDropdownBloc.indentSelectionDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<IndentorName>(
-                            stream: _dropdownBloc.selectedState,
+                        return StreamBuilder<IndentSelection>(
+                            stream: indentSelectionDropdownBloc.selectedIndentSelectionState,
                             builder: (context, item) {
-                              return SearchChoices<IndentorName>.single(
+                              return SearchChoices<IndentSelection>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectIndentorName!=null ? 2 : 11,
+                                padding: selectIndentSelection!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectIndentorName,
+                                value: selectIndentSelection,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<IndentorName>>((e) {
-                                  return DropdownMenuItem<IndentorName>(
+                                    ?.map<DropdownMenuItem<IndentSelection>>((e) {
+                                  return DropdownMenuItem<IndentSelection>(
                                     value: e,
-                                    child: Text(e.strName),
+                                    child: Text(e.StrDocID),
                                   );
                                 })?.toList() ??[],
                               );

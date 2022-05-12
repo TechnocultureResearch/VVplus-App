@@ -73,14 +73,16 @@ class _AddItemContainerState extends State<AddItemContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(0.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: Container(
                         //color: Colors.yellow,
                         height: 76,
-                        width: 120,
-                        child: Text(
-                          widget.itemNameText,
-                          style: containerTextStyle1(),
+                        width: 125,
+                        child: Center(
+                          child: Text(
+                            widget.itemNameText,
+                            style: containerTextStyle1(),
+                          ),
                         ),
                       ),
                     ),
@@ -91,7 +93,7 @@ class _AddItemContainerState extends State<AddItemContainer> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 30, top: 10),
+                padding: const EdgeInsets.only(left: 20, top: 14),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -110,11 +112,9 @@ class _AddItemContainerState extends State<AddItemContainer> {
                           ],
                         ),
                         const SizedBox(
-                          height: 2,
+                          height: 4,
                         ),
-                        const SizedBox(
-                          height: 2,
-                        ),
+
                         Text(
                           "Rate:",
                           style: containerTextStyle2(),
@@ -136,7 +136,7 @@ class _AddItemContainerState extends State<AddItemContainer> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 4, top: 5),
+                padding: const EdgeInsets.only(left: 8, top: 9),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -144,7 +144,7 @@ class _AddItemContainerState extends State<AddItemContainer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         const SizedBox(
-                          height: 0,
+                          height: 5,
                         ),
                         isEdit == false
                             ? Text(
@@ -157,14 +157,14 @@ class _AddItemContainerState extends State<AddItemContainer> {
                             : editTextfield(),
                         // editTextfield(),
                         const SizedBox(
-                          height: 0,
+                          height: 3,
                         ),
                         Text(
                           widget.rateText,
                           style: containerTextStyle2(),
                         ),
                         const SizedBox(
-                          height: 2,
+                          height: 4,
                         ),
                         Text(
                           widget.amountText,
@@ -184,20 +184,20 @@ class _AddItemContainerState extends State<AddItemContainer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Image.asset(icon15),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            //editTextfield();
-
-                            setState(() {
-                              isEdit = true;
-                              reqQtynew.clear();
-                            });
-                          },
-                          child: Text('Edit', style: containerTextStyle8()),
-                        ),
+                        const SizedBox(height: 9),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     //editTextfield();
+                        //
+                        //     setState(() {
+                        //       isEdit = true;
+                        //       reqQtynew.clear();
+                        //     });
+                        //   },
+                        //   child: Text('Edit', style: containerTextStyle8()),
+                        // ),
                         const SizedBox(height: 8),
-                        Text('Inc. Tax', style: containerTextStyle7()),
+                        Text('Inc.Tax', style: containerTextStyle7()),
                       ],
                     ),
                   ],
@@ -218,7 +218,7 @@ class _AddItemContainerState extends State<AddItemContainer> {
     return Container(
       width: 50,
       height: 24,
-      color: Colors.yellow,
+      // color: Colors.yellow,
       child: Center(
         child: TextFormField(
           focusNode: node,
