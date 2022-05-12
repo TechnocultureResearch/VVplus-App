@@ -131,6 +131,8 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
   @override
   Widget build(BuildContext context) {
     final bloc = PlacePurchaseOrderProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -145,9 +147,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               sizedbox1,
-              formsHeadText("Voucher No:"),
+              formsHeadTextNew("Voucher No:", width * .045),
               sizedbox1,
-              formsHeadText("Voucher Type"),
+              formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -162,7 +164,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType != null ? 2 : 11,
+                                padding: selectVoucherType != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType,
@@ -173,7 +177,10 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -183,10 +190,10 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Date"),
+              formsHeadTextNew("Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .09,
                 child: TextFormField(
                   validator: (val) {
                     if (val.isEmpty) {
@@ -216,7 +223,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                   },
                 ),
               ),
-              formsHeadText("Supplier"),
+              formsHeadTextNew("Supplier", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -231,7 +238,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null ? 2 : 11,
+                                padding: selectVoucherType1 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
@@ -242,7 +251,10 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -252,7 +264,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Indent Selection"),
+              formsHeadTextNew("Indent Selection", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -267,7 +279,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectIndentName != null ? 2 : 11,
+                                padding: selectIndentName != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectIndentName,
@@ -278,7 +292,10 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                             (e) {
                                       return DropdownMenuItem<IndentorName>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -288,10 +305,10 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("PO Valid Date"),
+              formsHeadTextNew("PO Valid Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .09,
                 child: TextFormField(
                   validator: (val) {
                     if (val.isEmpty) {
@@ -334,40 +351,38 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                     )
                   : const SizedBox(),
               selectIndentName != null ? sizedbox1 : const SizedBox(),
-              formsHeadText("Remarks:"),
+              formsHeadTextNew("Remarks:", width * .045),
               Container(
-                height: 70,
+                //height: 70,
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if (val != remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
-                              ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: remarks,
-                      onChanged: bloc.intextField,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          errorBorder: textFieldBorder(),
-                          errorText: snapshot.error),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != remarks.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: remarks,
+                    onChanged: bloc.intextField,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: primaryColor8,
+                      enabledBorder: textFieldBorder(),
+                      focusedBorder: textFieldBorder(),
+                      errorText: snapshot.error,
+                      isDense: true,
+                      errorBorder: textFieldBorder(),
                     ),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),

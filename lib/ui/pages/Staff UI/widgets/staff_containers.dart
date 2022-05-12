@@ -173,11 +173,10 @@ class InformationBoxContainer2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 32, left: 11),
+      padding: const EdgeInsets.only(top: 30, left: 11),
       child: Container(
         //alignment: Alignment.center,
-
-        height: SizeConfig.getHeight(context) * .167,
+        height: SizeConfig.getHeight(context) * .18,
         width: SizeConfig.getWidth(context) * .95,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
@@ -190,88 +189,87 @@ class InformationBoxContainer2 extends StatelessWidget {
             ),
           ],
         ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 10),
-                child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Name: $text1",
-                      style: containerTextStyle1(),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "GHSN/SAC: $text2",
-                              style: containerTextStyle4(),
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "Order no.: $text3",
-                              style: containerTextStyle3(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        Text(
-                          "Order Qty.:\nReceive Qty.:\nRate:\nAmount:\nRemarks:",
-                          style: containerTextStyle2(),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "$text4\n$text5\n$text6\n$text7\n$text8",
-                          style: containerTextStyle2(),
-                        ),
-                        const SizedBox(
-                          width: 24,
-                        ),
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                Image.asset(icon15),
-                                const SizedBox(
-                                  height: 12.5,
-                                ),
-                                Text(
-                                  "Edit",
-                                  style: containerTextStyle5(),
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                Text(
-                                  "Inc.Tax",
-                                  style: containerTextStyle3(),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 10),
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("$text1",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "GHSN/SAC: $text2",
+                            style: containerTextStyle4(),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            "Order no.: $text3",
+                            style: containerTextStyle3(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        "Order Qty.:\nReceive Qty.:\nRate:\nAmount:\nRemarks:",
+                        style: containerTextStyle2(),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        "$text4\n$text5\n$text6\n$text7\n$text8",
+                        style: containerTextStyle2(),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        children: [
+                          Image.asset(icon15),
+                          const SizedBox(
+                            height: 12.5,
+                          ),
+                          Text(
+                            "Edit",
+                            style: containerTextStyle5(),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          Text(
+                            "Inc.Tax",
+                            style: containerTextStyle3(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -329,14 +327,16 @@ class InformationBoxContainer6 extends StatelessWidget {
                 //mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text("$text1",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        )),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text("$text1",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
