@@ -92,6 +92,18 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     super.initState();
   }
 
+  void clearData() {
+    dateinput.clear();
+    dateinput1.clear();
+    partyBillNo.clear();
+    vechileNo.clear();
+    selectVoucherType = null;
+    selectVoucherType1 = null;
+    selectVoucherType2 = null;
+    selectVoucherType3 = null;
+    selectIndentName = null;
+  }
+
   @override
   void dispose() {
     subscription.cancel();
@@ -147,6 +159,8 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   @override
   Widget build(BuildContext context) {
     final bloc = GoodsReceiptEntryProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -168,10 +182,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                     // ignore: deprecated_member_use
                     RaisedButton(
                       onPressed: () {
-                        dateinput.clear();
-                        dateinput1.clear();
-                        partyBillNo.clear();
-                        vechileNo.clear();
+                        clearData();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -180,7 +191,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   ],
                 ),
               ),
-              formsHeadText("Voucher Type"),
+              formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -195,7 +206,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType != null ? 2 : 11,
+                                padding: selectVoucherType != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType,
@@ -206,7 +219,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -216,10 +232,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Date"),
+              formsHeadTextNew("Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .09,
                 child: TextFormField(
                   validator: (val) {
                     if (val.isEmpty) {
@@ -249,49 +265,46 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   },
                 ),
               ),
-              formsHeadText("Voucher No:"),
+              formsHeadTextNew("Voucher No:", width * .045),
               sizedbox1,
-              formsHeadText("Party Bill No"),
+              formsHeadTextNew("Party Bill No", width * .045),
               Container(
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if (val != partyBillNo.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
-                              ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: partyBillNo,
-                      onChanged: bloc.intextField,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          errorBorder: textFieldBorder(),
-                          errorText: snapshot.error),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != partyBillNo.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: partyBillNo,
+                    onChanged: bloc.intextField,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        isDense: true,
+                        errorBorder: textFieldBorder(),
+                        errorText: snapshot.error),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Party Bill Date"),
+              formsHeadTextNew("Party Bill Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .09,
                 child: TextFormField(
                   validator: (val) {
                     if (val.isEmpty) {
@@ -321,7 +334,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   },
                 ),
               ),
-              formsHeadText("Supplier"),
+              formsHeadTextNew("Supplier", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -336,7 +349,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null ? 2 : 11,
+                                padding: selectVoucherType1 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
@@ -347,7 +362,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -357,7 +375,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Purchase Order Select"),
+              formsHeadTextNew("Purchase Order Select", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -372,7 +390,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType3 != null ? 2 : 11,
+                                padding: selectVoucherType3 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType3,
@@ -383,7 +403,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -393,44 +416,41 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadText("Vehicle No."),
+              formsHeadTextNew("Vehicle No.", width * .045),
               Container(
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField1,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if (val != vechileNo.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
-                              ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: vechileNo,
-                      onChanged: bloc.intextField1,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          errorBorder: textFieldBorder(),
-                          errorText: snapshot.error),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField1,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != vechileNo.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: vechileNo,
+                    onChanged: bloc.intextField1,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        isDense: true,
+                        errorBorder: textFieldBorder(),
+                        errorText: snapshot.error),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Godown"),
+              formsHeadTextNew("Godown", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -445,7 +465,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType2 != null ? 2 : 11,
+                                padding: selectVoucherType2 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType2,
@@ -456,7 +478,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                             (e) {
                                       return DropdownMenuItem<VoucherType>(
                                         value: e,
-                                        child: Text(e.strName ?? ''),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ''),
+                                        ),
                                       );
                                     })?.toList() ??
                                     [],
@@ -479,7 +504,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                     )
                   : const SizedBox(),
               sizedbox1,
-              formsHeadText("Total Bill Value :"),
+              formsHeadTextNew("Total Bill Value :", width * .045),
               sizedbox1,
               Padding(
                   padding: padding4,
