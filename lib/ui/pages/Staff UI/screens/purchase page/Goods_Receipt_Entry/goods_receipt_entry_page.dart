@@ -4,7 +4,7 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/Goods_Rec
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/appbar_staff.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_bottomnavbar.dart';
 
-class GoodsRecepitEntryPage extends StatefulWidget{
+class GoodsRecepitEntryPage extends StatefulWidget {
   const GoodsRecepitEntryPage({Key key}) : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class _GoodsRecepitEntryPageState extends State<GoodsRecepitEntryPage> {
   Widget build(BuildContext context) {
     return GoodsReceiptEntryProvider(
       child: Scaffold(
-        appBar: appBarSatff("Goods Recepit Entry"),
+        appBar: appBarSatff("Goods Receipt Entry"),
         body: const GoodsRecepitEntryBody(),
         bottomNavigationBar: const BottomNavBarStaff(),
       ),
