@@ -19,4 +19,15 @@ class TAXOHRepository{
       rethrow;
     }
   }
+Future<List<TAXOH>> getTAXOHUnitCancelationData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getTaxOHUnitCancelationnewUrl));
+      final items = (jsonDecode(response.body) as List)
+      .map((e) => TAXOH.fromJson(e))
+      .toList();
+      return items;
+    }catch(e){
+      rethrow;
+    }
+}
 }
