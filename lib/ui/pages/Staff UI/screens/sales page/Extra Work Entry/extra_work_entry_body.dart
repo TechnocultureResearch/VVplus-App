@@ -387,7 +387,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               formsHeadTextNew("Date of Estimate", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .099,
                 child: TextFormField(
                   validator: (val) {
                     if (val.isEmpty) {
@@ -462,7 +462,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               //formsHeadText("Remarks"),
               formsHeadTextNew("Remarks", width * .045),
               Container(
-                height: 70,
+                //height: 70,
                 padding: padding1,
                 decoration: decoration1(),
                 child: StreamBuilder<String>(

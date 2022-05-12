@@ -54,6 +54,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     selectItemCostCenter = null;
     reqQty.clear();
     remarks.clear();
+    intendDateInput.clear();
+    reqDateInput.clear();
   }
 
   TextEditingController intendDateInput = TextEditingController();
@@ -71,16 +73,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   IndentorNameDropdownBloc dropdownBlocIndentorName;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
   ItemCostCenterDropdownBloc dropdownBlocItemCostCenter;
-
-  String Item = "";
-  String Qty = "";
-  String Rate = "";
-
-  void getDropDownItem() {
-    setState(() {
-      Item = dropdownValue;
-    });
-  }
 
   _calculation() {
     setState(
@@ -199,19 +191,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
   }
 
-  int valueChoose = 4;
-
-
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
-  }
-
-  void onDataChange4(ItemCurrentStatus state) {
-    setState(() {
-      selectItemCurrentStatus.Code = state as String;
-    });
   }
 
   Future<void> _refresh() async {
@@ -223,6 +206,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   @override
   Widget build(BuildContext context) {
     final bloc = MaterialRequestEntryProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     //_calculation();
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
@@ -253,7 +238,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     ],
                   ),
                 ),
-                formsHeadText(text042),
+                formsHeadTextNew(text042, width * .045),
                 Padding(
                   padding: padding1,
                   child: Container(
@@ -270,7 +255,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   icon: const Icon(
                                       Icons.keyboard_arrow_down_sharp,
                                       size: 30),
-                                  padding: selectIndentName != null ? 2 : 11,
+                                  padding: selectIndentName != null
+                                      ? height * .002
+                                      : height * .015,
                                   isExpanded: true,
                                   hint: textHint,
                                   value: selectIndentName,
@@ -281,7 +268,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                               (e) {
                                         return DropdownMenuItem<IndentorName>(
                                           value: e,
-                                          child: Text(e.strName),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(e.strName),
+                                          ),
                                         );
                                       })?.toList() ??
                                       [],
@@ -293,17 +283,18 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
                 const Padding(padding: EdgeInsets.all(10)),
 
-                formsHeadText(text045),
+                formsHeadTextNew(text045, width * .045),
+
                 Container(
                   padding: dateFieldPadding,
-                  height: dateFieldHeight,
+                  height: height * .09,
                   child: TextFormField(
                     validator: (val) {
                       if (val.isEmpty) {
-                        return text046;
+                        return 'Enter Detail';
                       }
                       if (val != intendDateInput.text) {
-                        return text047;
+                        return 'Enter Correct Detail';
                       }
                       return null;
                     },
@@ -318,11 +309,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('DD-MM-YYYY').format(pickedDate);
+                            DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           intendDateInput.text = formattedDate;
                         });
-                      }
+                      } else {}
                     },
                   ),
                 ),
@@ -330,210 +321,223 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 // ============================================================ FormsContainer
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Expanded(
-                    child: Container(
-                      // width: SizeConfig.getWidth(context),
-                      decoration: BoxDecoration(
-                        color: storeContainerColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(padding: EdgeInsets.all(10)),
-                          formsHeadText(text048),
-                          Padding(
-                            padding: padding1,
-                            child: Container(
-                              decoration: decorationForms(),
-                              child: FutureBuilder<List<ItemCurrentStatus>>(
-                                  future: dropdownBlocItemCurrentStatus
-                                      .itemCurrentStatusDropdowndata,
-                                  builder: (context, snapshot) {
-                                    return StreamBuilder<ItemCurrentStatus>(
-                                        stream: dropdownBlocItemCurrentStatus
-                                            .selectedState,
-                                        builder: (context, item) {
-                                          return SearchChoices<
-                                              ItemCurrentStatus>.single(
-                                            icon: const Icon(
-                                                Icons.keyboard_arrow_down_sharp,
-                                                size: 30),
-                                            padding:
-                                                selectItemCurrentStatus != null
-                                                    ? 2
-                                                    : 11,
-                                            isExpanded: true,
-                                            hint: textHint,
-                                            value: selectItemCurrentStatus,
-                                            displayClearIcon: false,
-                                            onChanged: onDataChange2,
-                                            items: snapshot?.data?.map<
-                                                        DropdownMenuItem<
-                                                            ItemCurrentStatus>>(
-                                                    (e) {
-                                                  return DropdownMenuItem<
-                                                      ItemCurrentStatus>(
-                                                    value: e,
+                  child: Container(
+                    width: SizeConfig.getWidth(context),
+                    decoration: BoxDecoration(
+                      color: storeContainerColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(padding: EdgeInsets.all(10)),
+                        formsHeadTextNew("Item", width * .045),
+                        Padding(
+                          padding: padding1,
+                          child: Container(
+                            decoration: decorationForms(),
+                            child: FutureBuilder<List<ItemCurrentStatus>>(
+                                future: dropdownBlocItemCurrentStatus
+                                    .itemCurrentStatusStockIssueEntryDropdownData,
+                                builder: (context, snapshot) {
+                                  return StreamBuilder<ItemCurrentStatus>(
+                                      stream: dropdownBlocItemCurrentStatus
+                                          .selectedStateitemCurrentStatus,
+                                      builder: (context, item) {
+                                        return SearchChoices<
+                                            ItemCurrentStatus>.single(
+                                          icon: const Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              size: 30),
+                                          padding:
+                                              selectItemCurrentStatus != null
+                                                  ? height * .002
+                                                  : height * .015,
+                                          isExpanded: true,
+                                          hint: "Search here",
+                                          value: selectItemCurrentStatus,
+                                          displayClearIcon: false,
+                                          onChanged: onDataChange2,
+                                          items: snapshot?.data?.map<
+                                                  DropdownMenuItem<
+                                                      ItemCurrentStatus>>((e) {
+                                                return DropdownMenuItem<
+                                                    ItemCurrentStatus>(
+                                                  value: e,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Text(e.Name),
-                                                  );
-                                                })?.toList() ??
-                                                [],
-                                          );
-                                        });
-                                  }),
-                            ),
+                                                  ),
+                                                );
+                                              })?.toList() ??
+                                              [],
+                                        );
+                                      });
+                                }),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          formsHeadText("Request Qty. "),
-                          // yahan se copy
-                          Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 35),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        formsHeadTextNew("Request Qty. ", width * .045),
+                        Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 35),
+                              child: Container(
+                                padding: padding1,
+                                decoration: decoration1(),
                                 child: Container(
-                                  height: 50,
-                                  padding: padding1,
-                                  decoration: decoration1(),
-                                  child: SizedBox(
-                                    width: 100,
-                                    child: StreamBuilder<String>(
-                                        stream: bloc.requestQty,
-                                        builder: (context, snapshot) {
-                                          reqQty.value = reqQty.value
-                                              .copyWith(text: snapshot.data);
-                                          return Expanded(
-                                            child: TextFormField(
-                                              onEditingComplete: () {
-                                                _calculation();
-                                              },
-                                              // initialValue: "no",
+                                  width: width * .28,
+                                  child: StreamBuilder<String>(
+                                      stream: bloc.requestQty,
+                                      builder: (context, snapshot) {
+                                        return TextFormField(
+                                          onEditingComplete: () {
+                                            _calculation();
+                                          },
+                                          // initialValue: "no",
+                                          controller: reqQty,
+                                          textAlign: TextAlign.center,
 
-                                              textAlign: TextAlign.center,
-                                              controller: reqQty,
-                                              decoration: InputDecoration(
-                                                errorText: snapshot.error,
-                                              ),
-                                              onChanged: bloc.changerequestQty,
-                                              keyboardType:
-                                                  TextInputType.number,
-
-                                              //onSaved: selectItemCurrentStatus.strItemName,
-
-                                              style: simpleTextStyle7(),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                ),
-                              ),
-                              selectItemCurrentStatus != null
-                                  ? Container(
-                                      height: 50,
-                                      width: 65,
-                                      decoration: decoration1(),
-                                      child: Center(
-                                          child: Text(
-                                        selectItemCurrentStatus.SKU,
-                                        //style: TextStyle(fontSize: 30),
-                                      )))
-                                  : Container(
-                                      height: 50,
-                                      decoration: decoration1(),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Center(child: Text("Unit")),
-                                      )),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    formsHeadText("Rate"),
-                                    selectItemCurrentStatus != null
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 40),
-                                            child: Container(
-                                                height: 50,
-                                                // padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                                                decoration: decoration1(),
-                                                child: Center(
-                                                    child: Text(
-                                                        selectItemCurrentStatus
-                                                            .PurchaseRate))),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 40),
-                                            child: Container(
-                                                height: 50,
-                                                decoration: decoration1(),
-                                                child: const Center(
-                                                    child: Text("0000.00"))),
+                                          decoration: InputDecoration(
+                                            errorText: snapshot.error,
                                           ),
-                                  ],
+                                          onChanged: bloc.changerequestQty,
+                                          keyboardType: TextInputType.number,
+                                          //onSaved: selectItemCurrentStatus.strItemName,
+                                          style: simpleTextStyle7(),
+                                        );
+                                      }),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Column(
+                            ),
+                            selectItemCurrentStatus != null
+                                ? Container(
+                                    height: height * .067,
+                                    width: width * .18,
+                                    // padding: const EdgeInsets.symmetric(
+                                    //     horizontal: 15.0),
+                                    decoration: decoration1(),
+                                    child: Center(
+                                        child:
+                                            Text(selectItemCurrentStatus.SKU)))
+                                : Container(
+                                    height: height * .067,
+                                    width: width * .18,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0.0),
+                                    decoration: decoration1(),
+                                    child: const Center(child: Text("Unit"))),
+                          ],
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                formsHeadTextNew("Rate", width * .045),
+                                SizedBox(
+                                  width: 70,
+                                ),
+                                Column(
                                   children: [
-                                    formsHeadText("Amount:"),
-                                    Text(
-                                      "$StringAmount",
-                                      style: containerTextStyle1(),
-                                    ),
+                                    formsHeadTextNew("Amount:", width * .045),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RaisedButton(
-                                onPressed: () {
-                                  reqQty.clear();
-                                },
-                                elevation: 0.0,
-                                color: storeContainerColor,
-                                child: raisedButtonText("Clear This Item"),
-                              ),
-                              RoundedButtonInput(
-                                text: "Add Item to List",
-                                press: (selectItemCurrentStatus != null) &&
-                                        (isActive)
-                                    ? () {
-                                        _calculation();
-                                        setState(() {
-                                          pressed = true;
-                                        });
-                                      }
-                                    : null,
-                                fontsize1: 12,
-                                size1: 0.4,
-                                horizontal1: 30,
-                                vertical1: 10,
-                                color1: Colors.orange,
-                                textColor1: textColor1,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                              ],
+                            ),
+                            Row(
+                              //mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                selectItemCurrentStatus != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 40),
+                                        child: Container(
+                                            height: height * .067,
+                                            width: width * .28,
+                                            decoration: decoration1(),
+                                            child: Center(
+                                                child: Text(
+                                                    selectItemCurrentStatus
+                                                        .PurchaseRate))),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 40),
+                                        child: Container(
+                                            height: height * .067,
+                                            width: width * .28,
+                                            decoration: decoration1(),
+                                            child: const Center(
+                                                child: Text("00.00"))),
+                                      ),
+                                SizedBox(
+                                  width: 40,
+                                ),
+                                Text(
+                                  "$StringAmount",
+                                  style: containerTextStyle1(),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10)),
+                                RaisedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      reqQty.clear();
+                                    });
+                                  },
+                                  elevation: 0.0,
+                                  color: storeContainerColor,
+                                  child: raisedButtonText("Clear This Item"),
+                                ),
+
+                                /* StreamBuilder<bool>(
+                              stream: bloc.submitCheck,
+                              builder: (context, snapshot) {
+                                return*/
+                                RoundedButtonInput(
+                                  text: "Add Item to List",
+                                  press: (selectItemCurrentStatus != null) &&
+                                          (isActive)
+                                      ? () {
+                                          _calculation();
+                                          setState(() {
+                                            pressed = true;
+                                          });
+                                          //clearData();
+                                        }
+                                      : null,
+                                  /*press: !snapshot.hasData ? null: (){
+                                  } ,*/
+                                  fontsize1: 12,
+                                  size1: 0.4,
+                                  horizontal1: 30,
+                                  vertical1: 15,
+                                  color1: Colors.orange,
+                                  textColor1: textColor1,
+                                ),
+                                //}
+                                // ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -552,51 +556,51 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 //=============================================================================
                 const Padding(padding: EdgeInsets.all(10)),
 
-                formsHeadText("Choose Phase (Cost Center)"),
+                formsHeadTextNew("Choose Phase (Cost Center)", width * .045),
                 Padding(
                   padding: padding1,
-                  child: Expanded(
-                    child: Container(
-                      decoration: decorationForms(),
-                      child: FutureBuilder<List<ItemCostCenter>>(
-                          future: dropdownBlocItemCostCenter.itemCostCenterData,
-                          builder: (context, snapshot) {
-                            return StreamBuilder<ItemCostCenter>(
-                                stream:
-                                    dropdownBlocItemCostCenter.selectedState,
-                                builder: (context, item) {
-                                  return SearchChoices<ItemCostCenter>.single(
-                                    icon: const Icon(
-                                        Icons.keyboard_arrow_down_sharp,
-                                        size: 30),
-                                    padding:
-                                        selectItemCostCenter != null ? 2 : 11,
-                                    isExpanded: true,
-                                    hint: "Search here",
-                                    value: selectItemCostCenter,
-                                    displayClearIcon: false,
-                                    onChanged: onDataChange3,
-                                    items: snapshot?.data?.map<
-                                            DropdownMenuItem<
-                                                ItemCostCenter>>((e) {
-                                          return DropdownMenuItem<
-                                              ItemCostCenter>(
-                                            value: e,
+                  child: Container(
+                    decoration: decorationForms(),
+                    child: FutureBuilder<List<ItemCostCenter>>(
+                        future: dropdownBlocItemCostCenter.itemCostCenterData,
+                        builder: (context, snapshot) {
+                          return StreamBuilder<ItemCostCenter>(
+                              stream: dropdownBlocItemCostCenter.selectedState,
+                              builder: (context, item) {
+                                return SearchChoices<ItemCostCenter>.single(
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_sharp,
+                                      size: 30),
+                                  padding: selectItemCostCenter != null
+                                      ? height * .002
+                                      : height * .015,
+                                  isExpanded: true,
+                                  hint: "Search here",
+                                  value: selectItemCostCenter,
+                                  displayClearIcon: false,
+                                  onChanged: onDataChange3,
+                                  items: snapshot?.data?.map<
+                                              DropdownMenuItem<ItemCostCenter>>(
+                                          (e) {
+                                        return DropdownMenuItem<ItemCostCenter>(
+                                          value: e,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
                                             child: Text(e.Name),
-                                          );
-                                        })?.toList() ??
-                                        [],
-                                  );
-                                });
-                          }),
-                    ),
+                                          ),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                );
+                              });
+                        }),
                   ),
                 ),
                 const SizedBox(height: 15),
-                formsHeadText("Req. Date"),
+                formsHeadTextNew("Req. Date", width * .045),
                 Container(
                   padding: dateFieldPadding,
-                  height: dateFieldHeight,
+                  height: height * .09,
                   child: TextFormField(
                     validator: (val) {
                       if (val.isEmpty) {
@@ -626,40 +630,37 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     },
                   ),
                 ),
-                formsHeadText("Remarks"),
+                formsHeadTextNew("Remarks", width * .045),
                 Container(
-                  height: 70,
+                  //height: 70,
                   padding: padding1,
                   decoration: decoration1(),
-                  child: SizedBox(
-                    width: 320,
-                    child: StreamBuilder<String>(
-                      stream: bloc.outtextField,
-                      builder: (context, snapshot) => TextFormField(
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            return 'Enter Detail';
-                          }
-                          if (val != remarks.text) {
-                            return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
-                                ? null
-                                : "Enter valid detail";
-                          }
-                          return null;
-                        },
-                        controller: remarks,
-                        onChanged: bloc.intextField,
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: primaryColor8,
-                            enabledBorder: textFieldBorder(),
-                            focusedBorder: textFieldBorder(),
-                            isDense: true,
-                            errorBorder: textFieldBorder(),
-                            errorText: snapshot.error),
-                        keyboardType: TextInputType.text,
-                        style: simpleTextStyle7(),
-                      ),
+                  child: StreamBuilder<String>(
+                    stream: bloc.outtextField,
+                    builder: (context, snapshot) => TextFormField(
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return 'Enter Detail';
+                        }
+                        if (val != remarks.text) {
+                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                              ? null
+                              : "Enter valid detail";
+                        }
+                        return null;
+                      },
+                      controller: remarks,
+                      onChanged: bloc.intextField,
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: primaryColor8,
+                          enabledBorder: textFieldBorder(),
+                          focusedBorder: textFieldBorder(),
+                          isDense: true,
+                          errorBorder: textFieldBorder(),
+                          errorText: snapshot.error),
+                      keyboardType: TextInputType.text,
+                      style: simpleTextStyle7(),
                     ),
                   ),
                 ),
