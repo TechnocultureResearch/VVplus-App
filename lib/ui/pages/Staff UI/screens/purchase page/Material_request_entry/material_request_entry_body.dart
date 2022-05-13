@@ -494,7 +494,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                               children: [
                                 const Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 10)),
+                                        EdgeInsets.symmetric(horizontal: 13)),
                                 RaisedButton(
                                   onPressed: () {
                                     setState(() {

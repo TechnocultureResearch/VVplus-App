@@ -12,7 +12,6 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropd
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/phase_to_phase_transfer_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
@@ -736,7 +735,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                             children: [
                               const Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 10)),
+                                      EdgeInsets.symmetric(horizontal: 13)),
                               RaisedButton(
                                 onPressed: () {
                                   setState(() {
