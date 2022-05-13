@@ -546,7 +546,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("Vehicle No.", width * .045),
+              formsHeadTextNew("Indent No.", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
