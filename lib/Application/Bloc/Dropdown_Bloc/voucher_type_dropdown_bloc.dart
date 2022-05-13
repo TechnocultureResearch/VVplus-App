@@ -11,12 +11,14 @@ class VoucherTypeDropdownBloc {
   final voucherTypeChequeReceiveDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeExtraWorkEntryDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypePhaseToPhaseDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypePODropdownGetData = BehaviorSubject<VoucherType>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
   Future<List<VoucherType>> voucherTypeChequeReceiveDropdownData;
   Future<List<VoucherType>> voucherTypeExtraWorkEntryDropdownData;
   Future<List<VoucherType>> voucherTypePhaseToPhaseDropdownData;
+  Future<List<VoucherType>> voucherTypePODropdownData;
 
   Stream<VoucherType> get selecteddState => voucherTypeStockIssueDropdownGetData;
   void selecteddStateEvent(VoucherType state) => voucherTypeStockIssueDropdownGetData.add(state);
@@ -33,15 +35,24 @@ class VoucherTypeDropdownBloc {
   Stream<VoucherType> get selectedPhaseToPhaseState => voucherTypeExtraWorkEntryDropdownGetData;
   void selectedPhaseToPhaseStateEvent(VoucherType state) => voucherTypePhaseToPhaseDropdownGetData.add(state);
 
+  Stream<VoucherType> get selectedPOState => voucherTypePODropdownGetData;
+  void selectedPOStateEvent(VoucherType state) => voucherTypePODropdownGetData.add(state);
+
   VoucherTypeDropdownBloc() {
     voucherTypeDropdownData = voucherTypeDropdownRepository.getData();
     voucherTypeStockIssueDropdownData = voucherTypeDropdownRepository.getStockIssueVoucherData();
     voucherTypeChequeReceiveDropdownData = voucherTypeDropdownRepository.getChequeReceiveVoucherData();
     voucherTypeExtraWorkEntryDropdownData = voucherTypeDropdownRepository.getExtraworkEntryVoucherData();
     voucherTypePhaseToPhaseDropdownData = voucherTypeDropdownRepository.getPhaseToPhaseData();
+    voucherTypePODropdownData = voucherTypeDropdownRepository.getPOData();
   }
 
   void dispose() {
     voucherTypeDropdownGetData.close();
+    voucherTypeStockIssueDropdownGetData.close();
+    voucherTypeChequeReceiveDropdownGetData.close();
+    voucherTypeExtraWorkEntryDropdownGetData.close();
+    voucherTypePhaseToPhaseDropdownGetData.close();
+    voucherTypePODropdownGetData.close();
   }
 }
