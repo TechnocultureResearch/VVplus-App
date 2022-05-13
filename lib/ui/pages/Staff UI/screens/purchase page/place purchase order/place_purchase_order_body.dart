@@ -5,15 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/place_purchase_order_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
+import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/place%20purchase%20order/container_data.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
@@ -39,9 +40,10 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
   final placePurchaseOrderFormKey = GlobalKey<FormState>();
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  SupplierDropdownBloc supplierDropdownBloc;
   IndentorNameDropdownBloc dropdownBlocIndentorName;
   VoucherType selectVoucherType;
-  VoucherType selectVoucherType1;
+  Supplier selectSupplier;
   IndentorName selectIndentName;
   var subscription;
   var connectionStatus;
@@ -52,9 +54,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     });
   }
 
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(Supplier state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectSupplier = state;
     });
   }
 
@@ -69,7 +71,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     dateinput.text = "";
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    supplierDropdownBloc = SupplierDropdownBloc();
     dropdownBlocIndentorName = IndentorNameDropdownBloc();
     subscription = Connectivity()
         .onConnectivityChanged
@@ -89,7 +91,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
       if (selectVoucherType != null &&
-          selectVoucherType1 != null &&
+          selectSupplier != null &&
           selectIndentName != null &&
           placePurchaseOrderFormKey.currentState.validate()) {
         sendData();
@@ -107,7 +109,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
           body: json.encode({
             "VoucherType": selectVoucherType.strSubCode,
             "Date": dateinput.text,
-            "Supplier": selectVoucherType1.strSubCode,
+            "Supplier": selectSupplier.Name,
             "IndentSelection": selectIndentName.strSubCode,
             "POValidDate": dateinput1.text,
             "Remarks": remarks.text
@@ -147,18 +149,16 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               sizedbox1,
-              formsHeadTextNew("Voucher No:", width * .045),
-              sizedbox1,
               formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc.voucherTypePODropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc.selectedState,
+                            stream: voucherTypeDropdownBloc.selectedPOState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
@@ -179,7 +179,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.Description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -228,32 +228,32 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Supplier>>(
+                      future: supplierDropdownBloc.supplierDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                        return StreamBuilder<Supplier>(
+                            stream: supplierDropdownBloc.selectedSupplierState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Supplier>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null
+                                padding: selectSupplier != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectSupplier,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                        ?.map<DropdownMenuItem<Supplier>>(
                                             (e) {
-                                      return DropdownMenuItem<VoucherType>(
+                                      return DropdownMenuItem<Supplier>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.Name ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
