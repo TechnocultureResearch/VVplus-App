@@ -397,6 +397,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                       builder: (context, snapshot) {
                                         return TextFormField(
                                           onEditingComplete: () {
+                                            FocusScope.of(context).requestFocus(FocusNode());
                                             _calculation();
                                           },
                                           // initialValue: "no",
