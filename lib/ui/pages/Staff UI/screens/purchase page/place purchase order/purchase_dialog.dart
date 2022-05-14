@@ -282,7 +282,7 @@ class _PurchaseDialogState extends State<PurchaseDialog> {
       child: Center(
         child: Text(txt,
             style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w600, color: fcolor),
+                fontSize: 15, fontWeight: FontWeight.w800, color: fcolor),
             textAlign: TextAlign.right),
       ),
     );
@@ -362,7 +362,7 @@ class _PurchaseDialogState extends State<PurchaseDialog> {
       child: Center(
         child: Text(txt,
             style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w600, color: fcolor),
+                fontSize: 15, fontWeight: FontWeight.w800, color: fcolor),
             textAlign: TextAlign.right),
       ),
     );
