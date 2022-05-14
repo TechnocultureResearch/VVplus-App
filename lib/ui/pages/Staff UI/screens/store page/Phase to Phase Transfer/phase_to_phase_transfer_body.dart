@@ -639,6 +639,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                     builder: (context, snapshot) {
                                       return TextFormField(
                                         onEditingComplete: () {
+                                          FocusScope.of(context).requestFocus(FocusNode());
                                           _calculation();
                                         },
                                         // initialValue: "no",
