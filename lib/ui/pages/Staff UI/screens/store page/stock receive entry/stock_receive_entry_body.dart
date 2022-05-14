@@ -487,6 +487,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     builder: (context, snapshot) {
                                       return TextFormField(
                                         onEditingComplete: () {
+                                          FocusScope.of(context).requestFocus(FocusNode());
                                           _calculation();
                                         },
                                         // initialValue: "no",
