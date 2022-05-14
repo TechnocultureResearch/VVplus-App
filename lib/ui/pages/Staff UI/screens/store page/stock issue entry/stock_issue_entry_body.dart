@@ -473,6 +473,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
 
                                       return TextFormField(
                                         onEditingComplete: () {
+                                          FocusScope.of(context).requestFocus(FocusNode());
                                           _calculation();
                                         },
                                         // initialValue: "no",
