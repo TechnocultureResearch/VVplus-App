@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,7 @@ import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/place%20purchase%20order/purchase_dialog.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
@@ -149,6 +151,37 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               sizedbox1,
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      barrierColor: Colors.transparent,
+                      builder: (BuildContext ctx) {
+                        return BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                            child: PurchaseDialog());
+                      });
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Container(
+                    height: height * .04,
+                    width: width * .3,
+                    child: Center(
+                      child: Text("PopUpTest",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white),
+                          textAlign: TextAlign.center),
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.green),
+                  ),
+                ),
+              ),
+              sizedbox1,
               formsHeadTextNew("Voucher Type", width * .045),
               Padding(
                 padding: padding1,
@@ -247,8 +280,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<Supplier>>(
-                                            (e) {
+                                        ?.map<DropdownMenuItem<Supplier>>((e) {
                                       return DropdownMenuItem<Supplier>(
                                         value: e,
                                         child: Padding(
