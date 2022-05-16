@@ -79,6 +79,17 @@ Future<List<VoucherType>> getPOData() async {
       rethrow;
     }
 }
+Future<List<VoucherType>> getBToBsendData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getBToBSendnewURl));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => VoucherType.fromJson(e))
+      .toList();
+      return items;
+    }catch(e){
+      rethrow;
+    }
+}
 }
 
 Future<List<VoucherType>> createUser(String strSubCode,String strName,String Godown) async{
