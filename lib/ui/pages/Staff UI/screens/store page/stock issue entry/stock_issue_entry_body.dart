@@ -170,19 +170,39 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   }
 
   Future<dynamic> sendData() async {
+    // try {
+    //   await http.post(Uri.parse(ApiService.mockDataPostStockIssueEntry),
+    //       body: json.encode({
+    //         "Voucher Type": selectVoucherType1.strName,
+    //         "Issue By": selectIssuedTo.Name,
+    //         "Godown": selectGodown.GodName,
+    //         "Cost Center": selectItemCostCenter.Name,
+    //         "Item": selectItemCurrentStatus.Name,
+    //         "ReqQuantity": reqQty.text,
+    //         "Unit": selectItemCurrentStatus.strUnit,
+    //         "Rate": selectItemCurrentStatus.dblQty,
+    //       }));
+    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    // }
+    //ItemCode = "CG12"
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostStockIssueEntry),
-          body: json.encode({
-            "Voucher Type": selectVoucherType1.strName,
-            "Issue By": selectIssuedTo.Name,
-            "Godown": selectGodown.GodName,
-            "Cost Center": selectItemCostCenter.Name,
-            "Item": selectItemCurrentStatus.Name,
-            "ReqQuantity": reqQty.text,
-            "Unit": selectItemCurrentStatus.strUnit,
-            "Rate": selectItemCurrentStatus.dblQty,
-          }));
+      var url = Uri.parse(
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-03-03","StrSiteCode":"AD","StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"100","DblRate":"10","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remk"}],"StrPreparedBy":"SA"}'}');
+      //'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        final String responseStatus = response.statusCode.toString();
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+        Scaffold.of(context).showSnackBar(snackBar(responseStatus));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    } catch (e) {
+      rethrow;
     } on SocketException {
       Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
     } on HttpException {
@@ -297,7 +317,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name),
+                                          child: Text(e.SubCode),
                                         ),
                                       );
                                     })?.toList() ??
@@ -337,7 +357,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodName),
+                                          child: Text(e.GodCode),
                                         ),
                                       );
                                     })?.toList() ??
@@ -380,7 +400,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name),
+                                          child: Text(e.Code),
                                         ),
                                       );
                                     })?.toList() ??
@@ -443,7 +463,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child: Text(e.Name),
+                                                    child: Text(e.SearchCode),
                                                   ),
                                                 ),
                                               );
@@ -470,10 +490,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                 child: StreamBuilder<String>(
                                     stream: bloc.requestQty,
                                     builder: (context, snapshot) {
-
                                       return TextFormField(
                                         onEditingComplete: () {
-                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
                                           _calculation();
                                         },
                                         // initialValue: "no",
