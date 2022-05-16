@@ -36,7 +36,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   TextEditingController reqQty = TextEditingController();
   final branchToBranchSendFormKey = GlobalKey<FormState>();
 
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc4;
@@ -46,7 +46,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc4;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
 
-  VoucherType selectVoucherType1;
+  VoucherType selectVoucherType;
   VoucherType selectVoucherType2;
   VoucherType selectVoucherType3;
   VoucherType selectVoucherType4;
@@ -61,7 +61,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   @override
   void initState() {
-    voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc4 = VoucherTypeDropdownBloc();
@@ -87,7 +87,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   void onDataChange1(VoucherType state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectVoucherType = state;
     });
   }
 
@@ -148,7 +148,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   verifyDetail() {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
-      if (selectVoucherType1 != null &&
+      if (selectVoucherType != null &&
           selectItemCostCenter1 != null &&
           selectItemCostCenter2 != null &&
           selectVoucherType2 != null &&
@@ -171,7 +171,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostBranchToBranchSend),
           body: json.encode({
-            "Voucher Type": selectVoucherType1.strSubCode,
+            "Voucher Type": selectVoucherType.strSubCode,
             "VoucherNoDate": dateinput.text,
             "FromBranch": selectItemCostCenter1.strSubCode,
             "FromPhase": selectItemCostCenter2.strSubCode,
@@ -231,21 +231,21 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc.voucherTypeBToBSendDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                            stream: voucherTypeDropdownBloc.selectedBToBState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null
+                                padding: selectVoucherType != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectVoucherType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
@@ -255,7 +255,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.Description ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -299,7 +299,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                   },
                 ),
               ),
-              formsHeadTextNew("From Branch", width * .045),
+              formsHeadTextNew("From CostCenter", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -322,47 +322,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 value: selectItemCostCenter1,
                                 displayClearIcon: false,
                                 onChanged: onDataChange5,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<ItemCostCenter>>(
-                                            (e) {
-                                      return DropdownMenuItem<ItemCostCenter>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
-              sizedbox1,
-              formsHeadTextNew("From Phase", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc2.itemCostCenterData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc2.selectedState,
-                            builder: (context, item) {
-                              return SearchChoices<ItemCostCenter>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectItemCostCenter2 != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectItemCostCenter2,
-                                displayClearIcon: false,
-                                onChanged: onDataChange6,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<ItemCostCenter>>(
                                             (e) {
@@ -423,7 +382,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("To Branch", width * .045),
+              formsHeadTextNew("To CostCenter", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -446,47 +405,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 value: selectItemCostCenter3,
                                 displayClearIcon: false,
                                 onChanged: onDataChange8,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<ItemCostCenter>>(
-                                            (e) {
-                                      return DropdownMenuItem<ItemCostCenter>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
-              sizedbox1,
-              formsHeadTextNew("To Phase", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc4.itemCostCenterData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc4.selectedState,
-                            builder: (context, item) {
-                              return SearchChoices<ItemCostCenter>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectItemCostCenter4 != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectItemCostCenter4,
-                                displayClearIcon: false,
-                                onChanged: onDataChange9,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<ItemCostCenter>>(
                                             (e) {
