@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:core';
 import 'package:rxdart/rxdart.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -12,6 +11,7 @@ class VoucherTypeDropdownBloc {
   final voucherTypeExtraWorkEntryDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypePhaseToPhaseDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypePODropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeBToBSendDropdownGetData = BehaviorSubject<VoucherType>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
@@ -19,6 +19,7 @@ class VoucherTypeDropdownBloc {
   Future<List<VoucherType>> voucherTypeExtraWorkEntryDropdownData;
   Future<List<VoucherType>> voucherTypePhaseToPhaseDropdownData;
   Future<List<VoucherType>> voucherTypePODropdownData;
+  Future<List<VoucherType>> voucherTypeBToBSendDropdownData;
 
   Stream<VoucherType> get selecteddState => voucherTypeStockIssueDropdownGetData;
   void selecteddStateEvent(VoucherType state) => voucherTypeStockIssueDropdownGetData.add(state);
@@ -38,6 +39,9 @@ class VoucherTypeDropdownBloc {
   Stream<VoucherType> get selectedPOState => voucherTypePODropdownGetData;
   void selectedPOStateEvent(VoucherType state) => voucherTypePODropdownGetData.add(state);
 
+  Stream<VoucherType> get selectedBToBState => voucherTypeBToBSendDropdownGetData;
+  void selectedBToBStateEvent(VoucherType state) => voucherTypeBToBSendDropdownGetData.add(state);
+
   VoucherTypeDropdownBloc() {
     voucherTypeDropdownData = voucherTypeDropdownRepository.getData();
     voucherTypeStockIssueDropdownData = voucherTypeDropdownRepository.getStockIssueVoucherData();
@@ -45,6 +49,7 @@ class VoucherTypeDropdownBloc {
     voucherTypeExtraWorkEntryDropdownData = voucherTypeDropdownRepository.getExtraworkEntryVoucherData();
     voucherTypePhaseToPhaseDropdownData = voucherTypeDropdownRepository.getPhaseToPhaseData();
     voucherTypePODropdownData = voucherTypeDropdownRepository.getPOData();
+    voucherTypeBToBSendDropdownData = voucherTypeDropdownRepository.getBToBsendData();
   }
 
   void dispose() {
@@ -54,5 +59,6 @@ class VoucherTypeDropdownBloc {
     voucherTypeExtraWorkEntryDropdownGetData.close();
     voucherTypePhaseToPhaseDropdownGetData.close();
     voucherTypePODropdownGetData.close();
+    voucherTypeBToBSendDropdownGetData.close();
   }
 }
