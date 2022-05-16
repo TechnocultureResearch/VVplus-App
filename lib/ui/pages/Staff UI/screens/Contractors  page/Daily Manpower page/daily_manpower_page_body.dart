@@ -9,18 +9,15 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/resource_type_dropdown_bloc.dart';
-import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Contractors_page_bloc/daily_manpower_page_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/common_text.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
+//import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/resource_type_model.dart';
-import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/Dropdown/material_request_entry_data_dropdown.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
@@ -37,8 +34,8 @@ class DailyManpowerBody extends StatefulWidget {
   @override
   State<DailyManpowerBody> createState() => MyDailyManpowerBody();
 }
-class MyDailyManpowerBody extends State<DailyManpowerBody> {
 
+class MyDailyManpowerBody extends State<DailyManpowerBody> {
   TextEditingController dateInput = TextEditingController();
   final TextEditingController _qty = TextEditingController();
   final TextEditingController _remarks = TextEditingController();
@@ -62,21 +59,25 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
       selectResourceType = state;
     });
   }
+
   void onDataChange2(DepartmentName state) {
     setState(() {
       selectDepartmentName = state;
     });
   }
+
   void onDataChange3(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter = state;
     });
   }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
+
   @override
   void initState() {
     dateInput.text = "";
@@ -84,45 +85,78 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     // voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     resourceTypeDropdownBloc = ResourceTypeDropdownBloc();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
-  void clearData(){
-   selectItemCostCenter = null;
-   selectResourceType = null;
-   selectDepartmentName = null;
+
+  void clearData() {
+    selectItemCostCenter = null;
+    selectResourceType = null;
+    selectDepartmentName = null;
     dateInput.clear();
     _qty.clear();
     _remarks.clear();
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectDepartmentName!=null && selectItemCostCenter!=null && selectResourceType!=null && dailyManPowerFormKey.currentState.validate()){
-        sendData(dateInput.text,selectDepartmentName.strSubCode,selectItemCostCenter.strSubCode,selectResourceType.Name,_qty.text,_remarks.text);
-      }
-      else{
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (selectDepartmentName != null &&
+          selectItemCostCenter != null &&
+          selectResourceType != null &&
+          dailyManPowerFormKey.currentState.validate()) {
+        sendData(
+            dateInput.text,
+            selectDepartmentName.Name,
+            selectItemCostCenter.strSubCode,
+            selectResourceType.Name,
+            _qty.text,
+            _remarks.text);
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
-    }
+  }
 
-  Future<dynamic> sendData(String intendDate, String partyNameSubCode, String costCenterSubCode, String resourceTypeSubCode, String reqQty, String remarks) async{
+  Future<dynamic> sendData(
+      String intendDate,
+      String partyNameSubCode,
+      String costCenterSubCode,
+      String resourceTypeSubCode,
+      String reqQty,
+      String remarks) async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostDailyManPowerURL),
-          body: json.encode({
-            "IntendDate": intendDate,
-            "PartyNameSubCode": partyNameSubCode,
-            "CostCenterSubCode": costCenterSubCode,
-            "ResourceTypeSubCode": resourceTypeSubCode,
-            "ReqQty": reqQty,
-            "Remarks": remarks
-          }));
-      Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+      var url = Uri.parse(
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostDRM?StrRecord=${'{"StrVType":"DRME","StrVDate":"${dateInput.text}","StrSiteCode":"AD","StrRemark":"${_remarks.text}","StrPreparedBy":"SA",StrDRMGrid:[{"StrCostcenter":"${selectItemCostCenter.strSubCode}","DblQty":"${_qty.text}","StrParty":"${selectDepartmentName.subCode}","StrItem":"${selectResourceType.SearchCode}","StrRemark":"${_remarks.text}"}]}'}");
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        print('Response Body: ${responseString}');
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
+    } catch (e) {
+      rethrow;
+      // try {
+      //   await http.post(Uri.parse(ApiService.mockDataPostDailyManPowerURL),
+      //       body: json.encode({
+      //         "IntendDate": intendDate,
+      //         "PartyNameSubCode": partyNameSubCode,
+      //         "CostCenterSubCode": costCenterSubCode,
+      //         "ResourceTypeSubCode": resourceTypeSubCode,
+      //         "ReqQty": reqQty,
+      //         "Remarks": remarks
+      //       }));
+      //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } on SocketException {
       Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
     } on HttpException {
@@ -132,16 +166,17 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
     }
   }
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final bloc = ContractorProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -161,7 +196,9 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     RaisedButton(
-                      onPressed: () {clearData();},
+                      onPressed: () {
+                        clearData();
+                      },
                       elevation: 0.0,
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
@@ -169,16 +206,16 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                   ],
                 ),
               ),
-              formsHeadText("Date"),
+              formsHeadTextNew("Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .09,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateInput.text) {
+                    if (val != dateInput.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -188,22 +225,23 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat(/*'dd-MM-yyyy'*/ 'yyyy-MM-dd')
+                              .format(pickedDate);
                       setState(() {
                         dateInput.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
               //sizedbox1,
-              formsHeadText("Party Name"),
+              formsHeadTextNew("Party Name", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -215,64 +253,82 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                             stream: departmentNameDropdownBloc.selectedState,
                             builder: (context, item) {
                               return SearchChoices<DepartmentName>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
-                                padding: selectDepartmentName!=null ? 2 : 11,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  size: 30,
+                                ),
+                                padding: selectDepartmentName != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                isCaseSensitiveSearch: true,
                                 value: selectDepartmentName,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<DepartmentName>>((e) {
-                                  return DropdownMenuItem<DepartmentName>(
-                                    value: e,
-                                    child: Text(e.Name),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<DepartmentName>>(
+                                            (e) {
+                                      return DropdownMenuItem<DepartmentName>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.subCode ?? ""),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
+
               sizedbox1,
-              formsHeadText("Phase (cost center)"),
+              formsHeadTextNew("Phase (cost center)", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc.costCenterDailyManpowerData,
+                      future: itemCostCenterDropdownBloc
+                          .costCenterDailyManpowerData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc.selectedCostCenterDailyManpowerState,
+                            stream: itemCostCenterDropdownBloc
+                                .selectedCostCenterDailyManpowerState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
-                                padding: selectItemCostCenter!=null ? 2 : 11,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  size: 30,
+                                ),
+                                padding: selectItemCostCenter != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectItemCostCenter,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<ItemCostCenter>>((e) {
-                                  return DropdownMenuItem<ItemCostCenter>(
-                                    value: e,
-                                    child: Text(e.Name),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<ItemCostCenter>>(
+                                            (e) {
+                                      return DropdownMenuItem<ItemCostCenter>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.Name ?? ""),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Resource Type"),
+              formsHeadTextNew("Resource Type", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -281,112 +337,115 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                       future: resourceTypeDropdownBloc.resourceTypeData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ResourceType>(
-                            stream: resourceTypeDropdownBloc.selectedResourceTypeState,
+                            stream: resourceTypeDropdownBloc
+                                .selectedResourceTypeState,
                             builder: (context, item) {
                               return SearchChoices<ResourceType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size: 30,),
-                                padding: selectResourceType!=null ? 2 : 11,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  size: 30,
+                                ),
+                                padding: selectResourceType != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectResourceType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<ResourceType>>((e) {
-                                  return DropdownMenuItem<ResourceType>(
-                                    value: e,
-                                    child: Text(e.Name),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<ResourceType>>(
+                                            (e) {
+                                      return DropdownMenuItem<ResourceType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.SearchCode),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
+                            });
+                      }),
+                ),
+              ),
+              sizedbox1,
+              formsHeadTextNew("Qty.", width * .045),
+              Container(
+                padding: padding1,
+                decoration: decoration1(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outTextField1,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
                       }
+                      if (val != _qty.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: _qty,
+                    onChanged: bloc.inTextField1,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: primaryColor8,
+                      enabledBorder: textFieldBorder(),
+                      focusedBorder: textFieldBorder(),
+                      errorText: snapshot.error,
+                      errorBorder: textFieldBorder(),
+                      isDense: true,
+                    ),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Qty."),
+              formsHeadTextNew("Remarks", width * .045),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outTextField1,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if(val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if(val != _qty.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: _qty,
-                      onChanged: bloc.inTextField1,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          errorText: snapshot.error,
-                        errorBorder: textFieldBorder(),
-                        isDense: true,
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outTextField2,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != _remarks.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: _remarks,
+                    onChanged: bloc.inTextField2,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: primaryColor8,
+                      enabledBorder: textFieldBorder(),
+                      focusedBorder: textFieldBorder(),
+                      errorText: snapshot.error,
+                      errorBorder: textFieldBorder(),
+                      isDense: true,
                     ),
-                  ),
-                ),
-              ),
-              //sizedbox1,
-              formsHeadText("Remarks"),
-              Container(
-                height: 70,
-                padding: padding1,
-                decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outTextField2,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if(val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if(val != _remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: _remarks,
-                      onChanged: bloc.inTextField2,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          errorText: snapshot.error,
-                          errorBorder: textFieldBorder(),
-                        isDense: true,
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),
               //sizedbox1,
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Submit",(){
+                  child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                    },roundedButtonHomeColor1)),
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),
