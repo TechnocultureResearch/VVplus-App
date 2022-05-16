@@ -222,7 +222,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     //       }));
     try {
       var url = Uri.parse(
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"STKTR","StrSiteCode":"AD","StrNo":"1","StrDate":"2022-05-05","StrIssuedTo":"AS495","StrPreparedByCode":"SA",StrIndGrid:[{"StrCostCenterCode":"AD1","StrGodownCode":"AD1","StrToCostCenterCode":"AD1 ","StrToGodownCode":"AD1","StrItemCode":"CG12","DblQuantity":"10","StrSKU":"Mtr","DblRate":"10","DblAmt":"100"}],"StrRemark":""}'}");
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrNo":"1","StrDate":"${dateinput.text}","StrIssuedTo":"${selectIssuedTo.SubCode}","StrPreparedByCode":"SA",StrIndGrid:[{"StrCostCenterCode":"${selectFromItemCostCenter.Code}","StrGodownCode":"${selectFromGodown.GodCode}","StrToCostCenterCode":"${selectFromItemCostCenter.Code} ","StrToGodownCode":"${selectToGodown.GodCode}","StrItemCode":"${selectToItemCostCenter.Code}","DblQuantity":"${reqQty.text}","StrSKU":"Mtr","DblRate":"10","DblAmt":"100"}],"StrRemark":"${remarks.text}"}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -384,7 +384,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name),
+                                          child: Text(e.SubCode),
                                         ),
                                       );
                                     })?.toList() ??
@@ -425,7 +425,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodName),
+                                          child: Text(e.GodCode),
                                         ),
                                       );
                                     })?.toList() ??
@@ -468,7 +468,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name),
+                                          child: Text(e.Code),
                                         ),
                                       );
                                     })?.toList() ??
@@ -509,7 +509,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodName),
+                                          child: Text(e.GodCode),
                                         ),
                                       );
                                     })?.toList() ??
@@ -552,7 +552,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name),
+                                          child: Text(e.Code),
                                         ),
                                       );
                                     })?.toList() ??
@@ -611,7 +611,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(4.0),
-                                                  child: Text(e.Name),
+                                                  child: Text(e.SearchCode),
                                                 ),
                                               );
                                             })?.toList() ??
