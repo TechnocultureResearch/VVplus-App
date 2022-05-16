@@ -85,6 +85,9 @@ class ApiService{
 
    static const String getSuppliernewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AD","StrStateCode":"BH","Strv_type":"GORD"}'}";
 
+   static const String getBToBSendnewURl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
+
+
    // mock database get url
 
   static const String mockDataIndentorNameURL = "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
