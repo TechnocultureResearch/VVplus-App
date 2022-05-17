@@ -11,13 +11,15 @@ class ItemCostCenterDropdownBloc {
   final fromCostCenterPhaseToPhaseTransferGetData = BehaviorSubject<ItemCostCenter>();
   final toCostCenterPhaseToPhaseTransferGetData = BehaviorSubject<ItemCostCenter>();
   final fromCostCenterBranchToBranchSendGetData = BehaviorSubject<ItemCostCenter>();
-  
+  final toCostCenterBranchToBranchSendGetData = BehaviorSubject<ItemCostCenter>();
+
   Future<List<ItemCostCenter>> itemCostCenterData;
   Future<List<ItemCostCenter>> itemCostCenterStockIssueEntryData;
   Future<List<ItemCostCenter>> costCenterDailyManpowerData;
   Future<List<ItemCostCenter>> fromCostCenterPhaseToPhaseData;
   Future<List<ItemCostCenter>> toCostCenterPhaseToPhaseData;
   Future<List<ItemCostCenter>> fromcostCenterBranchToBranchSendData;
+  Future<List<ItemCostCenter>> tocostCenterBranchToBranchSendData;
 
   Stream<ItemCostCenter> get selectedCostCenterState => itemCostCenterStockIssueEntryGetData;
   void selectedCostCenterStateEvent(ItemCostCenter state) => itemCostCenterStockIssueEntryGetData.add(state);
@@ -37,6 +39,9 @@ class ItemCostCenterDropdownBloc {
   Stream<ItemCostCenter> get selectedFromBranchToBranchSendState => fromCostCenterBranchToBranchSendGetData;
   void selectedFromBranchToBranchSendStateEvent(ItemCostCenter state) => fromCostCenterBranchToBranchSendGetData.add(state);
 
+  Stream<ItemCostCenter> get selectedToBranchToBranchSendState => toCostCenterBranchToBranchSendGetData;
+  void selectedToBranchToBranchSendStateEvent(ItemCostCenter state) => toCostCenterBranchToBranchSendGetData.add(state);
+
   ItemCostCenterDropdownBloc() {
     itemCostCenterData = itemCostCenterRepository.getData();
     itemCostCenterStockIssueEntryData = itemCostCenterRepository.getStockIssueEntryCostCenterData();
@@ -44,6 +49,7 @@ class ItemCostCenterDropdownBloc {
     fromCostCenterPhaseToPhaseData = itemCostCenterRepository.getPhaseToPhaseFromCostCenterData();
     toCostCenterPhaseToPhaseData = itemCostCenterRepository.getPhaseToPhaseToCostCenterData();
     fromcostCenterBranchToBranchSendData = itemCostCenterRepository.getBToBsendFromCostCenterData();
+  tocostCenterBranchToBranchSendData = itemCostCenterRepository.getBToBsendToCostCenter();
   }
 
   void dispose() {
@@ -52,5 +58,6 @@ class ItemCostCenterDropdownBloc {
     costCenterDailyManpowerGetData.close();
     toCostCenterPhaseToPhaseTransferGetData.close();
     fromCostCenterBranchToBranchSendGetData.close();
+    toCostCenterBranchToBranchSendGetData.close();
   }
 }
