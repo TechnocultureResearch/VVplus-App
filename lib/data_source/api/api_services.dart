@@ -87,6 +87,7 @@ class ApiService{
 
    static const String getBToBSendnewURl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
+   static const String getBToBSendFromCostCenter = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"CostCenter","StrSiteCode":"AD","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
    // mock database get url
 
