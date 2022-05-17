@@ -5,10 +5,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -37,20 +39,20 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   final branchToBranchSendFormKey = GlobalKey<FormState>();
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc4;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
+  GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc4;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
 
   VoucherType selectVoucherType;
-  VoucherType selectVoucherType2;
   VoucherType selectVoucherType3;
   VoucherType selectVoucherType4;
   ItemCostCenter selectItemCostCenter;
+  Godown selectGodown;
   ItemCostCenter selectItemCostCenter2;
   ItemCostCenter selectItemCostCenter3;
   ItemCostCenter selectItemCostCenter4;
@@ -62,10 +64,10 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   @override
   void initState() {
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc4 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
+    godownDropdownBloc = GodownDropdownBloc();
     itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc3 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc4 = ItemCostCenterDropdownBloc();
@@ -90,13 +92,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       selectVoucherType = state;
     });
   }
-
-  void onDataChange2(VoucherType state) {
-    setState(() {
-      selectVoucherType2 = state;
-    });
-  }
-
   void onDataChange3(VoucherType state) {
     setState(() {
       selectVoucherType3 = state;
@@ -109,9 +104,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     });
   }
 
-  void onDataChange5(ItemCostCenter state) {
+  void onDataChange2(Godown state) {
     setState(() {
-      selectItemCostCenter2 = state;
+      selectGodown = state;
     });
   }
 
@@ -151,8 +146,8 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       if (selectVoucherType != null &&
           selectItemCostCenter != null &&
           selectItemCostCenter2 != null &&
-          selectVoucherType2 != null &&
           selectItemCostCenter3 != null &&
+          selectGodown != null &&
           selectItemCostCenter4 != null &&
           selectVoucherType3 != null &&
           selectIndentorName != null &&
@@ -175,7 +170,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
             "VoucherNoDate": dateinput.text,
             "FromBranch": selectItemCostCenter.Code,
             "FromPhase": selectItemCostCenter2.strSubCode,
-            "FromGodown": selectVoucherType2.strSubCode,
+            "FromGodown": selectGodown.GodCode,
             "ToBranch": selectItemCostCenter3.strSubCode,
             "ToPhase": selectItemCostCenter4.strSubCode,
             "ToGodown": selectVoucherType3.strSubCode,
@@ -345,33 +340,33 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Godown>>(
+                      future: godownDropdownBloc.godownDropDownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc2.selectedState,
+                        return StreamBuilder<Godown>(
+                            stream: godownDropdownBloc.selectedBranchToBranchSendFromState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Godown>.single(
                                 icon: const Icon(
                                   Icons.keyboard_arrow_down_sharp,
                                   size: 30,
                                 ),
-                                padding: selectVoucherType2 != null
+                                padding: selectGodown != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectGodown,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                        ?.map<DropdownMenuItem<Godown>>(
                                             (e) {
-                                      return DropdownMenuItem<VoucherType>(
+                                      return DropdownMenuItem<Godown>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.GodName ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
