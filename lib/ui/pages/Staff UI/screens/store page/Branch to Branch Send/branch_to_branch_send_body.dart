@@ -40,7 +40,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc4;
-  ItemCostCenterDropdownBloc itemCostCenterDropdownBloc1;
+  ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc4;
@@ -50,7 +50,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   VoucherType selectVoucherType2;
   VoucherType selectVoucherType3;
   VoucherType selectVoucherType4;
-  ItemCostCenter selectItemCostCenter1;
+  ItemCostCenter selectItemCostCenter;
   ItemCostCenter selectItemCostCenter2;
   ItemCostCenter selectItemCostCenter3;
   ItemCostCenter selectItemCostCenter4;
@@ -65,7 +65,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc4 = VoucherTypeDropdownBloc();
-    itemCostCenterDropdownBloc1 = ItemCostCenterDropdownBloc();
+    itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc3 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc4 = ItemCostCenterDropdownBloc();
@@ -105,7 +105,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   void onDataChange4(ItemCostCenter state) {
     setState(() {
-      selectItemCostCenter1 = state;
+      selectItemCostCenter = state;
     });
   }
 
@@ -149,7 +149,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
       if (selectVoucherType != null &&
-          selectItemCostCenter1 != null &&
+          selectItemCostCenter != null &&
           selectItemCostCenter2 != null &&
           selectVoucherType2 != null &&
           selectItemCostCenter3 != null &&
@@ -173,7 +173,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
           body: json.encode({
             "Voucher Type": selectVoucherType.strSubCode,
             "VoucherNoDate": dateinput.text,
-            "FromBranch": selectItemCostCenter1.strSubCode,
+            "FromBranch": selectItemCostCenter.Code,
             "FromPhase": selectItemCostCenter2.strSubCode,
             "FromGodown": selectVoucherType2.strSubCode,
             "ToBranch": selectItemCostCenter3.strSubCode,
@@ -305,23 +305,23 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc1.itemCostCenterData,
+                      future: itemCostCenterDropdownBloc.fromcostCenterBranchToBranchSendData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc1.selectedState,
+                            stream: itemCostCenterDropdownBloc.selectedFromBranchToBranchSendState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter1 != null
+                                padding: selectItemCostCenter != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectItemCostCenter1,
+                                value: selectItemCostCenter,
                                 displayClearIcon: false,
-                                onChanged: onDataChange5,
+                                onChanged: onDataChange4,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<ItemCostCenter>>(
                                             (e) {
@@ -329,7 +329,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
