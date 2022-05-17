@@ -44,7 +44,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
-  ItemCostCenterDropdownBloc itemCostCenterDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc4;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
 
@@ -54,7 +53,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenter selectItemCostCenter;
   Godown selectGodown;
   ItemCostCenter selectItemCostCenter2;
-  ItemCostCenter selectItemCostCenter3;
   ItemCostCenter selectItemCostCenter4;
   IndentorName selectIndentorName;
 
@@ -69,7 +67,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
     itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
-    itemCostCenterDropdownBloc3 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc4 = ItemCostCenterDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
     dateinput.text = "";
@@ -124,7 +121,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   void onDataChange8(ItemCostCenter state) {
     setState(() {
-      selectItemCostCenter3 = state;
+      selectItemCostCenter = state;
     });
   }
 
@@ -146,7 +143,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       if (selectVoucherType != null &&
           selectItemCostCenter != null &&
           selectItemCostCenter2 != null &&
-          selectItemCostCenter3 != null &&
           selectGodown != null &&
           selectItemCostCenter4 != null &&
           selectVoucherType3 != null &&
@@ -171,7 +167,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
             "FromBranch": selectItemCostCenter.Code,
             "FromPhase": selectItemCostCenter2.strSubCode,
             "FromGodown": selectGodown.GodCode,
-            "ToBranch": selectItemCostCenter3.strSubCode,
+            "ToBranch": selectItemCostCenter.Code,
             "ToPhase": selectItemCostCenter4.strSubCode,
             "ToGodown": selectVoucherType3.strSubCode,
             "VehicleNo": selectVoucherType4.strSubCode,
@@ -335,7 +331,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("From Godown", width * .045),
+              formsHeadTextNew("Godown", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
@@ -383,23 +379,23 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc3.itemCostCenterData,
+                      future: itemCostCenterDropdownBloc.tocostCenterBranchToBranchSendData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc3.selectedState,
+                            stream: itemCostCenterDropdownBloc.selectedToBranchToBranchSendState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter3 != null
+                                padding: selectItemCostCenter != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectItemCostCenter3,
+                                value: selectItemCostCenter,
                                 displayClearIcon: false,
-                                onChanged: onDataChange8,
+                                onChanged: onDataChange4,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<ItemCostCenter>>(
                                             (e) {
@@ -407,7 +403,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -418,7 +414,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("To Godown", width * .045),
+              formsHeadTextNew("Site To", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
