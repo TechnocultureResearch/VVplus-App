@@ -28,12 +28,12 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-
 class DiscountApprovalBody extends StatefulWidget {
   const DiscountApprovalBody({Key key}) : super(key: key);
   @override
   State<DiscountApprovalBody> createState() => MyDiscountApprovalBody();
 }
+
 class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
   TextEditingController dateinput = TextEditingController();
   TextEditingController dateinput1 = TextEditingController();
@@ -58,21 +58,25 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
       selectDepartmentName = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType1 = state;
     });
   }
+
   void onDataChange3(VoucherType state) {
     setState(() {
       selectVoucherType2 = state;
     });
   }
+
   void onDataChange4(IndentorName state) {
     setState(() {
       selectIndentorName = state;
     });
   }
+
   @override
   void initState() {
     dateinput.text = "";
@@ -80,39 +84,46 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => connectionStatus = result );
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      setState(() => connectionStatus = result);
     });
     super.initState();
   }
+
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
   }
+
   int valueChoose = 4;
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
-  verifyDetail(){
-    if(connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile){
-      if(selectVoucherType1!=null && selectDepartmentName!=null && selectIndentorName!=null && selectVoucherType2!=null && discountApprovalFormKey.currentState.validate()){
+
+  verifyDetail() {
+    if (connectionStatus == ConnectivityResult.wifi ||
+        connectionStatus == ConnectivityResult.mobile) {
+      if (selectVoucherType1 != null &&
+          selectDepartmentName != null &&
+          selectIndentorName != null &&
+          selectVoucherType2 != null &&
+          discountApprovalFormKey.currentState.validate()) {
         sendData();
-      }
-      else{
+      } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
       }
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostDiscountApproval),
           body: json.encode({
@@ -121,10 +132,9 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
             "RequestedBy": selectDepartmentName.strSubCode,
             "ReasonForDiscount": selectVoucherType2.strSubCode,
             "Remarks": dateinput1.text,
-            "CustomerName" : selectIndentorName.strName,
+            "CustomerName": selectIndentorName.strName,
             "CustomerContactNo": dateinput2.text,
             "PercentageDiscount": dateinput3.text
-
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } on SocketException {
@@ -135,8 +145,11 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     final bloc = DiscountApprovalProvider.of(context);
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
@@ -157,10 +170,12 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     RaisedButton(
-                      onPressed: () {dateinput.clear();
-                      dateinput1.clear();
-                      dateinput2.clear();
-                      dateinput3.clear();},
+                      onPressed: () {
+                        dateinput.clear();
+                        dateinput1.clear();
+                        dateinput2.clear();
+                        dateinput3.clear();
+                      },
                       elevation: 0.0,
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
@@ -168,16 +183,16 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                   ],
                 ),
               ),
-              formsHeadText("Date"),
+              formsHeadTextNew("Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: dateFieldHeight,
+                height: height * .09,
                 child: TextFormField(
-                  validator: (val){
-                    if(val.isEmpty) {
+                  validator: (val) {
+                    if (val.isEmpty) {
                       return 'Enter Detail';
                     }
-                    if(val != dateinput.text) {
+                    if (val != dateinput.text) {
                       return 'Enter Correct Detail';
                     }
                     return null;
@@ -187,26 +202,24 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                   readOnly: true,
                   onTap: () async {
                     DateTime pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
+                        context: context,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
-                        lastDate: DateTime(2101)
-                    );
+                        lastDate: DateTime(2101));
                     if (pickedDate != null) {
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
-                    } else {
-                    }
+                    } else {}
                   },
                 ),
               ),
-
-              formsHeadText("Branch and Phase"),
+              formsHeadTextNew("Branch and Phase", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
@@ -215,33 +228,39 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                             stream: voucherTypeDropdownBloc1.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType1!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType1 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType1,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Requested By"),
+              formsHeadTextNew("Requested By", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<DepartmentName>>(
                       future: departmentNameDropdownBloc.departmentNameData,
@@ -250,33 +269,38 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                             stream: departmentNameDropdownBloc.selectedState,
                             builder: (context, item) {
                               return SearchChoices<DepartmentName>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectDepartmentName!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectDepartmentName != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectDepartmentName,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<DepartmentName>>((e) {
-                                  return DropdownMenuItem<DepartmentName>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<DepartmentName>>(
+                                            (e) {
+                                      return DropdownMenuItem<DepartmentName>(
+                                          value: e,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(e.strName ?? ""),
+                                          ));
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Reason for Discount"),
+              formsHeadTextNew("Reason for Discount", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
@@ -285,70 +309,73 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                             stream: voucherTypeDropdownBloc2.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectVoucherType2!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectVoucherType2 != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectVoucherType2,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                  return DropdownMenuItem<VoucherType>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                            (e) {
+                                      return DropdownMenuItem<VoucherType>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
+                            });
+                      }),
+                ),
+              ),
+              sizedbox1,
+              formsHeadTextNew("Remarks", width * .045),
+              Container(
+                padding: padding1,
+                decoration: decoration1(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField1,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
                       }
+                      if (val != dateinput1.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: dateinput1,
+                    onChanged: bloc.intextField1,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        isDense: true,
+                        errorBorder: textFieldBorder(),
+                        errorText: snapshot.error),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Remarks"),
-              Container(
-                height: 70,
-                padding: padding1,
-                decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField1,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if(val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if(val != dateinput1.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: dateinput1,
-                      onChanged: bloc.intextField1,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
-                  ),
-                ),
-              ),
-              formsHeadText("Customer Name"),
+              formsHeadTextNew("Customer Name", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<IndentorName>>(
                       future: indentorNameDropdownBloc.indentorNameDropdownData,
@@ -357,100 +384,103 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                             stream: indentorNameDropdownBloc.selectedState,
                             builder: (context, item) {
                               return SearchChoices<IndentorName>.single(
-                                icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectIndentorName!=null ? 2 : 11,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectIndentorName != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectIndentorName,
                                 displayClearIcon: false,
                                 onChanged: onDataChange4,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<IndentorName>>((e) {
-                                  return DropdownMenuItem<IndentorName>(
-                                    value: e,
-                                    child: Text(e.strName),
-                                  );
-                                })?.toList() ??[],
+                                        ?.map<DropdownMenuItem<IndentorName>>(
+                                            (e) {
+                                      return DropdownMenuItem<IndentorName>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.strName ?? ""),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
                               );
-                            }
-                        );
-                      }
-                  ),
+                            });
+                      }),
                 ),
               ),
               sizedbox1,
-              formsHeadText("Customer Contact No."),
+              formsHeadTextNew("Customer Contact No.", width * .045),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: TextFormField(
-                      validator: (val) {
-                          return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)',).hasMatch(val) ? null
-                              : "Enter valid mobile number";
-                      },
-                      controller: dateinput2,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          hintText: "+91",
-                          errorBorder: textFieldBorder(),
-
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                child: TextFormField(
+                  validator: (val) {
+                    return RegExp(
+                      r'(^(?:[+0]9)?[0-9]{10,12}$)',
+                    ).hasMatch(val)
+                        ? null
+                        : "Enter valid mobile number";
+                  },
+                  controller: dateinput2,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: primaryColor8,
+                    enabledBorder: textFieldBorder(),
+                    focusedBorder: textFieldBorder(),
+                    isDense: true,
+                    hintText: "+91",
+                    errorBorder: textFieldBorder(),
                   ),
+                  keyboardType: TextInputType.text,
+                  style: simpleTextStyle7(),
                 ),
-
+              ),
+              sizedbox1,
               formsHeadText("For Unit No.:"),
               sizedbox1,
               formsHeadText("Percentage Discount"),
               Container(
-                height: 70,
                 padding: padding1,
                 decoration: decoration1(),
-                child: SizedBox(
-                  width: 320,
-                  child: StreamBuilder<String>(
-                    stream: bloc.outtextField2,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if(val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if(val != dateinput3.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: dateinput3,
-                      onChanged: bloc.intextField2,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          errorBorder: textFieldBorder(),
-                          errorText: snapshot.error
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField2,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != dateinput3.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: dateinput3,
+                    onChanged: bloc.intextField2,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        isDense: true,
+                        errorBorder: textFieldBorder(),
+                        errorText: snapshot.error),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
                   ),
                 ),
               ),
               sizedbox1,
               Padding(
                   padding: padding4,
-                  child: roundedButtonHome2("Submit",(){ verifyDetail();},roundedButtonHomeColor1)),
+                  child: roundedButtonHome2("Submit", () {
+                    verifyDetail();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),
