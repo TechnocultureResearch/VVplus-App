@@ -24,20 +24,20 @@ class ChequeEntryClearedBody extends StatefulWidget {
   @override
   State<ChequeEntryClearedBody> createState() => _ChequeEntryReceiveBody();
 }
-class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
 
+class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
   TextEditingController depositUpToDateInput = TextEditingController();
   TextEditingController clearedDateInput = TextEditingController();
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   VoucherType selectVoucherType;
   final clearedFormKey = GlobalKey<FormState>();
 
-
   void onDataChange(VoucherType state) {
     setState(() {
       selectVoucherType = state;
     });
   }
+
   @override
   void initState() {
     depositUpToDateInput.text = "";
@@ -45,27 +45,27 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
   }
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
+
   verifyDetail() {
     if (selectVoucherType != null && clearedFormKey.currentState.validate()) {
       sendData();
-    }
-    else {
+    } else {
       Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
     }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostChequeCleared),
           body: json.encode({
@@ -82,8 +82,11 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -99,10 +102,8 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                    children:[
-                      RaisedButton(
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    RaisedButton(
                       onPressed: () {
                         depositUpToDateInput.clear();
                         clearedDateInput.clear();
@@ -111,21 +112,18 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
                       color: Colors.white,
                       child: raisedButtonText("Clear all"),
                     ),
-                    ]
-                  ),
+                  ]),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 45)),
-
-                  formsHeadText("Deposit Up To"),
-
+                  formsHeadTextNew("Deposit Up To", width * .045),
                   Container(
                     padding: dateFieldPadding,
                     height: dateFieldHeight,
                     child: TextFormField(
-                      validator: (val){
-                        if(val.isEmpty) {
+                      validator: (val) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != depositUpToDateInput.text) {
+                        if (val != depositUpToDateInput.text) {
                           return 'Enter Correct Detail';
                         }
                         return null;
@@ -135,95 +133,92 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
                       readOnly: true,
                       onTap: () async {
                         DateTime pickedDate = await showDatePicker(
-                            context: context, initialDate: DateTime.now(),
+                            context: context,
+                            initialDate: DateTime.now(),
                             firstDate: DateTime(2000),
-                            lastDate: DateTime(2101)
-                        );
+                            lastDate: DateTime(2101));
                         if (pickedDate != null) {
-                          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                          String formattedDate =
+                              DateFormat('dd-MM-yyyy').format(pickedDate);
                           setState(() {
                             depositUpToDateInput.text = formattedDate;
                           });
-                        } else {
-                        }
+                        } else {}
                       },
                     ),
                   ),
-
-                  formsHeadText("Choose Cheque"),
-
+                  formsHeadTextNew("Choose Cheque", width * .045),
                   Padding(
                     padding: padding1,
                     child: Container(
-                      height: 52, width: 343,
                       decoration: decorationForms(),
                       child: FutureBuilder<List<VoucherType>>(
-                          future: voucherTypeDropdownBloc.voucherTypeDropdownData,
+                          future:
+                              voucherTypeDropdownBloc.voucherTypeDropdownData,
                           builder: (context, snapshot) {
                             return StreamBuilder<VoucherType>(
                                 stream: voucherTypeDropdownBloc.selectedState,
                                 builder: (context, item) {
                                   return SearchChoices<VoucherType>.single(
-                                    icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectVoucherType!=null ? 2 : 11,
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        size: 30),
+                                    padding: selectVoucherType != null
+                                        ? height * .002
+                                        : height * .015,
                                     isExpanded: true,
                                     hint: "Search here",
                                     value: selectVoucherType,
                                     displayClearIcon: false,
                                     onChanged: onDataChange,
-                                    items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                      return DropdownMenuItem<VoucherType>(
-                                        value: e,
-                                        child: Text(e.strName),
-                                      );
-                                    })?.toList() ??[],
+                                    items: snapshot?.data?.map<
+                                            DropdownMenuItem<VoucherType>>((e) {
+                                          return DropdownMenuItem<VoucherType>(
+                                            value: e,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(e.strName ?? ""),
+                                            ),
+                                          );
+                                        })?.toList() ??
+                                        [],
                                   );
-                                }
-                            );
-                          }
-                      ),
+                                });
+                          }),
                     ),
                   ),
-
                   Padding(padding: paddingFormsVertical),
-
-                  formsDetailText("Bank: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsDetailText(
+                      "Bank: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
-
-                  formsDetailText("Name of Customer: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsDetailText(
+                      "Name of Customer: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
-
-                  formsDetailText("Cheque Date: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsDetailText(
+                      "Cheque Date: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
-
-                  formsDetailText("Bank: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsDetailText(
+                      "Bank: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
-
-                  formsDetailText("Amount: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsDetailText(
+                      "Amount: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
-
-                  formsDetailText("Size: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsDetailText(
+                      "Size: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
-
-                  formsHeadText("Cleared Date: ${selectVoucherType!=null ? selectVoucherType.strSubCode : ""}"),
-
+                  formsHeadText(
+                      "Cleared Date: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   Container(
                     padding: dateFieldPadding,
-                    height: dateFieldHeight,
+                    height: height * .09,
                     child: TextFormField(
-                      validator: (val){
-                        if(val.isEmpty) {
+                      validator: (val) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != clearedDateInput.text) {
+                        if (val != clearedDateInput.text) {
                           return 'Enter Correct Detail';
                         }
                         return null;
@@ -233,25 +228,26 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryClearedBody> {
                       readOnly: true,
                       onTap: () async {
                         DateTime pickedDate = await showDatePicker(
-                            context: context, initialDate: DateTime.now(),
+                            context: context,
+                            initialDate: DateTime.now(),
                             firstDate: DateTime(2000),
-                            lastDate: DateTime(2101)
-                        );
+                            lastDate: DateTime(2101));
                         if (pickedDate != null) {
-                          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                          String formattedDate =
+                              DateFormat('dd-MM-yyyy').format(pickedDate);
                           setState(() {
                             clearedDateInput.text = formattedDate;
                           });
-                        } else {
-                        }
+                        } else {}
                       },
                     ),
                   ),
-
                   Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 40),
-                      child: roundedButtonHome("Submit", () {verifyDetail();})),
+                          vertical: 10, horizontal: 40),
+                      child: roundedButtonHome("Submit", () {
+                        verifyDetail();
+                      })),
                 ],
               ),
             ],

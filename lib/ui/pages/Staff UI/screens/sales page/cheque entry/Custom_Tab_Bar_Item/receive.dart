@@ -38,8 +38,8 @@ class ChequeEntryReceiveBody extends StatefulWidget {
   @override
   State<ChequeEntryReceiveBody> createState() => _ChequeEntryReceiveBody();
 }
-class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
 
+class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   TextEditingController chequeReceivingDateInput = TextEditingController();
   final TextEditingController voucherTypeInput = TextEditingController();
   final TextEditingController chequeNoInput = TextEditingController();
@@ -65,21 +65,25 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
       selectPaymentType = state;
     });
   }
+
   void onDataChange2(VoucherType state) {
     setState(() {
       selectVoucherType = state;
     });
   }
+
   void onDataChange3(CreditAccount state) {
     setState(() {
       selectCreditAccount = state;
     });
   }
-  void onDataChange4(DrawnBank state){
+
+  void onDataChange4(DrawnBank state) {
     setState(() {
       selectDrawnBank = state;
     });
   }
+
   @override
   void initState() {
     chequeReceivingDateInput.text = "";
@@ -91,27 +95,32 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     drawnBankDropdownBloc = DrawnBankDropdownBloc();
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
   }
 
-  Future<void> _refresh() async{
-    await Future.delayed(const Duration(milliseconds: 800),() {
-      setState(() {
-      });
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {});
     });
   }
-  verifyDetail(){
-      if(selectVoucherType!=null && selectDrawnBank!=null && selectPaymentType!=null && selectDepartmentName!=null && selectCreditAccount!=null && receiveFormKey.currentState.validate()){
-        sendData();
-      }
-      else{
-        Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
-      }
+
+  verifyDetail() {
+    if (selectVoucherType != null &&
+        selectDrawnBank != null &&
+        selectPaymentType != null &&
+        selectDepartmentName != null &&
+        selectCreditAccount != null &&
+        receiveFormKey.currentState.validate()) {
+      sendData();
+    } else {
+      Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
+    }
   }
 
-  Future<dynamic> sendData() async{
+  Future<dynamic> sendData() async {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostChequeReceive),
           body: json.encode({
@@ -120,7 +129,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
             "PaymentType": selectPaymentType.Name,
             "CreditAmount": selectCreditAccount.Name,
             "DrawnBank": selectDrawnBank.StrName,
-            "ChequeNo" : chequeNoInput.text,
+            "ChequeNo": chequeNoInput.text,
             "Amount": amountInput.text
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
@@ -132,9 +141,12 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final bloc = ChequeEntryUpdateProvider.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -150,71 +162,70 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children:[
-                      RaisedButton(
-                        onPressed: () {
-                          chequeReceivingDateInput.clear();
-                        },
-                        elevation: 0.0,
-                        color: Colors.white,
-                        child: raisedButtonText("Clear all"),
-                      ),
-
-                    ]
-                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    RaisedButton(
+                      onPressed: () {
+                        chequeReceivingDateInput.clear();
+                      },
+                      elevation: 0.0,
+                      color: Colors.white,
+                      child: raisedButtonText("Clear all"),
+                    ),
+                  ]),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 45)),
-
-                  formsHeadText("Voucher Type"),
-
+                  formsHeadTextNew("Voucher Type", width * .045),
                   Padding(
                     padding: padding1,
                     child: Container(
-                      height: 55, width: 343,
                       decoration: decorationForms(),
                       child: FutureBuilder<List<VoucherType>>(
-                          future: voucherTypeDropdownBloc.voucherTypeChequeReceiveDropdownData,
+                          future: voucherTypeDropdownBloc
+                              .voucherTypeChequeReceiveDropdownData,
                           builder: (context, snapshot) {
                             return StreamBuilder<VoucherType>(
-                                stream: voucherTypeDropdownBloc.selectedChequeReceiveState,
+                                stream: voucherTypeDropdownBloc
+                                    .selectedChequeReceiveState,
                                 builder: (context, item) {
                                   return SearchChoices<VoucherType>.single(
-                                    icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectVoucherType!=null ? 2 : 11,
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        size: 30),
+                                    padding: selectVoucherType != null
+                                        ? height * .002
+                                        : height * .015,
                                     isExpanded: true,
                                     hint: "Search here",
                                     value: selectVoucherType,
                                     displayClearIcon: false,
                                     onChanged: onDataChange2,
-                                    items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>((e) {
-                                      return DropdownMenuItem<VoucherType>(
-                                        value: e,
-                                        child: Text(e.V_Type),
-                                      );
-                                    })?.toList() ??[],
+                                    items: snapshot?.data?.map<
+                                            DropdownMenuItem<VoucherType>>((e) {
+                                          return DropdownMenuItem<VoucherType>(
+                                            value: e,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(e.V_Type),
+                                            ),
+                                          );
+                                        })?.toList() ??
+                                        [],
                                   );
-                                }
-                            );
-                          }
-                      ),
+                                });
+                          }),
                     ),
                   ),
-
                   const SizedBox(height: 15),
-
-                  formsHeadText("Cheque Receiving Date"),
-
+                  formsHeadTextNew("Cheque Receiving Date", width * .045),
                   Container(
                     padding: dateFieldPadding,
                     height: dateFieldHeight,
                     child: TextFormField(
-                      validator: (val){
-                        if(val.isEmpty) {
+                      validator: (val) {
+                        if (val.isEmpty) {
                           return 'Enter Detail';
                         }
-                        if(val != chequeReceivingDateInput.text) {
+                        if (val != chequeReceivingDateInput.text) {
                           return 'Enter Correct Detail';
                         }
                         return null;
@@ -224,107 +235,115 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                       readOnly: true,
                       onTap: () async {
                         DateTime pickedDate = await showDatePicker(
-                            context: context, initialDate: DateTime.now(),
+                            context: context,
+                            initialDate: DateTime.now(),
                             firstDate: DateTime(2000),
-                            lastDate: DateTime(2101)
-                        );
+                            lastDate: DateTime(2101));
                         if (pickedDate != null) {
-                          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                          String formattedDate =
+                              DateFormat('dd-MM-yyyy').format(pickedDate);
                           setState(() {
                             chequeReceivingDateInput.text = formattedDate;
                           });
-                        } else {
-                        }
+                        } else {}
                       },
                     ),
                   ),
-
-                  formsHeadText("Payment Type"),
-
+                  formsHeadTextNew("Payment Type", width * .045),
                   Padding(
                     padding: padding1,
                     child: Container(
-                      height: 52, width: 343,
                       decoration: decorationForms(),
                       child: FutureBuilder<List<PaymentType>>(
-                          future: paymentTypeDropdownBloc.paymentTypeDropdownData,
+                          future:
+                              paymentTypeDropdownBloc.paymentTypeDropdownData,
                           builder: (context, snapshot) {
                             return StreamBuilder<PaymentType>(
-                                stream: paymentTypeDropdownBloc.selectedPaymentTypeState,
+                                stream: paymentTypeDropdownBloc
+                                    .selectedPaymentTypeState,
                                 builder: (context, item) {
                                   return SearchChoices<PaymentType>.single(
-                                    icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectPaymentType!=null ? 2 : 11,
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        size: 30),
+                                    padding: selectPaymentType != null
+                                        ? height * .002
+                                        : height * .015,
                                     isExpanded: true,
                                     hint: "Search here",
                                     value: selectPaymentType,
                                     displayClearIcon: false,
                                     onChanged: onDataChange1,
-                                    items: snapshot?.data
-                                        ?.map<DropdownMenuItem<PaymentType>>((e) {
-                                      return DropdownMenuItem<PaymentType>(
-                                        value: e,
-                                        child: Text(e.Name),
-                                      );
-                                    })?.toList() ??[],
+                                    items: snapshot?.data?.map<
+                                            DropdownMenuItem<PaymentType>>((e) {
+                                          return DropdownMenuItem<PaymentType>(
+                                            value: e,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(e.Name),
+                                            ),
+                                          );
+                                        })?.toList() ??
+                                        [],
                                   );
-                                }
-                            );
-                          }
-                      ),
+                                });
+                          }),
                     ),
                   ),
-
                   Padding(padding: paddingFormsVertical),
-
-                  formsHeadText("Credit Account (customer name)"),
-
+                  formsHeadTextNew(
+                      "Credit Account (customer name)", width * .045),
                   Padding(
                     padding: padding1,
                     child: Container(
-                      height: 52, width: 343,
                       decoration: decorationForms(),
                       child: FutureBuilder<List<CreditAccount>>(
-                          future: creditAccountDropdownBloc.creditAccountDropdownData,
+                          future: creditAccountDropdownBloc
+                              .creditAccountDropdownData,
                           builder: (context, snapshot) {
                             return StreamBuilder<CreditAccount>(
-                                stream: creditAccountDropdownBloc.selectedCreditAccountState,
+                                stream: creditAccountDropdownBloc
+                                    .selectedCreditAccountState,
                                 builder: (context, item) {
                                   return SearchChoices<CreditAccount>.single(
-                                    icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectCreditAccount!=null ? 2 : 11,
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        size: 30),
+                                    padding: selectCreditAccount != null
+                                        ? height * .002
+                                        : height * .015,
                                     isExpanded: true,
                                     hint: "Search here",
                                     value: selectCreditAccount,
                                     displayClearIcon: false,
                                     onChanged: onDataChange3,
-                                    items: snapshot?.data
-                                        ?.map<DropdownMenuItem<CreditAccount>>((e) {
-                                      return DropdownMenuItem<CreditAccount>(
-                                        value: e,
-                                        child: Text(e.Name),
-                                      );
-                                    })?.toList() ??[],
+                                    items: snapshot?.data?.map<
+                                            DropdownMenuItem<
+                                                CreditAccount>>((e) {
+                                          return DropdownMenuItem<
+                                              CreditAccount>(
+                                            value: e,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(e.Name),
+                                            ),
+                                          );
+                                        })?.toList() ??
+                                        [],
                                   );
-                                }
-                            );
-                          }
-                      ),
+                                });
+                          }),
                     ),
                   ),
-
                   Padding(padding: paddingFormsVertical),
-
-                  formsHeadText("Debit Account (company):"),
-
+                  formsHeadTextNew("Debit Account (company):", width * .045),
                   Padding(padding: paddingFormsVertical),
-
-                  formsHeadText("Drawn Bank"),
-
+                  formsHeadTextNew("Drawn Bank", width * .045),
                   Padding(
                     padding: padding1,
                     child: Container(
-                      height: 52, width: 343,
                       decoration: decorationForms(),
                       child: FutureBuilder<List<DrawnBank>>(
                           // future: itemCostCenterDropdownBloc.itemCostCenterData,
@@ -332,121 +351,115 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                           builder: (context, snapshot) {
                             return StreamBuilder<DrawnBank>(
                                 // stream: itemCostCenterDropdownBloc.selectedState,
-                              stream: drawnBankDropdownBloc.selectedDrawnBankState,
+                                stream: drawnBankDropdownBloc
+                                    .selectedDrawnBankState,
                                 builder: (context, item) {
                                   return SearchChoices<DrawnBank>.single(
-                                    icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                    padding: selectDrawnBank!=null ? 2 : 11,
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        size: 30),
+                                    padding: selectDrawnBank != null
+                                        ? height * .002
+                                        : height * .015,
                                     isExpanded: true,
                                     hint: "Search here",
                                     value: selectDrawnBank,
                                     displayClearIcon: false,
                                     onChanged: onDataChange4,
                                     items: snapshot?.data
-                                        ?.map<DropdownMenuItem<DrawnBank>>((e) {
-                                      return DropdownMenuItem<DrawnBank>(
-                                        value: e,
-                                        child: Text(e.StrName),
-                                      );
-                                    })?.toList() ??[],
+                                            ?.map<DropdownMenuItem<DrawnBank>>(
+                                                (e) {
+                                          return DropdownMenuItem<DrawnBank>(
+                                            value: e,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(e.StrName),
+                                            ),
+                                          );
+                                        })?.toList() ??
+                                        [],
                                   );
-                                }
-                            );
+                                });
+                          }),
+                    ),
+                  ),
+                  Padding(padding: paddingFormsVertical),
+                  formsHeadTextNew("Customer Info:", width * .045),
+                  Padding(padding: paddingFormsVertical),
+                  formsHeadTextNew("Cheque No.", width * .045),
+                  Container(
+                    padding: padding1,
+                    decoration: decoration1(),
+                    child: StreamBuilder<String>(
+                      stream: bloc.outtextField2,
+                      builder: (context, snapshot) => TextFormField(
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return 'Enter Detail';
                           }
+                          if (val != chequeNoInput.text) {
+                            return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                                ? null
+                                : "Enter valid detail";
+                          }
+                          return null;
+                        },
+                        controller: chequeNoInput,
+                        onChanged: bloc.intextField2,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: primaryColor8,
+                            enabledBorder: textFieldBorder(),
+                            focusedBorder: textFieldBorder(),
+                            isDense: true,
+                            errorBorder: textFieldBorder(),
+                            errorText: snapshot.error),
+                        keyboardType: TextInputType.text,
+                        style: simpleTextStyle7(),
                       ),
                     ),
                   ),
-
-                  Padding(padding: paddingFormsVertical),
-
-                  formsHeadText("Customer Info:"),
-
-                  Padding(padding: paddingFormsVertical),
-
-                  formsHeadText("Cheque No."),
-
+                  sizedbox1,
+                  formsHeadTextNew("Amount", width * .045),
                   Container(
-                    height: 70,
                     padding: padding1,
                     decoration: decoration1(),
-                    child: SizedBox(
-                      width: 320,
-                      child: StreamBuilder<String>(
-                        stream: bloc.outtextField2,
-                        builder: (context, snapshot) => TextFormField(
-                          validator: (val) {
-                            if(val.isEmpty) {
-                              return 'Enter Detail';
-                            }
-                            if(val != chequeNoInput.text) {
-                              return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                                  : "Enter valid detail";
-                            }
-                            return null;
-                          },
-                          controller: chequeNoInput,
-                          onChanged: bloc.intextField2,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: primaryColor8,
-                              enabledBorder: textFieldBorder(),
-                              focusedBorder: textFieldBorder(),
-                              isDense: true,
-                              errorBorder: textFieldBorder(),
-                              errorText: snapshot.error
-                          ),
-                          keyboardType: TextInputType.text,
-                          style: simpleTextStyle7(),
-                        ),
+                    child: StreamBuilder<String>(
+                      stream: bloc.outtextField3,
+                      builder: (context, snapshot) => TextFormField(
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return 'Enter Detail';
+                          }
+                          if (val != amountInput.text) {
+                            return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                                ? null
+                                : "Enter valid detail";
+                          }
+                          return null;
+                        },
+                        controller: amountInput,
+                        onChanged: bloc.intextField3,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: primaryColor8,
+                            enabledBorder: textFieldBorder(),
+                            focusedBorder: textFieldBorder(),
+                            isDense: true,
+                            errorBorder: textFieldBorder(),
+                            errorText: snapshot.error),
+                        keyboardType: TextInputType.text,
+                        style: simpleTextStyle7(),
                       ),
                     ),
                   ),
-
-
-
-                  formsHeadText("Amount"),
-
-                  Container(
-                    height: 70,
-                    padding: padding1,
-                    decoration: decoration1(),
-                    child: SizedBox(
-                      width: 320,
-                      child: StreamBuilder<String>(
-                        stream: bloc.outtextField3,
-                        builder: (context, snapshot) => TextFormField(
-                          validator: (val) {
-                            if(val.isEmpty) {
-                              return 'Enter Detail';
-                            }
-                            if(val != amountInput.text) {
-                              return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val) ? null
-                                  : "Enter valid detail";
-                            }
-                            return null;
-                          },
-                          controller: amountInput,
-                          onChanged: bloc.intextField3,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: primaryColor8,
-                              enabledBorder: textFieldBorder(),
-                              focusedBorder: textFieldBorder(),
-                              isDense: true,
-                              errorBorder: textFieldBorder(),
-                              errorText: snapshot.error
-                          ),
-                          keyboardType: TextInputType.text,
-                          style: simpleTextStyle7(),
-                        ),
-                      ),
-                    ),
-                  ),
-
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 0, horizontal: 40),
-                      child: roundedButtonHome("Submit", () {verifyDetail();})),
+                      child: roundedButtonHome("Submit", () {
+                        verifyDetail();
+                      })),
                 ],
               ),
             ],
