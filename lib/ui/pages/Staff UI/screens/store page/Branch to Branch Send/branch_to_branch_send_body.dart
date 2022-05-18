@@ -8,11 +8,13 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/site_To_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
+import 'package:vvplus_app/infrastructure/Models/site_to_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
@@ -39,7 +41,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   final branchToBranchSendFormKey = GlobalKey<FormState>();
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
+  SiteToDropdownBloc siteToDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc4;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   GodownDropdownBloc godownDropdownBloc;
@@ -48,7 +50,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   IndentorNameDropdownBloc indentorNameDropdownBloc;
 
   VoucherType selectVoucherType;
-  VoucherType selectVoucherType3;
+  SiteTo selectSiteTo;
   VoucherType selectVoucherType4;
   ItemCostCenter selectItemCostCenter;
   Godown selectGodown;
@@ -62,7 +64,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   @override
   void initState() {
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
+    siteToDropdownBloc = SiteToDropdownBloc();
     voucherTypeDropdownBloc4 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
@@ -89,9 +91,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       selectVoucherType = state;
     });
   }
-  void onDataChange3(VoucherType state) {
+  void onDataChange3(SiteTo state) {
     setState(() {
-      selectVoucherType3 = state;
+      selectSiteTo = state;
     });
   }
 
@@ -145,7 +147,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
           selectItemCostCenter2 != null &&
           selectGodown != null &&
           selectItemCostCenter4 != null &&
-          selectVoucherType3 != null &&
+          selectSiteTo != null &&
           selectIndentorName != null &&
           selectVoucherType4 != null &&
           branchToBranchSendFormKey.currentState.validate()) {
@@ -169,7 +171,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
             "FromGodown": selectGodown.GodCode,
             "ToBranch": selectItemCostCenter.Code,
             "ToPhase": selectItemCostCenter4.strSubCode,
-            "ToGodown": selectVoucherType3.strSubCode,
+            "ToGodown": selectGodown.GodCode,
             "VehicleNo": selectVoucherType4.strSubCode,
             "IndentSelection": selectIndentorName.strSubCode
           }));
@@ -419,32 +421,32 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
+                  child: FutureBuilder<List<SiteTo>>(
+                      future: siteToDropdownBloc.siteToDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc3.selectedState,
+                        return StreamBuilder<SiteTo>(
+                            stream: siteToDropdownBloc.selectedSiteToState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<SiteTo>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType3 != null
+                                padding: selectSiteTo != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType3,
+                                value: selectSiteTo,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                        ?.map<DropdownMenuItem<SiteTo>>(
                                             (e) {
-                                      return DropdownMenuItem<VoucherType>(
+                                      return DropdownMenuItem<SiteTo>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
