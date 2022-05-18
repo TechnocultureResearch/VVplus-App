@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/issued_to_dropdown_bloc.dart';
@@ -107,8 +108,21 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
         .listen((ConnectivityResult result) {
       setState(() => connectionStatus = result);
     });
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    formatted = formatter.format(now);
+    print("current date...$formatted");
     super.initState();
   }
+
+  String formatted;
+  // Widget currentdate() {
+  //   final DateTime now = DateTime.now();
+  //   final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  //   formatted = formatter.format(now);
+  //   print("current date...$formatted");
+  // }
 
   @override
   void dispose() {
@@ -187,7 +201,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     //ItemCode = "CG12"
     try {
       var url = Uri.parse(
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-03-03","StrSiteCode":"AD","StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"100","DblRate":"10","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remk"}],"StrPreparedBy":"SA"}'}');
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"${formatted}","StrSiteCode":"AD","StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"100","DblRate":"10","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remk"}],"StrPreparedBy":"SA"}'}');
       //'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -310,7 +324,13 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                 hint: "Search here",
                                 value: selectIssuedTo,
                                 displayClearIcon: false,
-                                onChanged: onDataChange2,
+                                // onChanged: onDataChange2,
+                                onChanged: (IssuedTo value) {
+                                  setState(() {
+                                    selectIssuedTo = value;
+                                  });
+                                },
+
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<IssuedTo>>((e) {
                                       return DropdownMenuItem<IssuedTo>(
