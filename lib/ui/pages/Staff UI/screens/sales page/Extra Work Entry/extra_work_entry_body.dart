@@ -94,6 +94,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
     });
   }
 
+  String formatted;
   @override
   void initState() {
     dateinput.text = "";
@@ -108,6 +109,9 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
         .listen((ConnectivityResult result) {
       setState(() => connectionStatus = result);
     });
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    formatted = formatter.format(now);
     super.initState();
   }
 
@@ -147,24 +151,48 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
 
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostExtraWorkEntry),
-          body: json.encode({
-            "VoucherType": _voucherType.text,
-            "BookingId": selectBookingId.DocId,
-            "StagePurpose": selectStage.SearchCode,
-            "Overhead": selectTaxOh.Code,
-            "DateOfEstimate": dateinput.text,
-            "BaseAmount": _baseAmount.text,
-            "Remarks": _remarks.text
-          }));
+      var url = Uri.parse(
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule?StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}","StrCustomer":"AD15","StrTax":"GST 01 PER",StrIndGrid:[{"StrStage":"${selectStage.SearchCode}","StrOverhead":"${selectTaxOh.ExpCode}","StrDueDate":"2022-04-25","DblBaseAmt":"1000","DblTaxAmt":"10",StrTaxGrid:[{"StrOH":"8","StrTaxOHCode":"138","DblTaxPer":"0.5","DblRC_TaxPer":"1","StrROff":"Y","DblAmt":"5","StrSubCode":"AD37"},{"StrOH":"8","StrTaxOHCode":"139","DblTaxPer":"0.5","DblRC_TaxPer":"1","StrROff":"Y","DblAmt":"5","StrSubCode":"AD36"}],"DblNetAmt":"1010"}],"StrRemark":"remark","StrPreparedBy":"SA"}'}');
+      // 'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"${formatted}","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      // final response = await http.post(Uri.parse(ApiService.postStockReceiveEntrynewURL),
+      //      body:json.encode({
+      //        "StrRecord":{"StrVType":selectVoucherType1.V_Type,"StrVDate":"2022-01-29",
+      //          "StrSiteCode":"AD","StrReceiveFrom":selectReceivedBy.SubCode,
+      //          "StrIndGrid":[{"StrItemCode":selectItemCurrentStatus.Code,
+      //          "DblQuantity":reqQty.text,"DblAmt":_amount,"DblRate":selectItemCurrentStatus.PurchaseRate,
+      //          "StrCostCenterCode":selectItemCostCenter.Code,"StrGodown":selectGodown.GodCode,
+      //          "StrRemark":"Remark1"}],"StrPreparedBy":"SA"
+      //        }
+      //        // "Voucher Type": selectVoucherType1.strName,
+      //        // "Received By": selectReceivedBy.Name,
+      //        // "Godown": selectGodown.GodName,
+      //        // "Cost Center":selectItemCostCenter.strName,
+      //        // "Item": selectItemCurrentStatus.Name,
+      //        // "ReqQuantity": reqQty.text,
+      //        // "Unit": selectItemCurrentStatus.strUnit,
+      //        // "Rate": selectItemCurrentStatus.PurchaseRate,
+      //      })
+      // );
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    } catch (e) {
+      rethrow;
     }
+    // on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    // }
   }
 
   @override
