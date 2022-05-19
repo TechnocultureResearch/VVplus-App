@@ -31,6 +31,9 @@ class VoucherType {
   String Description;
   String Name;
 
+  @override
+  String toString() => Description;
+
   factory VoucherType.fromJson(Map<String, dynamic> json) => VoucherType(
     strSubCode: json["StrSubCode"],
     strName: json["StrName"],
