@@ -10,6 +10,8 @@ class ReceivedBy{
     this.Name,
     this.SubCode
   });
+  @override
+  String toString() => Name;
 
   factory ReceivedBy.fromJson(Map<String, dynamic> json)=> ReceivedBy(
       ManualCode: json["ManualCode"],
