@@ -9,7 +9,6 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dr
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/received_by_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/stock_receive_entry_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
@@ -431,40 +430,49 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                           decoration: decorationForms(),
                           child: FutureBuilder<List<ItemCurrentStatus>>(
                               future: dropdownBlocItemCurrentStatus
-                                  .itemCurrentStatusStockIssueEntryDropdownData,
+                                  .itemCurrentStatusDropdowndata,
                               builder: (context, snapshot) {
                                 return StreamBuilder<ItemCurrentStatus>(
                                     stream: dropdownBlocItemCurrentStatus
                                         .selectedStateitemCurrentStatus,
                                     builder: (context, item) {
-                                      return SearchChoices<
-                                          ItemCurrentStatus>.single(
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down_sharp,
-                                            size: 30),
-                                        padding: selectItemCurrentStatus != null
-                                            ? height * .002
-                                            : height * .015,
-                                        isExpanded: true,
-                                        hint: "Search here",
-                                        value: selectItemCurrentStatus,
-                                        displayClearIcon: false,
-                                        onChanged: onDataChange5,
-                                        items: snapshot?.data?.map<
-                                                DropdownMenuItem<
-                                                    ItemCurrentStatus>>((e) {
-                                              return DropdownMenuItem<
-                                                  ItemCurrentStatus>(
-                                                value: e,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: Text(e.Name),
-                                                ),
-                                              );
-                                            })?.toList() ??
-                                            [],
-                                      );
+                                      return SearchChoices.single(
+                                          items: snapshot?.data?.map((e) {
+                                            return new DropdownMenuItem<ItemCurrentStatus>(
+                                                child: Text(e.Name ?? ''), value: e
+                                            );
+                                          }).toList(),
+                                          isExpanded: true,
+                                          value: selectItemCurrentStatus,
+                                          onChanged:  onDataChange5);
+                                      // return SearchChoices<ItemCurrentStatus>.single(
+                                      //   icon: const Icon(
+                                      //       Icons.keyboard_arrow_down_sharp,
+                                      //       size: 30),
+                                      //   padding: selectItemCurrentStatus != null
+                                      //       ? height * .002
+                                      //       : height * .015,
+                                      //   isExpanded: true,
+                                      //   hint: "Search here",
+                                      //   value: selectItemCurrentStatus,
+                                      //   displayClearIcon: false,
+                                      //   onChanged: onDataChange5,
+                                      //   items: snapshot?.data?.map<
+                                      //           DropdownMenuItem<
+                                      //               ItemCurrentStatus>>((e) {
+                                      //         return DropdownMenuItem<
+                                      //             ItemCurrentStatus>(
+                                      //           value: e,
+                                      //           child: Padding(
+                                      //             padding:
+                                      //                 const EdgeInsets.all(4.0),
+                                      //             child: Text(e.Name),
+                                      //           ),
+                                      //         );
+                                      //       })?.toList() ??
+                                      //       [],
+                                      //
+                                      // );
                                     });
                               }),
                         ),
