@@ -6,7 +6,8 @@ class Godown {
     this.GodCode,
     this.GodName,
 });
-
+  @override
+  String toString() => GodName;
   factory Godown.fromJson(Map<String, dynamic> json) => Godown(
     GodCode: json["GodCode"],
     GodName: json["GodName"],
