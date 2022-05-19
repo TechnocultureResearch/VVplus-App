@@ -17,7 +17,8 @@ class ItemCostCenter {
     this.Code,
     this.Name
   });
-
+  @override
+  String toString() => Name;
   String strSubCode;
   String strName;
   String Code;
