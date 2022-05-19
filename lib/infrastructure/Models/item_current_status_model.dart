@@ -20,6 +20,14 @@ class ItemCurrentStatus {
     this.HSN_SAC,this.IGName,this.LotNoYN,this.MaintainStockOn,this.MaxStock,this.MinStock,
     this.PurchaseRate,this.ReOrder,this.SKU
   });
+  @override
+  String toString() => Name;
+
+  @override
+  operator ==(o) => o is ItemCurrentStatus && o.Name == Name;
+
+  @override
+  int get hashCode => Name.hashCode^Name.hashCode^Name.hashCode;
 
   String strItemName;
   String strCostCenterName;
