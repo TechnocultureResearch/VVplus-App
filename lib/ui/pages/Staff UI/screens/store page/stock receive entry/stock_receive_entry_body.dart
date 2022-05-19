@@ -436,43 +436,43 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     stream: dropdownBlocItemCurrentStatus
                                         .selectedStateitemCurrentStatus,
                                     builder: (context, item) {
-                                      return SearchChoices.single(
-                                          items: snapshot?.data?.map((e) {
-                                            return new DropdownMenuItem<ItemCurrentStatus>(
-                                                child: Text(e.Name ?? ''), value: e
-                                            );
-                                          }).toList(),
-                                          isExpanded: true,
-                                          value: selectItemCurrentStatus,
-                                          onChanged:  onDataChange5);
-                                      // return SearchChoices<ItemCurrentStatus>.single(
-                                      //   icon: const Icon(
-                                      //       Icons.keyboard_arrow_down_sharp,
-                                      //       size: 30),
-                                      //   padding: selectItemCurrentStatus != null
-                                      //       ? height * .002
-                                      //       : height * .015,
-                                      //   isExpanded: true,
-                                      //   hint: "Search here",
-                                      //   value: selectItemCurrentStatus,
-                                      //   displayClearIcon: false,
-                                      //   onChanged: onDataChange5,
-                                      //   items: snapshot?.data?.map<
-                                      //           DropdownMenuItem<
-                                      //               ItemCurrentStatus>>((e) {
-                                      //         return DropdownMenuItem<
-                                      //             ItemCurrentStatus>(
-                                      //           value: e,
-                                      //           child: Padding(
-                                      //             padding:
-                                      //                 const EdgeInsets.all(4.0),
-                                      //             child: Text(e.Name),
-                                      //           ),
-                                      //         );
-                                      //       })?.toList() ??
-                                      //       [],
-                                      //
-                                      // );
+                                      // return SearchChoices.single(
+                                      //     items: snapshot?.data?.map((e) {
+                                      //       return new DropdownMenuItem<ItemCurrentStatus>(
+                                      //           child: Text(e.Name ?? ''), value: e
+                                      //       );
+                                      //     }).toList(),
+                                      //     isExpanded: true,
+                                      //     value: selectItemCurrentStatus,
+                                      //     onChanged:  onDataChange5);
+                                      return SearchChoices<ItemCurrentStatus>.single(
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down_sharp,
+                                            size: 30),
+                                        padding: selectItemCurrentStatus != null
+                                            ? height * .002
+                                            : height * .015,
+                                        isExpanded: true,
+                                        hint: "Search here",
+                                        value: selectItemCurrentStatus,
+                                        displayClearIcon: false,
+                                        onChanged: onDataChange5,
+                                        items: snapshot?.data?.map<
+                                                DropdownMenuItem<
+                                                    ItemCurrentStatus>>((e) {
+                                              return DropdownMenuItem<
+                                                  ItemCurrentStatus>(
+                                                value: e,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Text(e.Name),
+                                                ),
+                                              );
+                                            })?.toList() ??
+                                            [],
+
+                                      );
                                     });
                               }),
                         ),
