@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_selection_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/site_To_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
+import 'package:vvplus_app/infrastructure/Models/indent_selection_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/site_to_model.dart';
@@ -48,6 +50,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc4;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
+  IndentSelectionDropdownBloc indentSelectionBtoBDropdownBloc;
 
   VoucherType selectVoucherType;
   SiteTo selectSiteTo;
@@ -57,6 +60,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenter selectItemCostCenter2;
   ItemCostCenter selectItemCostCenter4;
   IndentorName selectIndentorName;
+  IndentSelection selectIndentSelection;
 
   var subscription;
   var connectionStatus;
@@ -71,6 +75,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc4 = ItemCostCenterDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
+    indentSelectionBtoBDropdownBloc = IndentSelectionDropdownBloc();
     dateinput.text = "";
     subscription = Connectivity()
         .onConnectivityChanged
@@ -91,6 +96,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       selectVoucherType = state;
     });
   }
+
   void onDataChange3(SiteTo state) {
     setState(() {
       selectSiteTo = state;
@@ -130,6 +136,12 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   void onDataChange9(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter4 = state;
+    });
+  }
+
+  void onDataChange10(IndentSelection state) {
+    setState(() {
+      selectIndentSelection = state;
     });
   }
 
@@ -224,7 +236,8 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc.voucherTypeBToBSendDropdownData,
+                      future: voucherTypeDropdownBloc
+                          .voucherTypeBToBSendDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
                             stream: voucherTypeDropdownBloc.selectedBToBState,
@@ -298,10 +311,12 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc.fromcostCenterBranchToBranchSendData,
+                      future: itemCostCenterDropdownBloc
+                          .fromcostCenterBranchToBranchSendData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc.selectedFromBranchToBranchSendState,
+                            stream: itemCostCenterDropdownBloc
+                                .selectedFromBranchToBranchSendState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(
@@ -342,7 +357,8 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                       future: godownDropdownBloc.godownDropDownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<Godown>(
-                            stream: godownDropdownBloc.selectedBranchToBranchSendFromState,
+                            stream: godownDropdownBloc
+                                .selectedBranchToBranchSendFromState,
                             builder: (context, item) {
                               return SearchChoices<Godown>.single(
                                 icon: const Icon(
@@ -358,8 +374,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<Godown>>(
-                                            (e) {
+                                        ?.map<DropdownMenuItem<Godown>>((e) {
                                       return DropdownMenuItem<Godown>(
                                         value: e,
                                         child: Padding(
@@ -381,10 +396,12 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<ItemCostCenter>>(
-                      future: itemCostCenterDropdownBloc.tocostCenterBranchToBranchSendData,
+                      future: itemCostCenterDropdownBloc
+                          .tocostCenterBranchToBranchSendData,
                       builder: (context, snapshot) {
                         return StreamBuilder<ItemCostCenter>(
-                            stream: itemCostCenterDropdownBloc.selectedToBranchToBranchSendState,
+                            stream: itemCostCenterDropdownBloc
+                                .selectedToBranchToBranchSendState,
                             builder: (context, item) {
                               return SearchChoices<ItemCostCenter>.single(
                                 icon: const Icon(
@@ -440,8 +457,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<SiteTo>>(
-                                            (e) {
+                                        ?.map<DropdownMenuItem<SiteTo>>((e) {
                                       return DropdownMenuItem<SiteTo>(
                                         value: e,
                                         child: Padding(
@@ -501,32 +517,33 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<IndentorName>>(
-                      future: indentorNameDropdownBloc.indentorNameDropdownData,
+                  child: FutureBuilder<List<IndentSelection>>(
+                      future: indentSelectionBtoBDropdownBloc
+                          .indentSelectionBtoBDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<IndentorName>(
-                            stream: indentorNameDropdownBloc.selectedState,
+                        return StreamBuilder<IndentSelection>(
+                            stream: indentSelectionBtoBDropdownBloc
+                                .selectedIndentSelectionBtoBState,
                             builder: (context, item) {
-                              return SearchChoices<IndentorName>.single(
+                              return SearchChoices<IndentSelection>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectIndentorName != null
+                                padding: selectIndentSelection != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectIndentorName,
+                                value: selectIndentSelection,
                                 displayClearIcon: false,
-                                onChanged: onDataChange6,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<IndentorName>>(
-                                            (e) {
-                                      return DropdownMenuItem<IndentorName>(
+                                onChanged: onDataChange10,
+                                items: snapshot?.data?.map<
+                                        DropdownMenuItem<IndentSelection>>((e) {
+                                      return DropdownMenuItem<IndentSelection>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.searchCode ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
