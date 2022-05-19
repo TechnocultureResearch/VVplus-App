@@ -23,12 +23,6 @@ class ItemCurrentStatus {
   @override
   String toString() => Name;
 
-  @override
-  operator ==(o) => o is ItemCurrentStatus && o.Name == Name;
-
-  @override
-  int get hashCode => Name.hashCode^Name.hashCode^Name.hashCode;
-
   String strItemName;
   String strCostCenterName;
   String dblQty;
