@@ -141,6 +141,8 @@ class ApiService {
   static const String getSiteToBToBSendnewURL =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"SiteTo","StrSiteCode":"AD","StrStateCode":"GJ","StrPLTCode":"1","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
+  static const String getIndentNoBToBSendnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
+  
   static const String getIndentSelectionBToBSendnewURL =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"FillSelectedIndent","StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"DAAIND   2017     202","StrItemCode":"BX154","StrGodown":"","StrMaintainStockValue":""}'}";
   // mock database get url
