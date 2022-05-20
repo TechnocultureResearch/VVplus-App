@@ -20,4 +20,15 @@ class SupplierRepository{
       rethrow;
     }
   }
+
+  Future<List<Supplier>> getSupplierBToBReceiveData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getSupplierBToBReceivenewURL));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => Supplier.fromJson(e))
+      .toList();
+      return items;
+    }catch(e){
+    }
+  }
 }
