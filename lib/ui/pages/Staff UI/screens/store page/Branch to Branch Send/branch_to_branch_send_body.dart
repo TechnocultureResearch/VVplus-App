@@ -240,7 +240,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                           .voucherTypeBToBSendDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc.selectedBToBState,
+                            stream: voucherTypeDropdownBloc.selectedBToBSendState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
