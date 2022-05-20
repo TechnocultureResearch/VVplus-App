@@ -38,12 +38,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   final TextEditingController _remarks = TextEditingController();
   final branchToBranchReceiveFormKey = GlobalKey<FormState>();
 
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
 
-  VoucherType selectVoucherType1;
+  VoucherType selectVoucherType;
   VoucherType selectVoucherType2;
   VoucherType selectVoucherType3;
   IndentorName selectIndentorName;
@@ -53,7 +53,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
 
   @override
   void initState() {
-    voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
@@ -66,7 +66,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   }
 
   void clearData() {
-    selectVoucherType1 = null;
+    selectVoucherType = null;
     selectVoucherType2 = null;
     selectVoucherType3 = null;
     selectIndentorName = null;
@@ -84,7 +84,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
 
   void onDataChange1(VoucherType state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectVoucherType = state;
     });
   }
 
@@ -115,7 +115,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   verifyDetail() {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
-      if (selectVoucherType1 != null &&
+      if (selectVoucherType != null &&
           selectVoucherType2 != null &&
           selectVoucherType3 != null &&
           selectIndentorName != null &&
@@ -133,7 +133,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostBranchToBranchReceive),
           body: json.encode({
-            "VoucherType": selectVoucherType1.strSubCode,
+            "VoucherType": selectVoucherType.strSubCode,
             "ReceivingGoodsFromBranch": selectVoucherType2.strSubCode,
             "ReceivingInGodown": selectVoucherType3.strSubCode,
             "TransferEntrySelection": selectIndentorName.strSubCode,
@@ -191,21 +191,21 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc.voucherTypeBToBReceiveDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                            stream: voucherTypeDropdownBloc.selectedBToBReceiveState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null
+                                padding: selectVoucherType != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectVoucherType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
@@ -215,7 +215,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.Description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
