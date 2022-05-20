@@ -223,6 +223,13 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
+                        selectIndentNo = null;
+                        selectSiteTo = null;
+                        selectGodown = null;
+                        selectIndentSelection = null;
+                        selectVoucherType = null;
+                        selectItemCostCenter = null;
+                        selectIndentorName = null;
                         dateinput.clear();
                       },
                       elevation: 0.0,
