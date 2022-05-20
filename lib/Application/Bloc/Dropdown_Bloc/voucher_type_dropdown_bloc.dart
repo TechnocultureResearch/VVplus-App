@@ -12,6 +12,7 @@ class VoucherTypeDropdownBloc {
   final voucherTypePhaseToPhaseDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypePODropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeBToBSendDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeBToBReceiveDropdownGetData = BehaviorSubject<VoucherType>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
@@ -20,6 +21,7 @@ class VoucherTypeDropdownBloc {
   Future<List<VoucherType>> voucherTypePhaseToPhaseDropdownData;
   Future<List<VoucherType>> voucherTypePODropdownData;
   Future<List<VoucherType>> voucherTypeBToBSendDropdownData;
+  Future<List<VoucherType>> voucherTypeBToBReceiveDropdownData;
 
   Stream<VoucherType> get selecteddState => voucherTypeStockIssueDropdownGetData;
   void selecteddStateEvent(VoucherType state) => voucherTypeStockIssueDropdownGetData.add(state);
@@ -39,8 +41,11 @@ class VoucherTypeDropdownBloc {
   Stream<VoucherType> get selectedPOState => voucherTypePODropdownGetData;
   void selectedPOStateEvent(VoucherType state) => voucherTypePODropdownGetData.add(state);
 
-  Stream<VoucherType> get selectedBToBState => voucherTypeBToBSendDropdownGetData;
+  Stream<VoucherType> get selectedBToBSendState => voucherTypeBToBSendDropdownGetData;
   void selectedBToBStateEvent(VoucherType state) => voucherTypeBToBSendDropdownGetData.add(state);
+
+  Stream<VoucherType> get selectedBToBReceiveState => voucherTypeBToBReceiveDropdownGetData;
+  void selectedBToBReceiveStateEvent(VoucherType state) => voucherTypeBToBReceiveDropdownGetData.add(state);
 
   VoucherTypeDropdownBloc() {
     voucherTypeDropdownData = voucherTypeDropdownRepository.getData();
@@ -50,6 +55,7 @@ class VoucherTypeDropdownBloc {
     voucherTypePhaseToPhaseDropdownData = voucherTypeDropdownRepository.getPhaseToPhaseData();
     voucherTypePODropdownData = voucherTypeDropdownRepository.getPOData();
     voucherTypeBToBSendDropdownData = voucherTypeDropdownRepository.getBToBsendData();
+    voucherTypeBToBReceiveDropdownData = voucherTypeDropdownRepository.getBToBReceiveData();
   }
 
   void dispose() {
@@ -59,6 +65,7 @@ class VoucherTypeDropdownBloc {
     voucherTypeExtraWorkEntryDropdownGetData.close();
     voucherTypePhaseToPhaseDropdownGetData.close();
     voucherTypePODropdownGetData.close();
+    voucherTypeBToBSendDropdownGetData.close();
     voucherTypeBToBSendDropdownGetData.close();
   }
 }
