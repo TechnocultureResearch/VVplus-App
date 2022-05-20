@@ -4,12 +4,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/branch_to_branch_receive_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
+import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
+import 'package:vvplus_app/infrastructure/Repository/supplier_repository.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
@@ -39,12 +42,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   final branchToBranchReceiveFormKey = GlobalKey<FormState>();
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  SupplierDropdownBloc supplierDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
 
   VoucherType selectVoucherType;
-  VoucherType selectVoucherType2;
+  Supplier selectSupplier;
   VoucherType selectVoucherType3;
   IndentorName selectIndentorName;
 
@@ -54,7 +57,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   @override
   void initState() {
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
+    supplierDropdownBloc = SupplierDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
     subscription = Connectivity()
@@ -67,10 +70,9 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
 
   void clearData() {
     selectVoucherType = null;
-    selectVoucherType2 = null;
+    selectSupplier = null;
     selectVoucherType3 = null;
     selectIndentorName = null;
-
     _vehicleNo.clear();
     _gateEntryNo.clear();
     _remarks.clear();
@@ -88,9 +90,9 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     });
   }
 
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(Supplier state) {
     setState(() {
-      selectVoucherType2 = state;
+      selectSupplier = state;
     });
   }
 
@@ -116,7 +118,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
       if (selectVoucherType != null &&
-          selectVoucherType2 != null &&
+          selectSupplier != null &&
           selectVoucherType3 != null &&
           selectIndentorName != null &&
           branchToBranchReceiveFormKey.currentState.validate()) {
@@ -134,7 +136,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
       await http.post(Uri.parse(ApiService.mockDataPostBranchToBranchReceive),
           body: json.encode({
             "VoucherType": selectVoucherType.strSubCode,
-            "ReceivingGoodsFromBranch": selectVoucherType2.strSubCode,
+            "ReceivingGoodsFromBranch": selectSupplier.Name,
             "ReceivingInGodown": selectVoucherType3.strSubCode,
             "TransferEntrySelection": selectIndentorName.strSubCode,
             "GateEntryNo": _gateEntryNo.text,
@@ -231,32 +233,32 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
+                  child: FutureBuilder<List<Supplier>>(
+                      future: supplierDropdownBloc.supplierBToBReceiveDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc2.selectedState,
+                        return StreamBuilder<Supplier>(
+                            stream: supplierDropdownBloc.selectedSupplierState,
                             builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
+                              return SearchChoices<Supplier>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType2 != null
+                                padding: selectSupplier != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectSupplier,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
+                                        ?.map<DropdownMenuItem<Supplier>>(
                                             (e) {
-                                      return DropdownMenuItem<VoucherType>(
+                                      return DropdownMenuItem<Supplier>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.Name ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
