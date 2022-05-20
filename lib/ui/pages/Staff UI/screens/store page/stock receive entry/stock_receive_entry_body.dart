@@ -436,15 +436,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     stream: dropdownBlocItemCurrentStatus
                                         .selectedStateitemCurrentStatus,
                                     builder: (context, item) {
-                                      // return SearchChoices.single(
-                                      //     items: snapshot?.data?.map((e) {
-                                      //       return new DropdownMenuItem<ItemCurrentStatus>(
-                                      //           child: Text(e.Name ?? ''), value: e
-                                      //       );
-                                      //     }).toList(),
-                                      //     isExpanded: true,
-                                      //     value: selectItemCurrentStatus,
-                                      //     onChanged:  onDataChange5);
                                       return SearchChoices<ItemCurrentStatus>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
