@@ -131,7 +131,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   void onDataChange8(ItemCostCenter state) {
     setState(() {
-      selectItemCostCenter = state;
+      selectItemCostCenter2 = state;
     });
   }
 
@@ -160,10 +160,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
           selectItemCostCenter != null &&
           selectItemCostCenter2 != null &&
           selectGodown != null &&
-          selectItemCostCenter4 != null &&
           selectSiteTo != null &&
-          selectIndentorName != null &&
-          selectIndentNo != null &&
+          /* selectIndentorName != null &&
+          selectIndentNo != null &&*/
           branchToBranchSendFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -176,27 +175,49 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostBranchToBranchSend),
-          body: json.encode({
-            "Voucher Type": selectVoucherType.strSubCode,
-            "VoucherNoDate": dateinput.text,
-            "FromBranch": selectItemCostCenter.Code,
-            "FromPhase": selectItemCostCenter2.strSubCode,
-            "FromGodown": selectGodown.GodCode,
-            "ToBranch": selectItemCostCenter.Code,
-            "ToPhase": selectItemCostCenter4.strSubCode,
-            "ToGodown": selectGodown.GodCode,
-            "VehicleNo": selectIndentNo.IndNo,
-            "IndentSelection": selectIndentorName.strSubCode
-          }));
+      var baseurl =
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkTransferMan';
+
+      var url = Uri.parse(baseurl +
+          "?" +
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrFrmSite":"AD","StrFrmParty":"${selectSiteTo.SubCode}","StrFrmCC":"${selectItemCostCenter.Code}","StrFrmGodown":"${selectGodown.GodCode}","StrToSite":"${selectSiteTo.Code}","StrToParty":"${selectSiteTo.SubCode}","StrToCC":"${selectItemCostCenter.Code}","StrVehicleNo":"","StrIndent":"","StrSiteCode":"AD",StrIndGrid:[{"StrItemCode":"${selectIndentSelection.itemCode}",'
+              '"DblQuantity":"10","StrSKU":"PIECE","DblRate":"10","DblAmt":"100",StrItemGrid:[{"StrIndDocID":"","DblTrnQuantity":"10"}],"DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblNetValueRate":"118","DblNetValueAmt":"118"}],	'
+              '"DblGrossRate":"0","DblGrossAmt":"118","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"0","DblSGSTAmt":"9","DblCGSTRate":"0","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0","DblBillAmt":"0","DblRoundOffRate":"0","DblRoundOffAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118","StrPreparedBy":"SA","StrAgtForm":"HO3"}'}');
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    } catch (e) {
+      rethrow;
     }
+    // try {
+    //   await http.post(Uri.parse(ApiService.mockDataPostBranchToBranchSend),
+    //       body: json.encode({
+    //         "Voucher Type": selectVoucherType.strSubCode,
+    //         "VoucherNoDate": dateinput.text,
+    //         "FromBranch": selectItemCostCenter.Code,
+    //         "FromPhase": selectItemCostCenter2.strSubCode,
+    //         "FromGodown": selectGodown.GodCode,
+    //         "ToBranch": selectItemCostCenter.Code,
+    //         "ToPhase": selectItemCostCenter4.strSubCode,
+    //         "ToGodown": selectGodown.GodCode,
+    //         "VehicleNo": selectIndentNo.IndNo,
+    //         "IndentSelection": selectIndentorName.strSubCode
+    //       }));
+    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    // } on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    // }
   }
 
   @override
@@ -242,7 +263,8 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                           .voucherTypeBToBSendDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc.selectedBToBSendState,
+                            stream:
+                                voucherTypeDropdownBloc.selectedBToBSendState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
@@ -263,7 +285,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Description ?? ""),
+                                          child: Text(e.V_Type ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -299,7 +321,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
@@ -339,7 +361,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name ?? ""),
+                                          child: Text(e.Code ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -381,7 +403,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodName ?? ""),
+                                          child: Text(e.GodCode ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -409,14 +431,14 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectItemCostCenter != null
+                                padding: selectItemCostCenter2 != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectItemCostCenter,
+                                value: selectItemCostCenter2,
                                 displayClearIcon: false,
-                                onChanged: onDataChange4,
+                                onChanged: onDataChange8,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<ItemCostCenter>>(
                                             (e) {
@@ -424,7 +446,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name ?? ""),
+                                          child: Text(e.Code ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -464,7 +486,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name ?? ""),
+                                          child: Text(e.Code ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -544,7 +566,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.searchCode ?? ""),
+                                          child: Text(e.itemCode ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
