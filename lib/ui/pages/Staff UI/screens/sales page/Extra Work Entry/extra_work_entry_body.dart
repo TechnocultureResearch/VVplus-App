@@ -151,9 +151,16 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
 
   Future<dynamic> sendData() async {
     try {
-      var url = Uri.parse(
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule?StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}","StrCustomer":"AD15","StrTax":"GST 01 PER",StrIndGrid:[{"StrStage":"${selectStage.SearchCode}","StrOverhead":"${selectTaxOh.ExpCode}","StrDueDate":"2022-04-25","DblBaseAmt":"1000","DblTaxAmt":"10",StrTaxGrid:[{"StrOH":"8","StrTaxOHCode":"138","DblTaxPer":"0.5","DblRC_TaxPer":"1","StrROff":"Y","DblAmt":"5","StrSubCode":"AD37"},{"StrOH":"8","StrTaxOHCode":"139","DblTaxPer":"0.5","DblRC_TaxPer":"1","StrROff":"Y","DblAmt":"5","StrSubCode":"AD36"}],"DblNetAmt":"1010"}],"StrRemark":"remark","StrPreparedBy":"SA"}'}');
-      // 'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"${formatted}","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
+      var baseUrl =
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule';
+      var url = Uri.parse(baseUrl +
+          "?" +
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}",'
+              '"StrCustomer":"AD15","StrTax":"GST 01 PER",StrIndGrid:[{"StrStage":"${selectStage.SearchCode}","StrOverhead":"8","StrDueDate":"${selectStage.DueDate}","DblBaseAmt":"${_baseAmount.text}","DblTaxAmt":"10",'
+              'StrTaxGrid:[{"StrOH":"8","StrTaxOHCode":"138","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}","StrROff":"Y","DblAmt":"5","StrSubCode":"AD37"},'
+              '{"StrOH":"8","StrTaxOHCode":"139","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}","StrROff":"Y","DblAmt":"5","StrSubCode":"AD36"}],"DblNetAmt":"1010"}],'
+              '"StrRemark":"${_remarks.text}","StrPreparedBy":"SA"}'}');
+
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -263,7 +270,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text(e.V_Type),
+                                          child: Text(e.V_Type ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
