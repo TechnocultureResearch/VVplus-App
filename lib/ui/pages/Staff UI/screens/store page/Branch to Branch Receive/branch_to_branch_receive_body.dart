@@ -3,13 +3,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/fill_transfer_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/branch_to_branch_receive_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/fill_transfer_model.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
@@ -47,11 +50,13 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   SupplierDropdownBloc supplierDropdownBloc;
   GodownDropdownBloc godownDropdownBloc;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
+  FillTransferDropdownBloc fillTransferDropdownBloc;
 
   VoucherType selectVoucherType;
   Supplier selectSupplier;
   Godown selectGodown;
   IndentorName selectIndentorName;
+  FillTransferModel selectFillTransfer;
 
   var subscription;
   var connectionStatus;
@@ -62,6 +67,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     supplierDropdownBloc = SupplierDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
+    fillTransferDropdownBloc = FillTransferDropdownBloc();
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -75,6 +81,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     selectSupplier = null;
     selectGodown = null;
     selectIndentorName = null;
+    selectFillTransfer = null;
     _vehicleNo.clear();
     _gateEntryNo.clear();
     _remarks.clear();
@@ -104,12 +111,21 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     });
   }
 
-  void onDataChange4(IndentorName state) {
+  void onDataChange4(FillTransferModel state) {
     setState(() {
-      selectIndentorName = state;
+      selectFillTransfer = state;
     });
   }
-
+  Future<dynamic> FillTransfer() async {
+    try{
+var url = Uri.parse('http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer","StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":""}'}');
+final response = await http.get(url);
+final items = (jsonDecode(response.body)as List)
+.map((e) => FillTransferModel.fromJson(e))
+.toList();
+return items;
+    }catch(e){rethrow;}
+  }
   Future<void> _refresh() async {
     await Future.delayed(const Duration(milliseconds: 800), () {
       setState(() {});
@@ -122,7 +138,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
       if (selectVoucherType != null &&
           selectSupplier != null &&
           selectGodown != null &&
-          selectIndentorName != null &&
+          selectFillTransfer != null &&
           branchToBranchReceiveFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -140,7 +156,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
             "VoucherType": selectVoucherType.strSubCode,
             "ReceivingGoodsFromBranch": selectSupplier.Name,
             "ReceivingInGodown": selectGodown.GodCode,
-            "TransferEntrySelection": selectIndentorName.strSubCode,
+            "TransferEntrySelection": selectFillTransfer.DocId,
             "GateEntryNo": _gateEntryNo.text,
             "VehicleNo": _vehicleNo.text,
             "Remarks": _remarks.text
@@ -317,32 +333,57 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<IndentorName>>(
-                      future: indentorNameDropdownBloc.indentorNameDropdownData,
+                  child: FutureBuilder<List<FillTransferModel>>(
+                      future:fillTransferDropdownBloc.fillTransferDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<IndentorName>(
-                            stream: indentorNameDropdownBloc.selectedState,
+                        // return SearchChoices<IndentorName>.single(
+                        //             icon: const Icon(
+                        //                 Icons.keyboard_arrow_down_sharp,
+                        //                 size: 30),
+                        //             padding: selectIndentorName != null
+                        //                 ? height * .002
+                        //                 : height * .015,
+                        //             isExpanded: true,
+                        //             hint: "Search here",
+                        //             value: selectIndentorName,
+                        //             displayClearIcon: false,
+                        //             onChanged: onDataChange4,
+                        //             items: snapshot?.data
+                        //                     ?.map<DropdownMenuItem<IndentorName>>(
+                        //                         (e) {
+                        //                   return DropdownMenuItem<IndentorName>(
+                        //                     value: e,
+                        //                     child: Padding(
+                        //                       padding: const EdgeInsets.all(4.0),
+                        //                       child: Text(e.strSubCode ?? ''),
+                        //                     ),
+                        //                   );
+                        //                 })?.toList() ??
+                        //                 [],
+                        //           );
+                        return StreamBuilder<FillTransferModel>(
+                            stream: fillTransferDropdownBloc.selectedFillTransferState,
                             builder: (context, item) {
-                              return SearchChoices<IndentorName>.single(
+                              return SearchChoices<FillTransferModel>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectIndentorName != null
+                                padding: selectFillTransfer != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectIndentorName,
+                                value: selectFillTransfer,
                                 displayClearIcon: false,
                                 onChanged: onDataChange4,
                                 items: snapshot?.data
-                                        ?.map<DropdownMenuItem<IndentorName>>(
+                                        ?.map<DropdownMenuItem<FillTransferModel>>(
                                             (e) {
-                                      return DropdownMenuItem<IndentorName>(
+                                      return DropdownMenuItem<FillTransferModel>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strSubCode ?? ''),
+                                          child: Text(e.DocId ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
