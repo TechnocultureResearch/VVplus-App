@@ -337,7 +337,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.SubCode),
+                                          child: Text(e.Name),
                                         ),
                                       );
                                     })?.toList() ??
@@ -377,7 +377,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodCode),
+                                          child: Text(e.GodName),
                                         ),
                                       );
                                     })?.toList() ??
@@ -420,7 +420,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code),
+                                          child: Text(e.Name),
                                         ),
                                       );
                                     })?.toList() ??
@@ -483,7 +483,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child: Text(e.SearchCode),
+                                                    child: Text(e.Name),
                                                   ),
                                                 ),
                                               );

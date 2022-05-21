@@ -384,7 +384,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.SubCode),
+                                          child: Text(e.Name),
                                         ),
                                       );
                                     })?.toList() ??
@@ -425,7 +425,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodCode),
+                                          child: Text(e.GodName),
                                         ),
                                       );
                                     })?.toList() ??
@@ -468,7 +468,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code),
+                                          child: Text(e.Name),
                                         ),
                                       );
                                     })?.toList() ??
@@ -509,7 +509,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodCode),
+                                          child: Text(e.GodName),
                                         ),
                                       );
                                     })?.toList() ??
@@ -552,7 +552,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code),
+                                          child: Text(e.Name),
                                         ),
                                       );
                                     })?.toList() ??
@@ -611,7 +611,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(4.0),
-                                                  child: Text(e.SearchCode),
+                                                  child: Text(e.Name),
                                                 ),
                                               );
                                             })?.toList() ??
@@ -639,7 +639,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                     builder: (context, snapshot) {
                                       return TextFormField(
                                         onEditingComplete: () {
-                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
                                           _calculation();
                                         },
                                         // initialValue: "no",
