@@ -150,6 +150,8 @@ class ApiService {
 
   static const String getSupplierBToBReceivenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
 
+  static const String getGodownBToBReceivenewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"Godown","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
+
   // mock database get url
 
   static const String mockDataIndentorNameURL =
