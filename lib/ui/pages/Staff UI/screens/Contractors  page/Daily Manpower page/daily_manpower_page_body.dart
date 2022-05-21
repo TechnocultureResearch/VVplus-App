@@ -272,7 +272,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.subCode ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -360,7 +360,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.SearchCode),
+                                          child: Text(e.Name),
                                         ),
                                       );
                                     })?.toList() ??
