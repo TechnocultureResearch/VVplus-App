@@ -1,5 +1,4 @@
-
-class Stage{
+class Stage {
   String SearchCode;
   String Name;
   String Date;
@@ -10,19 +9,20 @@ class Stage{
     this.Name,
     this.Date,
     this.DueDate,
-});
+  });
+  @override
+  String toString() => SearchCode;
 
   factory Stage.fromJson(Map<String, dynamic> json) => Stage(
-    SearchCode: json["SearchCode"],
-    Name: json["Name"],
-    Date: json["Date"],
-    DueDate: json["DueDate"]
-  );
+      SearchCode: json["SearchCode"],
+      Name: json["Name"],
+      Date: json["Date"],
+      DueDate: json["DueDate"]);
 
   Map<String, dynamic> toJson() => {
-    "SearchCode": SearchCode,
-    "Name": Name,
-    "Date": Date,
-    "DueDate": DueDate
-  };
+        "SearchCode": SearchCode,
+        "Name": Name,
+        "Date": Date,
+        "DueDate": DueDate
+      };
 }
