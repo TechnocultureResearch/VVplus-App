@@ -131,11 +131,11 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
       if (/*selectDepartmentName != null &&
-          selectVoucherType*/ /*1 != null &&*/
-          selectBookingNo != null &&
-              selectChangeApplicable != null &&
-              selectTAX != null &&
-              unitCancellationFormKey.currentState.validate()) {
+          selectVoucherType1 != null &&*/
+          // selectBookingNo != null &&
+          //     selectChangeApplicable != null &&
+          //     selectTAX != null &&
+          unitCancellationFormKey.currentState.validate()) {
         sendData();
       } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
@@ -147,9 +147,12 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
 
   Future<dynamic> sendData() async {
     try {
-      var url = Uri.parse(
-          //"http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation?StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"2022-04-22","StrBookingNo":"DADUBOOK 2016       1","StrChangeApplicable":"M","StrDueDate":"2022-04-22","DblBaseAmt":"10000","DblTaxAmt":"450",StrTaxGrid:[{"StrOH":"95","StrTaxOHCode":"59","DblTaxPer":"4.5","DblRC_TaxPer":"4.5","StrROff":"H","DblAmt":450,"StrSubCode":"GY1"}],"DblNetAmt":"10450","StrRemark":"Remarkkk","StrBookingDate":"2016-04-21","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1"}'}");
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation?StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}","StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",StrTaxGrid:[{"StrOH":"95","StrTaxOHCode":"59","DblTaxPer":"4.5","DblRC_TaxPer":"4.5","StrROff":"H","DblAmt":450,"StrSubCode":"GY1"}],"DblNetAmt":"10450","StrRemark":"Remarkkk","StrBookingDate":"2016-04-21","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1"}'}");
+      var baseUrl =
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
+      var url = Uri.parse(baseUrl +
+          "?" +
+          "StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}","StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",'
+              'StrTaxGrid:[{"StrOH":"${selectTAX.ExpCode}","StrTaxOHCode":"${selectTAX.SubExpCode}","DblTaxPer":"${selectTAX.TaxPer}","DblRC_TaxPer":"4.5","StrROff":"H","DblAmt":450,"StrSubCode":"GY1"}],"DblNetAmt":"10450","StrRemark":"${remarks.text}","StrBookingDate":"${selectBookingNo.V_Date}","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1"}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -239,7 +242,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
@@ -373,7 +376,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dueDate.text = formattedDate;
                       });
@@ -448,7 +451,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code),
+                                          child: Text(e.SubExpCode),
                                         ),
                                       );
                                     })?.toList() ??
