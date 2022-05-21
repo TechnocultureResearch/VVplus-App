@@ -8,11 +8,13 @@ class GodownDropdownBloc{
   final godownPhaseToPhaseFromGetdata = BehaviorSubject<Godown>();
   final godownPhaseToPhaseToGetData = BehaviorSubject<Godown>();
   final godownBranchToBranchSendFromGetData = BehaviorSubject<Godown>();
+  final godownBranchToBranchReceiveGetData = BehaviorSubject<Godown>();
 
   Future<List<Godown>> godownDropDownData;
   Future<List<Godown>> godownPhaseToPhaseFromData;
   Future<List<Godown>> godownPhaseToPhaseToData;
   Future<List<Godown>> godownBranchToBranchSendFromData;
+  Future<List<Godown>> godownBranchToBranchReceiveData;
 
   Stream<Godown> get selectedState => godownDropdownGetdata;
   void selectedStateEvent(Godown state)=> godownDropdownGetdata.add(state);
@@ -26,16 +28,21 @@ class GodownDropdownBloc{
   Stream<Godown> get selectedBranchToBranchSendFromState => godownBranchToBranchSendFromGetData;
   void selectedBranchToBranchSendFromStateEvent(Godown state) => godownBranchToBranchSendFromGetData.add(state);
 
+  Stream<Godown> get selectedBranchToBranchReceiveState => godownBranchToBranchSendFromGetData;
+  void selectedBranchToBranchReceiveStateEvent(Godown state) => godownBranchToBranchReceiveGetData.add(state);
+
   GodownDropdownBloc(){
     godownDropDownData = godownDropdownRepository.getData();
     godownPhaseToPhaseFromData = godownDropdownRepository.getPhaseToPhaseFromGodownData();
     godownPhaseToPhaseToData = godownDropdownRepository.getPhaseToPhaseToGodownData();
     godownBranchToBranchSendFromData = godownDropdownRepository.getBranchToBranchSendFromGodownData();
+    godownBranchToBranchReceiveData = godownDropdownRepository.getBranchToBranchReceiveGodownData();
   }
   void dispose(){
     godownDropdownGetdata.close();
     godownPhaseToPhaseFromGetdata.close();
     godownPhaseToPhaseToGetData.close();
     godownBranchToBranchSendFromGetData.close();
+    godownBranchToBranchReceiveGetData.close();
   }
 }
