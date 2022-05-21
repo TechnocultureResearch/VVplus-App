@@ -62,4 +62,15 @@ class GodownRepository{
       rethrow;
     }
   }
+  Future<List<Godown>> getBranchToBranchReceiveGodownData() async {
+    try{
+      final response  = await client.get(Uri.parse(ApiService.getGodownBToBReceivenewUrl));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => Godown.fromJson(e))
+      .toList();
+      return items;
+    }catch(e){
+      rethrow;
+    }
+  }
 }
