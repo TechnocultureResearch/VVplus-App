@@ -8,7 +8,7 @@ import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:vvplus_app/ui/widgets/constants/text_feild.dart';
 
-class SalesBody extends StatelessWidget{
+class SalesBody extends StatelessWidget {
   final Widget child;
 
   const SalesBody({
@@ -18,16 +18,18 @@ class SalesBody extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: paddingForms3,
+            padding: const EdgeInsets.only(top: 32, left: 45, right: 45),
             child: Container(
               alignment: Alignment.center,
-              height: 130,
-              width: 300,
+              height: height * .2,
+              // width: 300,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: primaryColor3,
@@ -47,7 +49,8 @@ class SalesBody extends StatelessWidget{
                     child: Text(
                       "Notification",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -57,14 +60,13 @@ class SalesBody extends StatelessWidget{
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(padding: paddingForms2),
+              Padding(padding: const EdgeInsets.symmetric(vertical: 14)),
               roundedButtonHome(text47, () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const ExtraWorkEntryPage()));
               }),
-
               roundedButtonHome(text48, () {
                 Navigator.push(
                     context,
@@ -75,11 +77,12 @@ class SalesBody extends StatelessWidget{
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                    builder: (context) => const ChequeEntry()));
+                        builder: (context) => const ChequeEntry()));
               }),
-
               roundedButtonHome(text50, () {
-                Navigator.push(context, MaterialPageRoute(
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
                         builder: (context) => const DiscountApprovalPage()));
               }),
             ],
@@ -88,5 +91,4 @@ class SalesBody extends StatelessWidget{
       ),
     );
   }
-
 }

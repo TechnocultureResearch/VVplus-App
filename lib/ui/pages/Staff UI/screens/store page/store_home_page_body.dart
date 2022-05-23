@@ -9,7 +9,7 @@ import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:vvplus_app/ui/widgets/constants/text_feild.dart';
 
-class StorePageBody extends StatelessWidget{
+class StorePageBody extends StatelessWidget {
   final Widget child;
 
   const StorePageBody({
@@ -19,16 +19,19 @@ class StorePageBody extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: paddingForms3,
+            padding: const EdgeInsets.only(top: 32, left: 45, right: 45),
             child: Container(
               alignment: Alignment.center,
-              height: 130,
-              width: 300,
+              height: height * .2,
+              // width: 300,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: primaryColor3,
@@ -48,7 +51,8 @@ class StorePageBody extends StatelessWidget{
                     child: Text(
                       "Notification",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -58,28 +62,43 @@ class StorePageBody extends StatelessWidget{
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Padding(padding: paddingForms2),
-              roundedButtonHome(text42,
-                      () {Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => const StockReceiveEntryPage()));
-                      }),
-              roundedButtonHome(text43,
-                      () {Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const StockIssueEntryPage()));}),
-              roundedButtonHome(text44,
-                      () {Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const PhaseToPhaseTransferPage()));}),
-              roundedButtonHome(text45,
-                      () {Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const BranchtoBranchSendPage()));}),
-              roundedButtonHome(text46,
-                      () {Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const BranchtoBranchReceivePage()));}),
+              Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
+              roundedButtonHome(text42, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StockReceiveEntryPage()));
+              }),
+              roundedButtonHome(text43, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StockIssueEntryPage()));
+              }),
+              roundedButtonHome(text44, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const PhaseToPhaseTransferPage()));
+              }),
+              roundedButtonHome(text45, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BranchtoBranchSendPage()));
+              }),
+              roundedButtonHome(text46, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const BranchtoBranchReceivePage()));
+              }),
             ],
           ),
         ],
       ),
     );
   }
-
 }
