@@ -241,7 +241,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  // height: height * .076,
+                  //height: height * .076,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
                       future: voucherTypeDropdownBloc
@@ -257,9 +257,10 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                                     size: 30),
                                 padding: selectVoucherType != null
                                     ? height * .002
-                                    : height * .015,
+                                    : height * .014,
                                 isExpanded: true,
                                 hint: "Search here",
+                                underline: "",
                                 value: selectVoucherType,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
@@ -444,7 +445,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
