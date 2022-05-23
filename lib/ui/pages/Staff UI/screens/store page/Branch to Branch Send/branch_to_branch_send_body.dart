@@ -368,7 +368,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -410,7 +410,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.GodCode ?? ""),
+                                          child: Text(e.GodName ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -453,7 +453,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -493,7 +493,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Code ?? ""),
+                                          child: Text(e.Name ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
