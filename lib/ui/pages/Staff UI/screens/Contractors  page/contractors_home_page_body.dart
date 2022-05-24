@@ -5,7 +5,7 @@ import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:vvplus_app/ui/widgets/constants/text_feild.dart';
 
-class ContractorsBody extends StatelessWidget{
+class ContractorsBody extends StatelessWidget {
   final Widget child;
 
   const ContractorsBody({
@@ -15,6 +15,7 @@ class ContractorsBody extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -23,8 +24,8 @@ class ContractorsBody extends StatelessWidget{
             padding: paddingForms3,
             child: Container(
               alignment: Alignment.center,
-              height: 130,
-              width: 300,
+              height: height * .2,
+              //width: 300,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: primaryColor3,
@@ -44,7 +45,8 @@ class ContractorsBody extends StatelessWidget{
                     child: Text(
                       "Notification",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -54,7 +56,7 @@ class ContractorsBody extends StatelessWidget{
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(padding: paddingForms2),
+              Padding(padding: paddingFormsVertical),
               roundedButtonHome(text51, () {
                 Navigator.push(
                     context,
@@ -67,5 +69,4 @@ class ContractorsBody extends StatelessWidget{
       ),
     );
   }
-
 }
