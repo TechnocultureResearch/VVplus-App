@@ -3,12 +3,11 @@ import 'dart:convert';
 //StrRecord strRecordFromJson(String str) => StrRecord.fromJson(json.decode(str));
 //String strRecordToJson(StrRecord data) => json.encode(data.toJson());
 
-List<VoucherType> strRecordFromJson(String str) =>
-    List<VoucherType>.from(json.decode(str).map((x) => VoucherType.fromJson(x)));
+List<VoucherType> strRecordFromJson(String str) => List<VoucherType>.from(
+    json.decode(str).map((x) => VoucherType.fromJson(x)));
 
 String strRecordToJson(List<VoucherType> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 
 class VoucherType {
   VoucherType({
@@ -19,7 +18,9 @@ class VoucherType {
     this.supplier,
     this.V_Type,
     this.Description,
-    this.Name
+    this.Name,
+    this.vType,
+    this.description,
   });
 
   String strSubCode;
@@ -30,29 +31,35 @@ class VoucherType {
   String V_Type;
   String Description;
   String Name;
+  String vType;
+  String description;
 
   @override
   String toString() => Description;
 
   factory VoucherType.fromJson(Map<String, dynamic> json) => VoucherType(
-    strSubCode: json["StrSubCode"],
-    strName: json["StrName"],
-    godown: json["Godown"],
-    purchaseOrderSelect: json["Purchase_order_select"],
-    supplier: json["Supplier"],
-    V_Type: json["V_Type"],
-    Description: json["Description"],
-    Name: json["Name"],
-  );
+        strSubCode: json["StrSubCode"],
+        strName: json["StrName"],
+        godown: json["Godown"],
+        purchaseOrderSelect: json["Purchase_order_select"],
+        supplier: json["Supplier"],
+        V_Type: json["V_Type"],
+        Description: json["Description"],
+        Name: json["Name"],
+        vType: json["V_Type"],
+        description: json["Description"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "StrSubCode": strSubCode,
-    "StrName": strName,
-    "Godown": godown,
-    "Purchase_order_select": purchaseOrderSelect,
-    "Supplier": supplier,
-    "V_Type": V_Type,
-    "Description": Description,
-    "Name": Name
-  };
+        "StrSubCode": strSubCode,
+        "StrName": strName,
+        "Godown": godown,
+        "Purchase_order_select": purchaseOrderSelect,
+        "Supplier": supplier,
+        "V_Type": V_Type,
+        "Description": Description,
+        "Name": Name,
+        "V_Type": vType,
+        "Description": description,
+      };
 }
