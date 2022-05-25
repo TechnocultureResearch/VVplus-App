@@ -2,7 +2,6 @@
 import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 
 class ApiService {
-
   static const String postApiURL =
       "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"10/11/2021","StrDepartmentCode":"AD2","StrIndentorCode":"SG344","StrPreparedByCode":"SA","StrIndGrid":[{"StrItemCode":"PN1","DblQuantity":"100","StrCostCenterCode":"AD1","StrRequiredDate":"10/11/2021","StrRemark":"remark2"}]}'}";
 
@@ -132,6 +131,9 @@ class ApiService {
   static const String getBToBSendnewURl =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
+  static const String getPOIndentNonewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrStateCode":"WB","Strv_type":"GORD"}'}";
+
   static const String getBToBSendFromCostCenter =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"CostCenter","StrSiteCode":"AD","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
@@ -144,18 +146,30 @@ class ApiService {
   static const String getSiteToBToBSendnewURL =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"SiteTo","StrSiteCode":"AD","StrStateCode":"GJ","StrPLTCode":"1","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
-  static const String getIndentNoBToBSendnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
+  static const String getIndentNoBToBSendnewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
   static const String getIndentSelectionBToBSendnewURL =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"FillSelectedIndent","StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"DAAIND   2017     202","StrItemCode":"BX154","StrGodown":"","StrMaintainStockValue":""}'}";
 
-  static const String getVouchertypeBToBReceivenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
+  static const String getVouchertypeBToBReceivenewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
 
-  static const String getSupplierBToBReceivenewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
+  static const String getSupplierBToBReceivenewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
 
-  static const String getGodownBToBReceivenewUrl = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"Godown","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
+  static const String getGodownBToBReceivenewUrl =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"Godown","StrSiteCode":"AA","StrPartyCode":"","StrStkTrnManID":""}'}";
 
-  static const String getFillTransfernewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer","StrSiteCode":"AA","StrPartyCode":"SG614","StrStkTrnManID":""}'}";
+  static const String getFillTransfernewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer","StrSiteCode":"AA","StrPartyCode":"SG614","StrStkTrnManID":""}'}";
+
+  static const String getVouchertypeGoodReceiptnewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrStateCode":"","StrPartyCode":"","StrPOValDate":"","StrPODocID":"","Strv_type":"PCHLN"}'}";
+
+  static const String getSupplierGoodReceiptnewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AD","StrStateCode":"WB","StrPartyCode":"KK496","StrPOValDate":"","StrPODocID":"","Strv_type":"PCHLN"}'}";
+
   // mock database get url
 
   static const String mockDataIndentorNameURL =
