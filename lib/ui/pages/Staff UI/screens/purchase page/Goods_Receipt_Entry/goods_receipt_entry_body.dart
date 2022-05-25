@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/goods_receipt_entry_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
+import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -38,12 +40,12 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   TextEditingController vechileNo = TextEditingController();
   final goodsReceiptEntryFormKey = GlobalKey<FormState>();
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
+  SupplierDropdownBloc supplierDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   IndentorNameDropdownBloc dropdownBlocIndentorName;
   VoucherType selectVoucherType;
-  VoucherType selectVoucherType1;
+  Supplier selectSupplier;
   VoucherType selectVoucherType2;
   VoucherType selectVoucherType3;
   IndentorName selectIndentName;
@@ -57,9 +59,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     });
   }
 
-  void onDataChange2(VoucherType state) {
+  void onDataChange2(Supplier state) {
     setState(() {
-      selectVoucherType1 = state;
+      selectSupplier = state;
     });
   }
 
@@ -80,7 +82,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     dateinput.text = "";
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
-    voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
+    supplierDropdownBloc = SupplierDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     dropdownBlocIndentorName = IndentorNameDropdownBloc();
@@ -98,7 +100,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     partyBillNo.clear();
     vechileNo.clear();
     selectVoucherType = null;
-    selectVoucherType1 = null;
+    selectSupplier = null;
     selectVoucherType2 = null;
     selectVoucherType3 = null;
     selectIndentName = null;
@@ -120,7 +122,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
       if (selectVoucherType != null &&
-          selectVoucherType1 != null &&
+          selectSupplier != null &&
           selectVoucherType3 != null &&
           selectVoucherType2 != null &&
           goodsReceiptEntryFormKey.currentState.validate()) {
@@ -141,7 +143,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
             "Date": dateinput.text,
             "PartyBillNo": partyBillNo.text,
             "PartyBillDate": dateinput1.text,
-            "Supplier": selectVoucherType1.strSubCode,
+            "Supplier": selectSupplier.Name,
             "PurchaseOrderSelect": selectVoucherType3.strSubCode,
             "VehicleNo": vechileNo.text,
             "Godown": selectVoucherType2.strSubCode
@@ -197,10 +199,12 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc
+                          .voucherTypeGoodReceiptDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc.selectedState,
+                            stream: voucherTypeDropdownBloc
+                                .selectedGoodReceiptState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
@@ -221,7 +225,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -340,21 +344,21 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc1.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc1.selectedState,
+                            stream: voucherTypeDropdownBloc2.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType1 != null
+                                padding: selectVoucherType2 != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType1,
+                                value: selectVoucherType2,
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
