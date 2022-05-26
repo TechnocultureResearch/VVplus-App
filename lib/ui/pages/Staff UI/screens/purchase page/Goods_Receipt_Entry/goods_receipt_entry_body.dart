@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/fill_po_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/fill_select_po_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/goods_receipt_entry_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/fill_po_model.dart';
+import 'package:vvplus_app/infrastructure/Models/fill_select_po_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -41,12 +45,15 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   final goodsReceiptEntryFormKey = GlobalKey<FormState>();
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   SupplierDropdownBloc supplierDropdownBloc;
-  VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
+  // FillPODropdownBloc fillPODropdownBloc;
+  // FillSelectPODropdownBloc fillSelectPODropdownBloc;
+
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   IndentorNameDropdownBloc dropdownBlocIndentorName;
   VoucherType selectVoucherType;
   Supplier selectSupplier;
-  VoucherType selectVoucherType2;
+  // FillPOModel selectFillPo;
+  // FillSelectPOModel selectFillSelectPo;
   VoucherType selectVoucherType3;
   IndentorName selectIndentName;
 
@@ -65,17 +72,38 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     });
   }
 
-  void onDataChange3(VoucherType state) {
-    setState(() {
-      selectVoucherType2 = state;
-    });
-  }
+  // void onDataChange3(FillPOModel state) {
+  //   setState(() {
+  //     selectFillPo = state;
+  //   });
+  // }
+  //
+  // void onDataChange4(FillSelectPOModel state) {
+  //   setState(() {
+  //     selectFillSelectPo = state;
+  //   });
+  // }
 
-  void onDataChange4(VoucherType state) {
+  void onDataChange5(VoucherType state) {
     setState(() {
       selectVoucherType3 = state;
     });
   }
+
+  // Future<dynamic> FillSelectPO() async {
+  //   try {
+  //     var url = Uri.parse(
+  //         'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?'
+  //         'StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"","StrPartyCode":"AD59","StrPOValDate":"","StrPODocID":"${selectFillPo.docId}"}'}');
+  //     final response = await http.get(url);
+  //     final items = (jsonDecode(response.body) as List)
+  //         .map((e) => FillSelectPOModel.fromJson(e))
+  //         .toList();
+  //     return items;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   @override
   void initState() {
@@ -83,7 +111,8 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     supplierDropdownBloc = SupplierDropdownBloc();
-    voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
+    // fillPODropdownBloc = FillPODropdownBloc();
+    // fillSelectPODropdownBloc = FillSelectPODropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     dropdownBlocIndentorName = IndentorNameDropdownBloc();
     subscription = Connectivity()
@@ -101,7 +130,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     vechileNo.clear();
     selectVoucherType = null;
     selectSupplier = null;
-    selectVoucherType2 = null;
     selectVoucherType3 = null;
     selectIndentName = null;
   }
@@ -124,7 +152,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
       if (selectVoucherType != null &&
           selectSupplier != null &&
           selectVoucherType3 != null &&
-          selectVoucherType2 != null &&
           goodsReceiptEntryFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -144,9 +171,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
             "PartyBillNo": partyBillNo.text,
             "PartyBillDate": dateinput1.text,
             "Supplier": selectSupplier.Name,
-            "PurchaseOrderSelect": selectVoucherType3.strSubCode,
+            "PurchaseOrderSelect": "",
             "VehicleNo": vechileNo.text,
-            "Godown": selectVoucherType2.strSubCode
+            "Godown": selectVoucherType3.strSubCode
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } on SocketException {
@@ -343,24 +370,66 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
+                  child: FutureBuilder<List<Supplier>>(
+                      future:
+                          supplierDropdownBloc.supplierGoodReceiptDropdownData,
+                      builder: (context, snapshot) {
+                        return StreamBuilder<Supplier>(
+                            stream: supplierDropdownBloc
+                                .selectedSupplierGoodReceiptState,
+                            builder: (context, item) {
+                              return SearchChoices<Supplier>.single(
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectSupplier != null
+                                    ? height * .002
+                                    : height * .015,
+                                isExpanded: true,
+                                hint: "Search here",
+                                value: selectSupplier,
+                                displayClearIcon: false,
+                                onChanged: onDataChange2,
+                                items: snapshot?.data
+                                        ?.map<DropdownMenuItem<Supplier>>((e) {
+                                      return DropdownMenuItem<Supplier>(
+                                        value: e,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(e.name ?? ''),
+                                        ),
+                                      );
+                                    })?.toList() ??
+                                    [],
+                              );
+                            });
+                      }),
+                ),
+              ),
+              sizedbox1,
+              formsHeadTextNew("Fill PO", width * .045),
+              Padding(
+                padding: padding1,
+                child: Container(
+                  decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc2.selectedState,
+                            stream: voucherTypeDropdownBloc3.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType2 != null
+                                padding: selectVoucherType3 != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectVoucherType3,
                                 displayClearIcon: false,
-                                onChanged: onDataChange2,
+                                onChanged: onDataChange5,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<VoucherType>>(
                                             (e) {
@@ -401,7 +470,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 hint: "Search here",
                                 value: selectVoucherType3,
                                 displayClearIcon: false,
-                                onChanged: onDataChange4,
+                                onChanged: onDataChange5,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<VoucherType>>(
                                             (e) {
@@ -460,23 +529,23 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc2.voucherTypeDropdownData,
+                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc2.selectedState,
+                            stream: voucherTypeDropdownBloc3.selectedState,
                             builder: (context, item) {
                               return SearchChoices<VoucherType>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectVoucherType2 != null
+                                padding: selectVoucherType3 != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectVoucherType2,
+                                value: selectVoucherType3,
                                 displayClearIcon: false,
-                                onChanged: onDataChange3,
+                                onChanged: onDataChange5,
                                 items: snapshot?.data
                                         ?.map<DropdownMenuItem<VoucherType>>(
                                             (e) {
