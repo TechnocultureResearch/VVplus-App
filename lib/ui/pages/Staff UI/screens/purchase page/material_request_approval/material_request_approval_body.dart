@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_no_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_selection_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/infrastructure/Models/indent_selection_model.dart';
@@ -10,6 +11,8 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
+
+import '../../../../../../infrastructure/Models/indent_no_model.dart';
 
 class MaterialRequestApprovalBody extends StatefulWidget{
   const MaterialRequestApprovalBody({Key key}) : super(key: key);
@@ -22,21 +25,21 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
   TextEditingController dateinput = TextEditingController();
   final materialRequestApprovalFormKey = GlobalKey<FormState>();
   IndentorNameDropdownBloc _dropdownBloc;
-  IndentSelectionDropdownBloc indentSelectionDropdownBloc;
+  IndentNoDropdownBloc indentNoDropdownBloc;
   bool pressAttention = false;
   @override
   void initState() {
 
     dateinput.text = "";
     _dropdownBloc = IndentorNameDropdownBloc();
-    indentSelectionDropdownBloc = IndentSelectionDropdownBloc();
+    indentNoDropdownBloc = IndentNoDropdownBloc();
     super.initState();
   }
   IndentorName selectIndentorName;
-  IndentSelection selectIndentSelection;
-  void onDataChange1(IndentSelection state) {
+  IndentNo selectIndentNo;
+  void onDataChange1(IndentNo state) {
     setState(() {
-      selectIndentSelection = state;
+      selectIndentNo = state;
     });
   }
   Future<void> _refresh() async{
@@ -94,31 +97,30 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                   },
                 ),
               ),
-              formsHeadText("Indant Selection"),
+              formsHeadText("Indant No"),
               Padding(
                 padding: padding1,
                 child: Container(
-                  height: 52, width: 343,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<IndentSelection>>(
-                      future: indentSelectionDropdownBloc.indentSelectionDropdownData,
+                  child: FutureBuilder<List<IndentNo>>(
+                      future: indentNoDropdownBloc.indentNoMaterialRequestApproveDropdowndata,
                       builder: (context, snapshot) {
-                        return StreamBuilder<IndentSelection>(
-                            stream: indentSelectionDropdownBloc.selectedIndentSelectionState,
+                        return StreamBuilder<IndentNo>(
+                            stream: indentNoDropdownBloc.selectedIndentNoMaterialReqApprovState,
                             builder: (context, item) {
-                              return SearchChoices<IndentSelection>.single(
+                              return SearchChoices<IndentNo>.single(
                                 icon: const Icon(Icons.keyboard_arrow_down_sharp,size:30),
-                                padding: selectIndentSelection!=null ? 2 : 11,
+                                padding: selectIndentNo!=null ? 2 : 11,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectIndentSelection,
+                                value: selectIndentNo,
                                 displayClearIcon: false,
                                 onChanged: onDataChange1,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<IndentSelection>>((e) {
-                                  return DropdownMenuItem<IndentSelection>(
+                                    ?.map<DropdownMenuItem<IndentNo>>((e) {
+                                  return DropdownMenuItem<IndentNo>(
                                     value: e,
-                                    child: Text(e.StrDocID),
+                                    child: Text(e.StrDocID ?? ''),
                                   );
                                 })?.toList() ??[],
                               );
