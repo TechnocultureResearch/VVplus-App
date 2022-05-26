@@ -170,6 +170,8 @@ class ApiService {
   static const String getSupplierGoodReceiptnewURL =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AD","StrStateCode":"WB","StrPartyCode":"KK496","StrPOValDate":"","StrPODocID":"","Strv_type":"PCHLN"}'}";
 
+  static const String getIndentNoMaterialReqApprovnewURL =
+  "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"VN","StrV_Date":"",StrIndDocID:[{"StrDocID":""},{"StrDocID":""}]}'}";
   // mock database get url
 
   static const String mockDataIndentorNameURL =
