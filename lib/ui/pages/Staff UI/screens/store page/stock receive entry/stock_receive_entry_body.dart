@@ -167,25 +167,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
-      // final response = await http.post(Uri.parse(ApiService.postStockReceiveEntrynewURL),
-      //      body:json.encode({
-      //        "StrRecord":{"StrVType":selectVoucherType1.V_Type,"StrVDate":"2022-01-29",
-      //          "StrSiteCode":"AD","StrReceiveFrom":selectReceivedBy.SubCode,
-      //          "StrIndGrid":[{"StrItemCode":selectItemCurrentStatus.Code,
-      //          "DblQuantity":reqQty.text,"DblAmt":_amount,"DblRate":selectItemCurrentStatus.PurchaseRate,
-      //          "StrCostCenterCode":selectItemCostCenter.Code,"StrGodown":selectGodown.GodCode,
-      //          "StrRemark":"Remark1"}],"StrPreparedBy":"SA"
-      //        }
-      //        // "Voucher Type": selectVoucherType1.strName,
-      //        // "Received By": selectReceivedBy.Name,
-      //        // "Godown": selectGodown.GodName,
-      //        // "Cost Center":selectItemCostCenter.strName,
-      //        // "Item": selectItemCurrentStatus.Name,
-      //        // "ReqQuantity": reqQty.text,
-      //        // "Unit": selectItemCurrentStatus.strUnit,
-      //        // "Rate": selectItemCurrentStatus.PurchaseRate,
-      //      })
-      // );
+
       if (response.statusCode == 200) {
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
