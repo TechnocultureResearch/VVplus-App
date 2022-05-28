@@ -172,6 +172,9 @@ class ApiService {
 
   static const String getIndentNoMaterialReqApprovnewURL =
   "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"VN","StrV_Date":"",StrIndDocID:[{"StrDocID":""},{"StrDocID":""}]}'}";
+
+ static const String getIndentNoPOnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrStateCode":"WB","Strv_type":"GORD"}'}";
+
   // mock database get url
 
   static const String mockDataIndentorNameURL =
@@ -191,6 +194,8 @@ class ApiService {
 
   static const String mockDataItemCostCenterURL =
       "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/ItemCostCenter.json";
+
+
 
 // mock database post url
 
