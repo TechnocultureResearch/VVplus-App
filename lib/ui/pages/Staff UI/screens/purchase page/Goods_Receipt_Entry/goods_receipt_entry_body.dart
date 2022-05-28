@@ -41,21 +41,20 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   final goodsReceiptEntryFormKey = GlobalKey<FormState>();
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   SupplierDropdownBloc supplierDropdownBloc;
-  // FillPODropdownBloc fillPODropdownBloc;
-  // FillSelectPODropdownBloc fillSelectPODropdownBloc;
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   IndentorNameDropdownBloc dropdownBlocIndentorName;
   VoucherType selectVoucherType;
   Supplier selectSupplier;
-  // FillPOModel selectFillPo;
-  // FillSelectPOModel selectFillSelectPo;
+
   VoucherType selectVoucherType3;
   IndentorName selectIndentName;
 
   var subscription;
   var connectionStatus;
-
+  Future<List<dynamic>> futureList;
+  Future<List<dynamic>> fillList;
+  String fillPODoc;
   void onDataChange1(VoucherType state) {
     setState(() {
       selectVoucherType = state;
@@ -68,47 +67,66 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     });
   }
 
-  // void onDataChange3(FillPOModel state) {
-  //   setState(() {
-  //     selectFillPo = state;
-  //   });
-  // }
-  //
-  // void onDataChange4(FillSelectPOModel state) {
-  //   setState(() {
-  //     selectFillSelectPo = state;
-  //   });
-  // }
-
   void onDataChange5(VoucherType state) {
     setState(() {
       selectVoucherType3 = state;
     });
   }
 
-  // Future<dynamic> FillSelectPO() async {
-  //   try {
-  //     var url = Uri.parse(
-  //         'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?'
-  //         'StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"","StrPartyCode":"AD59","StrPOValDate":"","StrPODocID":"${selectFillPo.docId}"}'}');
-  //     final response = await http.get(url);
-  //     final items = (jsonDecode(response.body) as List)
-  //         .map((e) => FillSelectPOModel.fromJson(e))
-  //         .toList();
-  //     return items;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
+  Future<List<dynamic>> getFillPOData() async {
+    try {
+      var url = Uri.parse(
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
+              '"StrSiteCode":"AD",'
+              '"StrStateCode":"","StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"",'
+              '"StrPODocID":"","Strv_type":"PCHLN"}'}");
+
+      final response = await http.get(url);
+      final List<dynamic> fillitems = json.decode(response.body);
+      print("body: ${response.body}");
+      print("status code: ${response.statusCode}");
+      return fillitems;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<dynamic>> getFillSelectedPOData() async {
+    // if (selectFillPo != null) {
+    try {
+      var url = Uri.parse(
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?'
+          'StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+              '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"${fillPODoc}"}'}');
+      //'"StrPartyCode":"AD59}","StrPOValDate":"","StrPODocID":"DADGORD  2022       2"}'}');
+      final response = await http.get(url);
+      final List<dynamic> items = json.decode(response.body);
+      print("body: ${response.body}");
+      print("status code: ${response.statusCode}");
+      print("doccc: $fillPODoc");
+      return items;
+      _refresh();
+    } catch (e) {
+      rethrow;
+    }
+    // } else {
+    //   print("Please select fillselectedpo");
+    // }
+  }
+
+  Future buildText() {
+    return new Future.delayed(
+        const Duration(milliseconds: 1), () => print('waiting'));
+  }
 
   @override
   void initState() {
+    fillList = getFillPOData();
+    futureList = getFillSelectedPOData();
     dateinput.text = "";
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     supplierDropdownBloc = SupplierDropdownBloc();
-    // fillPODropdownBloc = FillPODropdownBloc();
-    // fillSelectPODropdownBloc = FillSelectPODropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     dropdownBlocIndentorName = IndentorNameDropdownBloc();
     subscription = Connectivity()
@@ -137,8 +155,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(milliseconds: 800), () {
-      setState(() {});
+    await Future.delayed(const Duration(milliseconds: 200), () {
+      setState(() {
+        // fillpoText();
+      });
     });
   }
 
@@ -404,86 +424,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               ),
               sizedbox1,
               formsHeadTextNew("Fill PO", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc3.selectedState,
-                            builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectVoucherType3 != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectVoucherType3,
-                                displayClearIcon: false,
-                                onChanged: onDataChange5,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
-                                            (e) {
-                                      return DropdownMenuItem<VoucherType>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
+              fillpoText(),
               sizedbox1,
               formsHeadTextNew("Purchase Order Select", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc3.selectedState,
-                            builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectVoucherType3 != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectVoucherType3,
-                                displayClearIcon: false,
-                                onChanged: onDataChange5,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
-                                            (e) {
-                                      return DropdownMenuItem<VoucherType>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
+              fillSelectedpoText(),
               sizedbox1,
               formsHeadTextNew("Vehicle No.", width * .045),
               Container(
@@ -584,6 +528,61 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget fillpoText() {
+    return Padding(
+      padding: padding1,
+      child: Container(
+          height: 50,
+          width: 300,
+          decoration: decorationForms(),
+          child: StreamBuilder(
+              stream: getFillPOData().asStream(),
+              builder: (context, snapdata) {
+                if (snapdata.hasData) {
+                  return ListView.builder(
+                    itemCount: snapdata.data.length,
+                    itemBuilder: (context, index) {
+                      fillPODoc = snapdata.data[index]['DocId'] ?? '';
+                      return ListTile(
+                          leading: Text(
+                        fillPODoc,
+                        style: simpleTextStyle2(),
+                      ));
+                    },
+                  );
+                } else {
+                  return Text("");
+                }
+              })),
+    );
+  }
+
+  Widget fillSelectedpoText() {
+    return Padding(
+      padding: padding1,
+      child: Container(
+          height: 50,
+          width: 300,
+          decoration: decorationForms(),
+          child: StreamBuilder(
+              stream: getFillSelectedPOData().asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                          leading: Text(snapshot.data[index]['DocID'] ?? '',
+                              style: simpleTextStyle2()));
+                    },
+                  );
+                } else {
+                  return Center(child: Text(""));
+                }
+              })),
     );
   }
 }
