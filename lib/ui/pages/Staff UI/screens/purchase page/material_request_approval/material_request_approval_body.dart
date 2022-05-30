@@ -334,11 +334,6 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                         return Center(child: CircularProgressIndicator());
                       }
                     }),
-                // const InformationBoxContainer1(),
-                //SizedBox(height: 10,),
-                //const InformationBoxContainer1(),
-                // const MaterialApprovalPageContainerData(),
-                //sizedbox1,
                 Padding(
                     padding: padding4,
                     child: roundedButtonHome2(
