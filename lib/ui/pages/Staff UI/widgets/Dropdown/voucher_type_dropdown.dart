@@ -52,7 +52,7 @@ class _VoucherTypeDropdownState extends State<VoucherTypeDropdown> {
                           ?.map<DropdownMenuItem<VoucherType>>((e) {
                         return DropdownMenuItem<VoucherType>(
                           value: e,
-                          child: Text(e.strName),
+                          child: Text(e.StrName),
                         );
                       })?.toList() ??[],
                     );
