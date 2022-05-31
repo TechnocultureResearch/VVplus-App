@@ -175,6 +175,7 @@ class ApiService {
 
   static const String getIndentNoPOnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrStateCode":"WB","Strv_type":"GORD"}'}";
 
+  static const String getVoucherTypeMaterialrequestEntrynewURL = "http://43.228.113.108:888//Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
   // mock database get url
 
   static const String mockDataIndentorNameURL =
