@@ -26,6 +26,7 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/add_item_container.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_text_style.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/raisedbutton_text.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/rounded_button.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
@@ -45,6 +46,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   bool isActive = false;
   bool pressed = false;
   TextEditingController reqQty = TextEditingController();
+  TextEditingController remarks = TextEditingController();
   final stockIssueEntryFormKey = GlobalKey<FormState>();
 
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
@@ -73,6 +75,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     selectItemCostCenter = null;
     selectItemCurrentStatus = null;
     reqQty.clear();
+    remarks.clear();
   }
 
   _calculation() {
@@ -108,9 +111,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
         .listen((ConnectivityResult result) {
       setState(() => connectionStatus = result);
     });
-
     final DateTime now = DateTime.now();
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
     formatted = formatter.format(now);
     print("current date...$formatted");
     super.initState();
@@ -200,9 +202,16 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     // }
     //ItemCode = "CG12"
     try {
-      var url = Uri.parse(
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"${formatted}","StrSiteCode":"AD","StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"100","DblRate":"10","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remk"}],"StrPreparedBy":"SA"}'}');
-      //'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
+      var baseUrl =
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue';
+      var url = Uri.parse(baseUrl +
+          '?' +
+          'StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"$formatted","StrSiteCode":"AD",'
+              '"StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}",'
+              '"DblQuantity":"${reqQty.text}",'
+              '"DblAmt":"${StringAmount}","DblRate":"${selectItemCurrentStatus.PurchaseRate}",'
+              '"StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}",'
+              '"StrRemark":"${remarks.text}"}],"StrPreparedBy":"SA"}'}');
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -669,7 +678,42 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   : const SizedBox(),
 
               sizedbox1,
-              formsHeadText("Total Amount:"),
+              formsHeadTextNew("Remarks", width * .045),
+              Container(
+                //height: 70,
+                padding: padding1,
+                decoration: decoration1(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outtextField,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != remarks.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: remarks,
+                    onChanged: bloc.intextField,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: primaryColor8,
+                        enabledBorder: textFieldBorder(),
+                        focusedBorder: textFieldBorder(),
+                        isDense: true,
+                        errorBorder: textFieldBorder(),
+                        errorText: snapshot.error),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
+                  ),
+                ),
+              ),
+              sizedbox1,
+              formsHeadText("Total Amount: "),
               sizedbox1,
               Padding(
                   padding: padding4,
