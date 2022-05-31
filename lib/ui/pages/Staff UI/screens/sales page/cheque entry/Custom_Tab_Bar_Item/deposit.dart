@@ -70,7 +70,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
       await http.post(Uri.parse(ApiService.mockDataPostChequeDeposit),
           body: json.encode({
             "ChequeUpTo": chequeUpToDateInput.text,
-            "ChooseCheque": selectVoucherType.strSubCode,
+            "ChooseCheque": selectVoucherType.StrSubCode,
             "DepositDate": depositDateInput.text
           }));
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
@@ -178,7 +178,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(4.0),
-                                              child: Text(e.strName ?? ''),
+                                              child: Text(e.StrName ?? ''),
                                             ),
                                           );
                                         })?.toList() ??
@@ -190,25 +190,25 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                   ),
                   Padding(padding: paddingFormsVertical),
                   formsDetailText(
-                      "Bank: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Bank: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   formsDetailText(
-                      "Name of Customer: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Name of Customer: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   formsDetailText(
-                      "Cheque Date: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Cheque Date: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   formsDetailText(
-                      "Bank: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Bank: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   formsDetailText(
-                      "Amount: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Amount: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   formsDetailText(
-                      "Site: ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Site: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Padding(padding: paddingFormsVertical),
                   formsHeadText(
-                      "Desposit Date ${selectVoucherType != null ? selectVoucherType.strSubCode : ""}"),
+                      "Desposit Date ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Container(
                     padding: dateFieldPadding,
                     height: height * .09,

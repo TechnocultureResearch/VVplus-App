@@ -109,7 +109,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     try {
       await http.post(Uri.parse(ApiService.mockDataPostPlacePurchaseOrderURL),
           body: json.encode({
-            "VoucherType": selectVoucherType.strSubCode,
+            "VoucherType": selectVoucherType.StrSubCode,
             "Date": dateinput.text,
             "Supplier": selectSupplier.Name,
             "IndentSelection": selectIndentName.strSubCode,

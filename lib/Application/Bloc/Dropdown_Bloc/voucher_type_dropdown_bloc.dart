@@ -16,6 +16,7 @@ class VoucherTypeDropdownBloc {
   final voucherTypeBToBSendDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeBToBReceiveDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeGoodReceiptDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeMatrialReqEntryDropdownGetData = BehaviorSubject<VoucherType>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
@@ -26,6 +27,7 @@ class VoucherTypeDropdownBloc {
   Future<List<VoucherType>> voucherTypeBToBSendDropdownData;
   Future<List<VoucherType>> voucherTypeBToBReceiveDropdownData;
   Future<List<VoucherType>> voucherTypeGoodReceiptDropdownData;
+  Future<List<VoucherType>> voucherTypeMaterialReqEntryDropdownData;
 
   Stream<VoucherType> get selecteddState =>
       voucherTypeStockIssueDropdownGetData;
@@ -70,6 +72,11 @@ class VoucherTypeDropdownBloc {
   void selectedGoodReceiptStateEvent(VoucherType state) =>
       voucherTypeGoodReceiptDropdownGetData.add(state);
 
+  Stream<VoucherType> get selectedMaterialReqEntryState =>
+  voucherTypeMatrialReqEntryDropdownGetData;
+  void selectedMaterialReqEntryStateEvent(VoucherType state) =>
+  voucherTypeMatrialReqEntryDropdownGetData.add(state);
+
   VoucherTypeDropdownBloc() {
     voucherTypeDropdownData = voucherTypeDropdownRepository.getData();
     voucherTypeStockIssueDropdownData =
@@ -87,6 +94,8 @@ class VoucherTypeDropdownBloc {
         voucherTypeDropdownRepository.getBToBReceiveData();
     voucherTypeGoodReceiptDropdownData =
         voucherTypeDropdownRepository.getGoodReceiptnewURL();
+    voucherTypeMaterialReqEntryDropdownData = voucherTypeDropdownRepository.getMaterialReqEntryData();
+
   }
 
   void dispose() {
@@ -99,5 +108,6 @@ class VoucherTypeDropdownBloc {
     voucherTypeBToBSendDropdownGetData.close();
     voucherTypeBToBSendDropdownGetData.close();
     voucherTypeGoodReceiptDropdownGetData.close();
+    voucherTypeMatrialReqEntryDropdownGetData.close();
   }
 }

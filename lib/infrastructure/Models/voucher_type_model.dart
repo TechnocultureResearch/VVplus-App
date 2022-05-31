@@ -11,8 +11,8 @@ String strRecordToJson(List<VoucherType> data) =>
 
 class VoucherType {
   VoucherType({
-    this.strSubCode,
-    this.strName,
+    this.StrSubCode,
+    this.StrName,
     this.godown,
     this.purchaseOrderSelect,
     this.supplier,
@@ -23,8 +23,8 @@ class VoucherType {
     this.description,
   });
 
-  String strSubCode;
-  String strName;
+  String StrSubCode;
+  String StrName;
   String godown;
   String purchaseOrderSelect;
   String supplier;
@@ -38,8 +38,8 @@ class VoucherType {
   String toString() => Description;
 
   factory VoucherType.fromJson(Map<String, dynamic> json) => VoucherType(
-        strSubCode: json["StrSubCode"],
-        strName: json["StrName"],
+        StrSubCode: json["StrSubCode"],
+    StrName: json["StrName"],
         godown: json["Godown"],
         purchaseOrderSelect: json["Purchase_order_select"],
         supplier: json["Supplier"],
@@ -51,8 +51,8 @@ class VoucherType {
       );
 
   Map<String, dynamic> toJson() => {
-        "StrSubCode": strSubCode,
-        "StrName": strName,
+        "StrSubCode": StrSubCode,
+        "StrName": StrName,
         "Godown": godown,
         "Purchase_order_select": purchaseOrderSelect,
         "Supplier": supplier,

@@ -9,12 +9,14 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/material_request_entry_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
+import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/add_item_container.dart';
@@ -70,7 +72,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   final materialRequestEntryFormKey = GlobalKey<FormState>();
 
   String dropdownValue = 'Choose an option';
-  IndentorNameDropdownBloc dropdownBlocIndentorName;
+  VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
   ItemCostCenterDropdownBloc dropdownBlocItemCostCenter;
 
@@ -99,7 +101,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
     intendDateInput.text = "";
     reqDateInput.text = "";
-    dropdownBlocIndentorName = IndentorNameDropdownBloc();
+    voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dropdownBlocItemCostCenter = ItemCostCenterDropdownBloc();
     _amount = 0;
@@ -171,11 +173,12 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   }
 
   IndentorName selectIndentName;
+  VoucherType selectVoucherType;
   ItemCurrentStatus selectItemCurrentStatus;
   ItemCostCenter selectItemCostCenter;
-  void onDataChange1(IndentorName state) {
+  void onDataChange1(VoucherType state) {
     setState(() {
-      selectIndentName = state;
+      selectVoucherType = state;
     });
   }
 
@@ -244,33 +247,33 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   child: Container(
                     // height: 52, width: 343,
                     decoration: decorationForms(),
-                    child: FutureBuilder<List<IndentorName>>(
+                    child: FutureBuilder<List<VoucherType>>(
                         future:
-                            dropdownBlocIndentorName.indentorNameDropdownData,
+                            voucherTypeDropdownBloc.voucherTypeMaterialReqEntryDropdownData,
                         builder: (context, snapshot) {
-                          return StreamBuilder<IndentorName>(
-                              stream: dropdownBlocIndentorName.selectedState,
+                          return StreamBuilder<VoucherType>(
+                              stream: voucherTypeDropdownBloc.selectedMaterialReqEntryState,
                               builder: (context, item) {
-                                return SearchChoices<IndentorName>.single(
+                                return SearchChoices<VoucherType>.single(
                                   icon: const Icon(
                                       Icons.keyboard_arrow_down_sharp,
                                       size: 30),
-                                  padding: selectIndentName != null
+                                  padding: selectVoucherType != null
                                       ? height * .002
                                       : height * .015,
                                   isExpanded: true,
                                   hint: textHint,
-                                  value: selectIndentName,
+                                  value: selectVoucherType,
                                   displayClearIcon: false,
                                   onChanged: onDataChange1,
                                   items: snapshot?.data
-                                          ?.map<DropdownMenuItem<IndentorName>>(
+                                          ?.map<DropdownMenuItem<VoucherType>>(
                                               (e) {
-                                        return DropdownMenuItem<IndentorName>(
+                                        return DropdownMenuItem<VoucherType>(
                                           value: e,
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
-                                            child: Text(e.strName),
+                                            child: Text(e.StrName),
                                           ),
                                         );
                                       })?.toList() ??

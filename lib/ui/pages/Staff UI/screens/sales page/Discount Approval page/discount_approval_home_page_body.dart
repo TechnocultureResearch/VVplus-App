@@ -128,9 +128,9 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
       await http.post(Uri.parse(ApiService.mockDataPostDiscountApproval),
           body: json.encode({
             "Date": dateinput.text,
-            "BranchAndPhase": selectVoucherType1.strSubCode,
+            "BranchAndPhase": selectVoucherType1.StrSubCode,
             "RequestedBy": selectDepartmentName.strSubCode,
-            "ReasonForDiscount": selectVoucherType2.strSubCode,
+            "ReasonForDiscount": selectVoucherType2.StrSubCode,
             "Remarks": dateinput1.text,
             "CustomerName": selectIndentorName.strName,
             "CustomerContactNo": dateinput2.text,
@@ -246,7 +246,7 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.StrName ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -327,7 +327,7 @@ class MyDiscountApprovalBody extends State<DiscountApprovalBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ""),
+                                          child: Text(e.StrName ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
