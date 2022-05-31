@@ -300,7 +300,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.V_Type),
+                                          child: Text(e.Description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??

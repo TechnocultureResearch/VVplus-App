@@ -257,7 +257,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.V_Type),
+                                          child: Text(e.Description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -418,7 +418,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     stream: dropdownBlocItemCurrentStatus
                                         .selectedStateitemCurrentStatus,
                                     builder: (context, item) {
-                                      return SearchChoices<ItemCurrentStatus>.single(
+                                      return SearchChoices<
+                                          ItemCurrentStatus>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
@@ -444,7 +445,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                               );
                                             })?.toList() ??
                                             [],
-
                                       );
                                     });
                               }),
@@ -468,7 +468,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     builder: (context, snapshot) {
                                       return TextFormField(
                                         onEditingComplete: () {
-                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
                                           _calculation();
                                         },
                                         // initialValue: "no",
@@ -547,7 +548,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                           width: width * .28,
                                           decoration: decoration1(),
                                           child: const Center(
-                                              child: Text("00.00"))),
+                                              child: Text("100.00"))),
                                     ),
                               SizedBox(
                                 width: 40,

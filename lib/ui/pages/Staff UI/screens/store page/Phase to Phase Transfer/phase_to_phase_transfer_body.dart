@@ -222,7 +222,9 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     //       }));
     try {
       var url = Uri.parse(
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrNo":"1","StrDate":"${dateinput.text}","StrIssuedTo":"${selectIssuedTo.SubCode}","StrPreparedByCode":"SA",StrIndGrid:[{"StrCostCenterCode":"${selectFromItemCostCenter.Code}","StrGodownCode":"${selectFromGodown.GodCode}","StrToCostCenterCode":"${selectFromItemCostCenter.Code} ","StrToGodownCode":"${selectToGodown.GodCode}","StrItemCode":"${selectToItemCostCenter.Code}","DblQuantity":"${reqQty.text}","StrSKU":"Mtr","DblRate":"10","DblAmt":"100"}],"StrRemark":"${remarks.text}"}'}");
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrNo":"2","StrDate":"${dateinput.text}",'
+              '"StrIssuedTo":"${selectIssuedTo.SubCode}","StrPreparedByCode":"SA",StrIndGrid:[{"StrCostCenterCode":"${selectFromItemCostCenter.Code}","StrGodownCode":"${selectFromGodown.GodCode}","StrToCostCenterCode":"${selectFromItemCostCenter.Code} ",'
+              '"StrToGodownCode":"${selectToGodown.GodCode}","StrItemCode":"${selectToItemCostCenter.Code}","DblQuantity":"${reqQty.text}","StrSKU":"${selectItemCurrentStatus.SKU}","DblRate":"${selectItemCurrentStatus.PurchaseRate}","DblAmt":"${StringAmount}"}],"StrRemark":"${remarks.text}"}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -309,7 +311,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.V_Type),
+                                          child: Text(e.Description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -709,7 +711,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                           child: Center(
                                               child: Text(
                                                   selectItemCurrentStatus
-                                                      .PurchaseRate))),
+                                                          .PurchaseRate
+                                                      .toString()))),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -718,8 +721,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                           height: height * .067,
                                           width: width * .28,
                                           decoration: decoration1(),
-                                          child: const Center(
-                                              child: Text("00.00"))),
+                                          child:
+                                              const Center(child: Text("100"))),
                                     ),
                               SizedBox(
                                 width: 40,
