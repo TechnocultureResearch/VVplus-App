@@ -3,20 +3,20 @@ import 'package:rxdart/rxdart.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/infrastructure/Repository/voucher_type_repository.dart';
 
+import '../../../infrastructure/Models/voucher_type_materialreqEntry.dart';
+
 class VoucherTypeDropdownBloc {
   final voucherTypeDropdownRepository = VoucherTypeRepository();
   final voucherTypeDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeStockIssueDropdownGetData = BehaviorSubject<VoucherType>();
-  final voucherTypeChequeReceiveDropdownGetData =
-      BehaviorSubject<VoucherType>();
-  final voucherTypeExtraWorkEntryDropdownGetData =
-      BehaviorSubject<VoucherType>();
+  final voucherTypeChequeReceiveDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeExtraWorkEntryDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypePhaseToPhaseDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypePODropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeBToBSendDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeBToBReceiveDropdownGetData = BehaviorSubject<VoucherType>();
   final voucherTypeGoodReceiptDropdownGetData = BehaviorSubject<VoucherType>();
-  final voucherTypeMatrialReqEntryDropdownGetData = BehaviorSubject<VoucherType>();
+  final voucherTypeMatrialReqEntryDropdownGetData = BehaviorSubject<VoucherTypeMaterialReqEntryModel>();
 
   Future<List<VoucherType>> voucherTypeDropdownData;
   Future<List<VoucherType>> voucherTypeStockIssueDropdownData;
@@ -27,7 +27,7 @@ class VoucherTypeDropdownBloc {
   Future<List<VoucherType>> voucherTypeBToBSendDropdownData;
   Future<List<VoucherType>> voucherTypeBToBReceiveDropdownData;
   Future<List<VoucherType>> voucherTypeGoodReceiptDropdownData;
-  Future<List<VoucherType>> voucherTypeMaterialReqEntryDropdownData;
+  Future<List<VoucherTypeMaterialReqEntryModel>> voucherTypeMaterialReqEntryDropdownData;
 
   Stream<VoucherType> get selecteddState =>
       voucherTypeStockIssueDropdownGetData;
@@ -72,9 +72,9 @@ class VoucherTypeDropdownBloc {
   void selectedGoodReceiptStateEvent(VoucherType state) =>
       voucherTypeGoodReceiptDropdownGetData.add(state);
 
-  Stream<VoucherType> get selectedMaterialReqEntryState =>
+  Stream<VoucherTypeMaterialReqEntryModel> get selectedMaterialReqEntryState =>
   voucherTypeMatrialReqEntryDropdownGetData;
-  void selectedMaterialReqEntryStateEvent(VoucherType state) =>
+  void selectedMaterialReqEntryStateEvent(VoucherTypeMaterialReqEntryModel state) =>
   voucherTypeMatrialReqEntryDropdownGetData.add(state);
 
   VoucherTypeDropdownBloc() {
