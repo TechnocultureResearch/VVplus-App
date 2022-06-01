@@ -14,11 +14,16 @@ class ItemCostCenterDropdown11 extends StatefulWidget {
 
 class _ItemCostCenterDropdown11State extends State<ItemCostCenterDropdown11> {
   MaterialRequestEntryPostDataBloc materialRequestEntryPostDataDropdownBloc;
-
+MaterialRequestEntryPostData selectmaterialReqEntryPost;
   @override
   void initState() {
     materialRequestEntryPostDataDropdownBloc = MaterialRequestEntryPostDataBloc();
     super.initState();
+  }
+  void onDataChange1(MaterialRequestEntryPostData state) {
+    setState(() {
+      selectmaterialReqEntryPost = state;
+    });
   }
 
   @override
@@ -46,12 +51,12 @@ class _ItemCostCenterDropdown11State extends State<ItemCostCenterDropdown11> {
                       hint: "Search here",
                       value: item.data,
                       displayClearIcon: false,
-                      onChanged: materialRequestEntryPostDataDropdownBloc.selectedStateEvent,
+                      onChanged: onDataChange1,
                       items: snapshot?.data
                           ?.map<DropdownMenuItem<MaterialRequestEntryPostData>>((e) {
                         return DropdownMenuItem<MaterialRequestEntryPostData>(
                           value: e,
-                          child: Text(e.indentSubCode),
+                          child: Text(e.indentSubCode??''),
                         );
                       })?.toList() ??[],
                     );
