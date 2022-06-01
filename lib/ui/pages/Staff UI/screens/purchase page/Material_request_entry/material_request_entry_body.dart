@@ -34,6 +34,8 @@ import 'package:vvplus_app/domain/common/common_text.dart';
 import 'dart:io';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 
+import '../../../../../../infrastructure/Models/voucher_type_materialreqEntry.dart';
+
 class MaterialEntryBody extends StatefulWidget {
   const MaterialEntryBody({Key key}) : super(key: key);
   @override
@@ -135,7 +137,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
           // await http.post(Uri.parse(ApiService.postMaterialRequestEntryURL),
           body: json.encode({
             "StrRecord": {
-              "StrVType": selectIndentName.strSubCode,
+              "StrVType": selectVoucherType.StrSubCode,
               "StrVDate": intendDateInput.text,
               "StrSiteCode": "AD",
               "StrReceiveFrom": "SM149",
@@ -173,10 +175,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   }
 
   IndentorName selectIndentName;
-  VoucherType selectVoucherType;
+  VoucherTypeMaterialReqEntryModel selectVoucherType;
   ItemCurrentStatus selectItemCurrentStatus;
   ItemCostCenter selectItemCostCenter;
-  void onDataChange1(VoucherType state) {
+  void onDataChange1(VoucherTypeMaterialReqEntryModel state) {
     setState(() {
       selectVoucherType = state;
     });
@@ -247,14 +249,14 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   child: Container(
                     // height: 52, width: 343,
                     decoration: decorationForms(),
-                    child: FutureBuilder<List<VoucherType>>(
+                    child: FutureBuilder<List<VoucherTypeMaterialReqEntryModel>>(
                         future:
                             voucherTypeDropdownBloc.voucherTypeMaterialReqEntryDropdownData,
                         builder: (context, snapshot) {
-                          return StreamBuilder<VoucherType>(
+                          return StreamBuilder<VoucherTypeMaterialReqEntryModel>(
                               stream: voucherTypeDropdownBloc.selectedMaterialReqEntryState,
                               builder: (context, item) {
-                                return SearchChoices<VoucherType>.single(
+                                return SearchChoices<VoucherTypeMaterialReqEntryModel>.single(
                                   icon: const Icon(
                                       Icons.keyboard_arrow_down_sharp,
                                       size: 30),
@@ -267,13 +269,13 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   displayClearIcon: false,
                                   onChanged: onDataChange1,
                                   items: snapshot?.data
-                                          ?.map<DropdownMenuItem<VoucherType>>(
+                                          ?.map<DropdownMenuItem<VoucherTypeMaterialReqEntryModel>>(
                                               (e) {
-                                        return DropdownMenuItem<VoucherType>(
+                                        return DropdownMenuItem<VoucherTypeMaterialReqEntryModel>(
                                           value: e,
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
-                                            child: Text(e.StrName),
+                                            child: Text(e.StrName.toLowerCase() ?? ''),
                                           ),
                                         );
                                       })?.toList() ??
