@@ -7,6 +7,8 @@ import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'dart:async';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 
+import '../Models/voucher_type_materialreqEntry.dart';
+
 class VoucherTypeRepository {
   Client client = Client();
 
@@ -140,15 +142,15 @@ class VoucherTypeRepository {
     }
   }
 
-  Future<List<VoucherType>> getMaterialReqEntryData() async {
+  Future<List<VoucherTypeMaterialReqEntryModel>> getMaterialReqEntryData() async {
     try{
       final response = await client.get(Uri.parse(ApiService.getVoucherTypeMaterialrequestEntrynewURL));
       final items = (jsonDecode(response.body)as List)
-          .map((e) => VoucherType.fromJson(e))
+          .map((e) => VoucherTypeMaterialReqEntryModel.fromJson(e))
           .toList();
       return items;
     }
-    catch(e) {
+    catch (e) {
       rethrow;
     }
   }
