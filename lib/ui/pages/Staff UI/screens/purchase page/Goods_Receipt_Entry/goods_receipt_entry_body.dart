@@ -590,7 +590,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     return Padding(
       padding: padding1,
       child: Container(
-          height: 50,
           width: 300,
           decoration: decorationForms(),
           child: StreamBuilder(
