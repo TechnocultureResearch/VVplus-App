@@ -87,6 +87,19 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     super.initState();
   }
 
+  double _amount;
+  String StringAmount;
+  _calculation() {
+    setState(
+      () {
+        //value1 = double.parse(reqQty.text);
+        _amount = (double.parse(selectIndentNo.IndQty.toString()) *
+            double.parse(selectIndentNo.Rate.toString()));
+        StringAmount = _amount.toStringAsFixed(3);
+      },
+    );
+  }
+
   @override
   void dispose() {
     subscription.cancel();
@@ -180,9 +193,17 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
 
       var url = Uri.parse(baseurl +
           "?" +
-          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrFrmSite":"AD","StrFrmParty":"${selectSiteTo.SubCode}","StrFrmCC":"${selectItemCostCenter.Code}","StrFrmGodown":"${selectGodown.GodCode}","StrToSite":"${selectSiteTo.Code}","StrToParty":"${selectSiteTo.SubCode}","StrToCC":"${selectItemCostCenter.Code}","StrVehicleNo":"","StrIndent":"","StrSiteCode":"AD",StrIndGrid:[{"StrItemCode":"${selectIndentSelection.itemCode}",'
-              '"DblQuantity":"10","StrSKU":"PIECE","DblRate":"10","DblAmt":"100",StrItemGrid:[{"StrIndDocID":"","DblTrnQuantity":"10"}],"DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblNetValueRate":"118","DblNetValueAmt":"118"}],	'
-              '"DblGrossRate":"0","DblGrossAmt":"118","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"0","DblSGSTAmt":"9","DblCGSTRate":"0","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0","DblBillAmt":"0","DblRoundOffRate":"0","DblRoundOffAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118","StrPreparedBy":"SA","StrAgtForm":"HO3"}'}');
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrFrmSite":"AA","StrFrmParty":"${selectSiteTo.SubCode}","StrFrmCC":"${selectItemCostCenter.Code}",'
+              '"StrFrmGodown":"${selectGodown.GodCode}","StrToSite":"${selectSiteTo.Code}","StrToParty":"${selectSiteTo.SubCode}","StrToCC":"${selectItemCostCenter.Code}",'
+              '"StrVehicleNo":"","StrIndent":"","StrSiteCode":"AD",StrIndGrid:[{"StrItemCode":"${selectIndentSelection.itemCode}",'
+              '"DblQuantity":"${selectIndentNo.IndQty}","StrSKU":"${selectIndentNo.Unit}","DblRate":"${selectIndentNo.Rate}","DblAmt":"10",StrItemGrid:[{"StrIndDocID":"${selectIndentNo.RefDocId}","DblTrnQuantity":"${selectIndentNo.AdjQty}"}],'
+              '"DblItemValueRate":"${selectIndentSelection.rate}","DblItemValueAmt":"0","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100","DblAVAmt":"100",'
+              '"DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
+              '"DblUGSTAmt":"0","DblNetValueRate":"118","DblNetValueAmt":"118"}],	'
+              '"DblGrossRate":"0","DblGrossAmt":"118","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"100",'
+              '"DblSGSTRate":"0","DblSGSTAmt":"9","DblCGSTRate":"0","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0",'
+              '"DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0","DblBillAmt":"0","DblRoundOffRate":"0",'
+              '"DblRoundOffAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118","StrPreparedBy":"SA","StrAgtForm":"HO3"}'}');
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -292,7 +313,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.V_Type ?? ""),
+                                          child: Text(e.description ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -531,7 +552,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.IndNo ?? ""),
+                                          child: Text(e.RefDocId ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
@@ -573,7 +594,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.itemCode ?? ""),
+                                          child: Text(e.itemName ?? ""),
                                         ),
                                       );
                                     })?.toList() ??
