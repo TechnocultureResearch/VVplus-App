@@ -87,7 +87,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     final String uri =
         "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
             '"StrSiteCode":"AD",'
-            '"StrStateCode":"","StrPartyCode":"AD59","StrPOValDate":"",'
+            '"StrStateCode":"","StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"",'
             '"StrPODocID":"","Strv_type":"PCHLN"}'}";
     var response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
@@ -112,7 +112,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
         var url = Uri.parse(
             'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?'
             'StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
-                '"StrPartyCode":"$pcode","StrPOValDate":"","StrPODocID":"${selectFillPo}"}'}');
+                '"StrPartyCode":"${pcode}","StrPOValDate":"","StrPODocID":"${selectFillPo}"}'}');
         //'"StrPartyCode":"AD59}","StrPOValDate":"","StrPODocID":"DADGORD  2022       2"}'}');
         final response = await http.get(url);
         final List<dynamic> items = json.decode(response.body);
@@ -565,8 +565,8 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   }
 
   Widget dataFillPoText() {
-    return FutureBuilder<String>(
-        future: myFuture,
+    return StreamBuilder<String>(
+        stream: fetchFillPoData().asStream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
