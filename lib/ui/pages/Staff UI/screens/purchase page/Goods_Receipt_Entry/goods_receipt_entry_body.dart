@@ -452,13 +452,14 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               // ),
               sizedbox1,
               formsHeadTextNew("Purchase Order Select", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                    height: height * .066,
-                    decoration: decorationForms(),
-                    child: fillSelectedpoText()),
-              ),
+              fillSelectedpoText(),
+              // Padding(
+              //   padding: padding1,
+              //   child: Container(
+              //       height: height * .066,
+              //       decoration: decorationForms(),
+              //       child: fillSelectedpoText()),
+              // ),
               sizedbox1,
               formsHeadTextNew("Vehicle No.", width * .045),
               Container(
