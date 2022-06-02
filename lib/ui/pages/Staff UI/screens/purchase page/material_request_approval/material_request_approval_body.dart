@@ -39,12 +39,10 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
   IndentorNameDropdownBloc _dropdownBloc;
   IndentNoDropdownBloc indentNoDropdownBloc;
   bool pressAttention = false;
-  Future<List<dynamic>> futureList;
   List<String> itemList = [];
 
   @override
   void initState() {
-    futureList = getIndentItemData();
     dateinput.text = "";
     // _dropdownBloc = IndentorNameDropdownBloc();
     indentNoDropdownBloc = IndentNoDropdownBloc();
@@ -55,7 +53,7 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
     if (selectIndentNo != null) {
       try {
         var url = Uri.parse(
-            'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"FillGrid","StrSiteCode":"AD","StrV_Date":"2022-05-27",StrIndDocID:[{"StrDocID":""},{"StrDocID":""}]}'}');
+            'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"FillGrid","StrSiteCode":"AD","StrV_Date":"2022-05-27",StrIndDocID:[{"StrDocID":"${selectIndentNo.StrDocID}"},{"StrDocID":""}]}'}');
         final response = await http.get(url);
         final List<dynamic> items = json.decode(response.body);
         // final items = (jsonDecode(response.body) as List)
@@ -77,7 +75,6 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
   IndentNo selectIndentNo;
   void onDataChange1(IndentNo state) {
     setState(() {
-      futureList = getIndentItemData();
       selectIndentNo = state;
     });
   }
