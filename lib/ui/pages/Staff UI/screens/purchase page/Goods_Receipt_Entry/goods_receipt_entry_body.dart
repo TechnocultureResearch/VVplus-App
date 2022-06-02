@@ -81,9 +81,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   }
 
   Future<String> fetchFillPoData() async {
-    String pcode = "${selectSupplier.subCode}";
-
-    print("prcode:pcode");
     final String uri =
         "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
             '"StrSiteCode":"AD",'
@@ -444,14 +441,15 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               ),
               sizedbox1,
               formsHeadTextNew("Fill PO", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  height: height * .066,
-                  decoration: decorationForms(),
-                  child: dataFillPoText(),
-                ),
-              ),
+              dataFillPoText(),
+              // Padding(
+              //   padding: padding1,
+              //   child: Container(
+              //     height: height * .066,
+              //     decoration: decorationForms(),
+              //     child: dataFillPoText(),
+              //   ),
+              // ),
               sizedbox1,
               formsHeadTextNew("Purchase Order Select", width * .045),
               Padding(
@@ -565,54 +563,68 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   }
 
   Widget dataFillPoText() {
-    return FutureBuilder<String>(
-        future: myFuture,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
-          return DropdownButton(
-            hint: Text("  Search here"),
-            icon: Padding(
-              padding: EdgeInsets.only(left: 85),
-              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
-            ),
-            items: data.map((item) {
-              return DropdownMenuItem(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(item['DocId']),
+    return Padding(
+      padding: padding1,
+      child: Container(
+        height: 50,
+        decoration: decorationForms(),
+        child: FutureBuilder<String>(
+            future: myFuture,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData)
+                return Center(child: CircularProgressIndicator());
+              return DropdownButton(
+                hint: Text("  Search here"),
+                icon: Padding(
+                  padding: EdgeInsets.only(left: 85),
+                  child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
                 ),
-                value: item['DocId'],
+                items: data.map((item) {
+                  return DropdownMenuItem(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(item['DocId']),
+                    ),
+                    value: item['DocId'],
+                  );
+                }).toList(),
+                onChanged: (newVal) {
+                  setState(() {
+                    selectFillPo = newVal as String;
+                  });
+                },
+                value: selectFillPo,
               );
-            }).toList(),
-            onChanged: (newVal) {
-              setState(() {
-                selectFillPo = newVal as String;
-              });
-            },
-            value: selectFillPo,
-          );
-        });
+            }),
+      ),
+    );
   }
 
   Widget fillSelectedpoText() {
-    return StreamBuilder(
-        stream: getFillSelectedPOData().asStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                    leading: Text(
-                  snapshot.data[index]['DocID'] ?? '',
-                  //style: ContainerText2()
-                ));
-              },
-            );
-          } else {
-            return Center(child: Text(""));
-          }
-        });
+    return Padding(
+      padding: padding1,
+      child: Container(
+        height: 50,
+        decoration: decorationForms(),
+        child: StreamBuilder(
+            stream: getFillSelectedPOData().asStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                        leading: Text(
+                      snapshot.data[index]['DocID'] ?? '',
+                      //style: ContainerText2()
+                    ));
+                  },
+                );
+              } else {
+                return Center(child: Text(""));
+              }
+            }),
+      ),
+    );
   }
 }
