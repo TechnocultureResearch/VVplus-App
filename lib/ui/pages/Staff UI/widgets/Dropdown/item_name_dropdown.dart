@@ -34,10 +34,10 @@ class _ItemNameDropdownState extends State<ItemNameDropdown> {
         height: 50, width: 343,
         decoration: decorationForms(),
         child: FutureBuilder<List<ItemName>>(
-            future: _dropdownBloc.itemNameDropdownData,
+            future: _dropdownBloc.itemMaterialReqEntryDropdownData,
             builder: (context, snapshot) {
               return StreamBuilder<ItemName>(
-                  stream: _dropdownBloc.selectedState,
+                  stream: _dropdownBloc.selecteditemMaterialReqEnrtyState,
                   builder: (context, item) {
                     return SearchChoices<ItemName>.single(
                       icon: const Icon(Icons.keyboard_arrow_down_sharp),
@@ -47,7 +47,7 @@ class _ItemNameDropdownState extends State<ItemNameDropdown> {
                       hint: "Search here",
                       value: item.data,
                       displayClearIcon: false,
-                      onChanged: _dropdownBloc.selectedStateEvent,
+                      onChanged: _dropdownBloc.selecteditemMaterialReqEnrtyStateEvent,
                       items: snapshot?.data
                           ?.map<DropdownMenuItem<ItemName>>((e) {
                         return DropdownMenuItem<ItemName>(
