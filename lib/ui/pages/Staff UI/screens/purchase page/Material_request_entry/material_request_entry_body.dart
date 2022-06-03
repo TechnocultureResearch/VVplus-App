@@ -16,6 +16,7 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
+import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -34,6 +35,7 @@ import 'package:vvplus_app/domain/common/common_text.dart';
 import 'dart:io';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 
+import '../../../../../../Application/Bloc/Dropdown_Bloc/item_name_dropdown_bloc.dart';
 import '../../../../../../infrastructure/Models/voucher_type_materialreqEntry.dart';
 
 class MaterialEntryBody extends StatefulWidget {
@@ -75,6 +77,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   String dropdownValue = 'Choose an option';
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
+  ItemNameDropdownBloc itemNameDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
   ItemCostCenterDropdownBloc dropdownBlocItemCostCenter;
 
@@ -104,6 +107,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     intendDateInput.text = "";
     reqDateInput.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
+    itemNameDropdownBloc = ItemNameDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dropdownBlocItemCostCenter = ItemCostCenterDropdownBloc();
     _amount = 0;
@@ -175,6 +179,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   }
 
   IndentorName selectIndentName;
+  ItemName selectItemName;
   VoucherTypeMaterialReqEntryModel selectVoucherType;
   ItemCurrentStatus selectItemCurrentStatus;
   ItemCostCenter selectItemCostCenter;
@@ -184,9 +189,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
   }
 
-  void onDataChange2(ItemCurrentStatus state) {
+  void onDataChange2(ItemName state) {
     setState(() {
-      selectItemCurrentStatus = state;
+      selectItemName = state;
     });
   }
 
@@ -275,7 +280,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           value: e,
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
-                                            child: Text(e.StrName.toLowerCase() ?? ''),
+                                            child: Text(e.StrName ?? ''),
                                           ),
                                         );
                                       })?.toList() ??
@@ -341,39 +346,37 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           padding: padding1,
                           child: Container(
                             decoration: decorationForms(),
-                            child: FutureBuilder<List<ItemCurrentStatus>>(
-                                future: dropdownBlocItemCurrentStatus
-                                    .itemCurrentStatusStockIssueEntryDropdownData,
+                            child: FutureBuilder<List<ItemName>>(
+                                future: itemNameDropdownBloc.itemMaterialReqEntryDropdownData,
                                 builder: (context, snapshot) {
-                                  return StreamBuilder<ItemCurrentStatus>(
-                                      stream: dropdownBlocItemCurrentStatus
-                                          .selectedStateitemCurrentStatus,
+                                  return StreamBuilder<ItemName>(
+                                      stream: itemNameDropdownBloc.selecteditemMaterialReqEnrtyState,
                                       builder: (context, item) {
                                         return SearchChoices<
-                                            ItemCurrentStatus>.single(
+                                            ItemName>.single(
                                           icon: const Icon(
                                               Icons.keyboard_arrow_down_sharp,
                                               size: 30),
                                           padding:
-                                              selectItemCurrentStatus != null
+                                              selectItemName != null
                                                   ? height * .002
                                                   : height * .015,
                                           isExpanded: true,
                                           hint: "Search here",
-                                          value: selectItemCurrentStatus,
+                                          value: selectItemName,
                                           displayClearIcon: false,
                                           onChanged: onDataChange2,
                                           items: snapshot?.data?.map<
                                                   DropdownMenuItem<
-                                                      ItemCurrentStatus>>((e) {
+                                                      ItemName>>((e) {
                                                 return DropdownMenuItem<
-                                                    ItemCurrentStatus>(
+                                                    ItemName>(
                                                   value: e,
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child: Text(e.Name),
+                                                    child: Text(e.strItemName),
                                                   ),
                                                 );
                                               })?.toList() ??
