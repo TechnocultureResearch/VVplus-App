@@ -54,12 +54,15 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   bool loading = false;
   var subscription;
   var connectionStatus;
-  var futureList;
+  //var futureList;
   List fillPO = List();
-
-  String fillSelectPoDoc;
-  String selectFillPo;
+  bool _selected = false;
   List data = [];
+  List dataa = [];
+  String fillSelectPoDoc;
+  final TextEditingController _remarks = TextEditingController();
+  String selectFillPo;
+  Future<String> futureList;
   Future<String> myFuture;
 
   void onDataChange1(VoucherType state) {
@@ -81,9 +84,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   }
 
   Future<String> fetchFillPoData() async {
-    String pcode = "${selectSupplier.subCode}";
-
-    print("prcode:pcode");
     final String uri =
         "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
             '"StrSiteCode":"AD",'
@@ -97,6 +97,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
       var resBody = json.decode(res.body);
       setState(() {
         data = resBody;
+        print("body:$data");
       });
       print('Loaded Successfully');
       return "Loaded Successfully";
@@ -105,44 +106,53 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     }
   }
 
-  Future<List<dynamic>> getFillSelectedPOData() async {
-    String pcode = "${selectSupplier.subCode}";
-    if (selectFillPo != null) {
-      try {
-        var url = Uri.parse(
-            'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?'
-            'StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
-                '"StrPartyCode":"${pcode}","StrPOValDate":"","StrPODocID":"${selectFillPo}"}'}');
-        //'"StrPartyCode":"AD59}","StrPOValDate":"","StrPODocID":"DADGORD  2022       2"}'}');
-        final response = await http.get(url);
-        final List<dynamic> items = json.decode(response.body);
-        print("body: ${response.body}");
-        print("status code: ${response.statusCode}");
-
-        return items;
-        _refresh();
-      } catch (e) {
-        rethrow;
-      }
+  Future<String> fetchFillselectPoData() async {
+    // if (selectFillPo != null) {
+    final String uri =
+        "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+            //  '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}";
+            '"StrPartyCode":"AD59","StrPOValDate":"","StrPODocID":"DADGORD  2022       2"}'}";
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      var res = await http.get(
+        Uri.parse(uri),
+      );
+      var respBody = json.decode(res.body);
+      setState(() {
+        dataa = respBody;
+        print("body:$dataa");
+      });
+      print('Loaded Successfully');
+      return "Loaded Successfully";
+      //  }
+    } else {
+      throw Exception('Failed to load data.');
     }
-    // } else {
-    //   print("Please select fillselectedpo");
-    // }
   }
-
-  Future buildText() {
-    return new Future.delayed(
-        const Duration(milliseconds: 1), () => print('waiting'));
-  }
+//For text data
+  // Future<List<dynamic>> getFillSelectedPOData() async {
+  //   if (selectFillPo != null) {
+  //     try {
+  //       var url = Uri.parse(
+  //           'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?'
+  //           'StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+  //               '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"${selectFillPo}"}'}');
+  //       //'"StrPartyCode":"AD59}","StrPOValDate":"","StrPODocID":"DADGORD  2022       2"}'}');
+  //       final response = await http.get(url);
+  //       final List<dynamic> items = json.decode(response.body);
+  //       print("body: ${response.body}");
+  //       print("status code: ${response.statusCode}");
+  //       return items;
+  //     } catch (e) {
+  //       rethrow;
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
     myFuture = fetchFillPoData();
-    //getData();
-    //getFillPOData();
-    // fillList = getFillPOData() as Future<List>;
-    // fillList = _selectPolist as Future<List>;
-    futureList = getFillSelectedPOData();
+    futureList = fetchFillselectPoData();
     dateinput.text = "";
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
@@ -162,6 +172,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     dateinput1.clear();
     partyBillNo.clear();
     vechileNo.clear();
+    _remarks.clear();
     selectVoucherType = null;
     selectSupplier = null;
     selectVoucherType3 = null;
@@ -176,9 +187,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
 
   Future<void> _refresh() async {
     await Future.delayed(const Duration(milliseconds: 200), () {
-      setState(() {
-        // fillpoText();
-      });
+      setState(() {});
     });
   }
 
@@ -187,7 +196,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
         connectionStatus == ConnectivityResult.mobile) {
       if (selectVoucherType != null &&
           selectSupplier != null &&
-          selectVoucherType3 != null &&
+          // selectVoucherType3 != null &&
           goodsReceiptEntryFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -200,25 +209,57 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
 
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostGoodsReceiveEntryURL),
-          body: json.encode({
-            "VoucherType": selectVoucherType.StrSubCode,
-            "Date": dateinput.text,
-            "PartyBillNo": partyBillNo.text,
-            "PartyBillDate": dateinput1.text,
-            "Supplier": selectSupplier.Name,
-            "PurchaseOrderSelect": "",
-            "VehicleNo": vechileNo.text,
-            "Godown": selectVoucherType3.StrSubCode
-          }));
+      var baseUrl =
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
+      var url = Uri.parse(baseUrl +
+          "?" +
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"11","StrPtyChlDate":"${dateinput1.text}",'
+              '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.subCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${fillSelectPoDoc}",'
+              '"StrPONo":"${selectFillPo}","DblQuantity":"1000","DblPOQuantity":"100","DblAmt":"100","DblRate":"10",'
+              '"StrCostCenterCode":"AD1","StrOUnit":"Mtr","StrHSNSACCode":"CG1","StrGoodsServices":"G","StrPODate":"",'
+              '"StrRemark":"${_remarks.text}","DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0",'
+              '"DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9",'
+              '"DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118"}],'
+              '"DblGrossRate":"10","DblGrossAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"100",'
+              '"DblSGSTRate":"0","DblSGSTAmt":"9","DblCGSTRate":"0","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
+              '"DblUGSTAmt":"0","DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0",'
+              '"DblBillAmt":"118","DblRoundOffRate":"0","DblRoundOffAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118",'
+              '"StrPreparedBy":"SA","StrWarningDupChln":"S","StrWarningAbvTol":"S","StrVehicleNo":"${vechileNo.text}","DblGAmount":"100","StrAgtForm":"HO3"}'}');
+
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    } catch (e) {
+      rethrow;
     }
+    // try {
+    //   await http.post(Uri.parse(ApiService.mockDataPostGoodsReceiveEntryURL),
+    //       body: json.encode({
+    //         "VoucherType": selectVoucherType.StrSubCode,
+    //         "Date": dateinput.text,
+    //         "PartyBillNo": partyBillNo.text,
+    //         "PartyBillDate": dateinput1.text,
+    //         "Supplier": selectSupplier.Name,
+    //         "PurchaseOrderSelect": "",
+    //         "VehicleNo": vechileNo.text,
+    //         "Godown": selectVoucherType3.StrSubCode
+    //       }));
+    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    // } on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    // }
   }
 
   @override
@@ -447,6 +488,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
+                  width: 300,
                   height: height * .066,
                   decoration: decorationForms(),
                   child: dataFillPoText(),
@@ -457,9 +499,11 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
+                    width: 300,
                     height: height * .066,
                     decoration: decorationForms(),
-                    child: fillSelectedpoText()),
+                    //child: fillSelectedpoText()),
+                    child: dataFillselectPoText()),
               ),
               sizedbox1,
               formsHeadTextNew("Vehicle No.", width * .045),
@@ -552,6 +596,42 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               sizedbox1,
               formsHeadTextNew("Total Bill Value :", width * .045),
               sizedbox1,
+              formsHeadTextNew("Remarks", width * .045),
+              Container(
+                //height: 70,
+                padding: padding1,
+                decoration: decoration1(),
+                child: StreamBuilder<String>(
+                  stream: bloc.outDropField1,
+                  builder: (context, snapshot) => TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return 'Enter Detail';
+                      }
+                      if (val != _remarks.text) {
+                        return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                            ? null
+                            : "Enter valid detail";
+                      }
+                      return null;
+                    },
+                    controller: _remarks,
+                    onChanged: bloc.inDropField1,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: primaryColor8,
+                      enabledBorder: textFieldBorder(),
+                      focusedBorder: textFieldBorder(),
+                      errorText: snapshot.error,
+                      isDense: true,
+                      errorBorder: textFieldBorder(),
+                    ),
+                    keyboardType: TextInputType.text,
+                    style: simpleTextStyle7(),
+                  ),
+                ),
+              ),
+              sizedbox1,
               Padding(
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
@@ -578,41 +658,77 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
             ),
             items: data.map((item) {
               return DropdownMenuItem(
+                value: item['DocId'],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(item['DocId']),
+                  child: Text(item['DocId'] ?? ''),
                 ),
-                value: item['DocId'],
               );
             }).toList(),
             onChanged: (newVal) {
               setState(() {
-                selectFillPo = newVal as String;
+                selectFillPo = newVal;
+
+                // print("selectFillPo$selectFillPo");
               });
             },
-            value: selectFillPo,
+            value: selectFillPo != null ? selectFillPo : null,
           );
         });
   }
 
-  Widget fillSelectedpoText() {
-    return StreamBuilder(
-        stream: getFillSelectedPOData().asStream(),
+//dropdown
+  Widget dataFillselectPoText() {
+    return StreamBuilder<String>(
+        stream: fetchFillselectPoData().asStream(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                    leading: Text(
-                  snapshot.data[index]['DocID'] ?? '',
-                  //style: ContainerText2()
-                ));
-              },
-            );
-          } else {
-            return Center(child: Text(""));
-          }
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
+          return DropdownButton(
+            hint: Text("  Search here"),
+            icon: Padding(
+              padding: EdgeInsets.only(left: 85),
+              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
+            ),
+            items: dataa.map((itemm) {
+              return DropdownMenuItem(
+                value: itemm['ItemCode'],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(itemm['ItemCode'] ?? ""),
+                ),
+                // value: item['DocId'],
+              );
+            }).toList(),
+            onChanged: (newVal) {
+              setState(() {
+                fillSelectPoDoc = newVal;
+              });
+            },
+            value: fillSelectPoDoc != null ? fillSelectPoDoc : null,
+          );
         });
   }
+
+//text
+//   Widget fillSelectedpoText() {
+//     return StreamBuilder(
+//         stream: getFillSelectedPOData().asStream(),
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             return ListView.builder(
+//               itemCount: snapshot.data.length,
+//               itemBuilder: (context, index) {
+//                 return ListTile(
+//                     leading: Text(
+//                   snapshot.data[index]['DocID'] ?? '',
+//                   //style: ContainerText2()
+//                 ));
+//               },
+//             );
+//           } else {
+//             return Center(child: Text(""));
+//           }
+//         });
+//   }
 }
