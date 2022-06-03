@@ -5,17 +5,17 @@ import 'package:vvplus_app/infrastructure/Repository/item_name_repository.dart';
 
 class ItemNameDropdownBloc {
   final itemNameDropdownRepository = ItemNameRepository();
-  final itemNameDropdownGetData = BehaviorSubject<ItemName>();
+  final itemMaterialReqEntryDropdownGetData = BehaviorSubject<ItemName>();
 
-  Future<List<ItemName>> itemNameDropdownData;
-  Stream<ItemName> get selectedState => itemNameDropdownGetData;
-  void selectedStateEvent(ItemName state) => itemNameDropdownGetData.add(state);
+  Future<List<ItemName>> itemMaterialReqEntryDropdownData;
+  Stream<ItemName> get selecteditemMaterialReqEnrtyState => itemMaterialReqEntryDropdownGetData;
+  void selecteditemMaterialReqEnrtyStateEvent(ItemName state) => itemMaterialReqEntryDropdownGetData.add(state);
 
   ItemNameDropdownBloc() {
-    itemNameDropdownData = itemNameDropdownRepository.getData();
+    itemMaterialReqEntryDropdownData = itemNameDropdownRepository.getItemNameMaterialReqEntryData();
   }
 
   void dispose() {
-    itemNameDropdownGetData.close();
+    itemMaterialReqEntryDropdownGetData.close();
   }
 }
