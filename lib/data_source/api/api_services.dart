@@ -41,7 +41,8 @@ class ApiService {
   static const String getItemNameURL =
       "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
-  static const String getItemMaterialReqEntrynewURL = "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
+  static const String getItemMaterialReqEntrynewURL =
+      "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
   static const String getItemCurrentStatusURL =
       "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"AL1","StrCostCenterCode":"AS1","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":"AS1"},{"StrCostCenterCode":"AS1"}]}'}";
@@ -133,7 +134,7 @@ class ApiService {
   static const String getBToBSendnewURl =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrStateCode":"","StrPLTCode":"","StrIndDocID":"","StrItemCode":"","StrGodown":"","StrMaintainStockValue":""}'}";
 
-  static const String getPOIndentNonewURL =
+  static const String getPlacePOIndentSelectionURL =
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrStateCode":"WB","Strv_type":"GORD"}'}";
 
   static const String getBToBSendFromCostCenter =
@@ -173,11 +174,13 @@ class ApiService {
       "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"Supplier","StrSiteCode":"AD","StrStateCode":"WB","StrPartyCode":"KK496","StrPOValDate":"","StrPODocID":"","Strv_type":"PCHLN"}'}";
 
   static const String getIndentNoMaterialReqApprovnewURL =
-  "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrV_Date":"",StrIndDocID:[{"StrDocID":""},{"StrDocID":""}]}'}";
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrV_Date":"",StrIndDocID:[{"StrDocID":""},{"StrDocID":""}]}'}";
 
-  static const String getIndentNoPOnewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrStateCode":"WB","Strv_type":"GORD"}'}";
+  static const String getIndentNoPOnewURL =
+      "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPO?StrRecord=${'{"StrFilter":"IndentNo","StrSiteCode":"AD","StrStateCode":"WB","Strv_type":"GORD"}'}";
 
-  static const String getVoucherTypeMaterialrequestEntrynewURL = "http://43.228.113.108:888//Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
+  static const String getVoucherTypeMaterialrequestEntrynewURL =
+      "http://43.228.113.108:888//Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
   // mock database get url
 
   static const String mockDataIndentorNameURL =
@@ -197,8 +200,6 @@ class ApiService {
 
   static const String mockDataItemCostCenterURL =
       "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/ItemCostCenter.json";
-
-
 
 // mock database post url
 
