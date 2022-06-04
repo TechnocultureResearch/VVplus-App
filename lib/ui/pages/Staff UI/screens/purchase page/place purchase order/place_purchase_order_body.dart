@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_selection_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/place_purchase_order_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
+import 'package:vvplus_app/infrastructure/Models/indent_selection_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -43,10 +45,11 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   SupplierDropdownBloc supplierDropdownBloc;
-  IndentorNameDropdownBloc dropdownBlocIndentorName;
+  IndentSelectionDropdownBloc indentSelectionPlacePoDropdownBloc;
+
   VoucherType selectVoucherType;
   Supplier selectSupplier;
-  IndentorName selectIndentName;
+  IndentSelection selectIndentSelection;
   var subscription;
   var connectionStatus;
 
@@ -62,9 +65,9 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     });
   }
 
-  void onDataChange3(IndentorName state) {
+  void onDataChange3(IndentSelection state) {
     setState(() {
-      selectIndentName = state;
+      selectIndentSelection = state;
     });
   }
 
@@ -74,7 +77,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     supplierDropdownBloc = SupplierDropdownBloc();
-    dropdownBlocIndentorName = IndentorNameDropdownBloc();
+    indentSelectionPlacePoDropdownBloc = IndentSelectionDropdownBloc();
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -94,7 +97,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
         connectionStatus == ConnectivityResult.mobile) {
       if (selectVoucherType != null &&
           selectSupplier != null &&
-          selectIndentName != null &&
+          selectIndentSelection != null &&
           placePurchaseOrderFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -107,23 +110,59 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
 
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostPlacePurchaseOrderURL),
-          body: json.encode({
-            "VoucherType": selectVoucherType.StrSubCode,
-            "Date": dateinput.text,
-            "Supplier": selectSupplier.Name,
-            "IndentSelection": selectIndentName.strSubCode,
-            "POValidDate": dateinput1.text,
-            "Remarks": remarks.text
-          }));
+      var baseurl =
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPO';
+
+      var url = Uri.parse(baseurl +
+          "?" +
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrSiteCode":"AD",'
+              '"StrSupplier":"${selectSupplier.SubCode}",StrIndGrid:[{"StrItemCode":"${selectIndentSelection.itemCode}",'
+              '"DblQuantity":"${selectIndentSelection.indQty}",'
+              '"DblAmt":"100","DblRate":"10","StrOUnit":"${selectIndentSelection.unit}","StrPOValDate":"${dateinput1.text}",'
+              '"StrCostCenterCode":"${selectIndentSelection.rate}","StrHSNSACCode":"${selectIndentSelection.hsnSacCode}",'
+              'StrIndGrid1:[{"StrDocID":"${selectIndentSelection.refDocId}","StrItemCode":"${selectIndentSelection.itemCode}",'
+              '"DblQuantity":"10","StrCostCenterCode":"AD1"}],"DblItemValueRate":"10",'
+              '"DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100",'
+              '"DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9",'
+              '"DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblNetValueRate":"118",'
+              '"DblNetValueAmt":"118","StrRemark":"${remarks.text}","StrGoodsServices":"G"}],"DblGrossRate":"10",'
+              '"DblGrossAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100","DblAVAmt":"100",'
+              '"DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0",'
+              '"DblUGSTRate":"0","DblUGSTAmt":"0","DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0",'
+              '"DblOtherDedAmt":"0","DblBillRate":"0","DblBillAmt":"118","DblRoundOffRate":"0","DblRoundOffAmt":"118",'
+              '"DblNetValueRate":"118","DblNetValueAmt":"118","StrPreparedBy":"sa","StrRemark":"${remarks.text}","StrAgtForm":"HO3"}'}');
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    } catch (e) {
+      rethrow;
     }
+
+    // try {
+    //   await http.post(Uri.parse(ApiService.mockDataPostPlacePurchaseOrderURL),
+    //       body: json.encode({
+    //         "VoucherType": selectVoucherType.StrSubCode,
+    //         "Date": dateinput.text,
+    //         "Supplier": selectSupplier.Name,
+    //         "IndentSelection": selectIndentName.strSubCode,
+    //         "POValidDate": dateinput1.text,
+    //         "Remarks": remarks.text
+    //       }));
+    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    // } on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    // }
   }
 
   Future<void> _refresh() async {
@@ -151,36 +190,6 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               sizedbox1,
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      barrierColor: Colors.transparent,
-                      builder: (BuildContext ctx) {
-                        return BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                            child: PurchaseDialog());
-                      });
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Container(
-                    height: height * .04,
-                    width: width * .3,
-                    child: Center(
-                      child: Text("PopUpTest",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
-                          textAlign: TextAlign.center),
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.green),
-                  ),
-                ),
-              ),
               sizedbox1,
               formsHeadTextNew("Voucher Type", width * .045),
               Padding(
@@ -248,7 +257,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
@@ -301,32 +310,33 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<IndentorName>>(
-                      future: dropdownBlocIndentorName.indentorNameDropdownData,
+                  child: FutureBuilder<List<IndentSelection>>(
+                      future: indentSelectionPlacePoDropdownBloc
+                          .indentSelectionPlacePoDropdownData,
                       builder: (context, snapshot) {
-                        return StreamBuilder<IndentorName>(
-                            stream: dropdownBlocIndentorName.selectedState,
+                        return StreamBuilder<IndentSelection>(
+                            stream: indentSelectionPlacePoDropdownBloc
+                                .selectedIndentSelectionPlacePoState,
                             builder: (context, item) {
-                              return SearchChoices<IndentorName>.single(
+                              return SearchChoices<IndentSelection>.single(
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectIndentName != null
+                                padding: selectIndentSelection != null
                                     ? height * .002
                                     : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
-                                value: selectIndentName,
+                                value: selectIndentSelection,
                                 displayClearIcon: false,
                                 onChanged: onDataChange3,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<IndentorName>>(
-                                            (e) {
-                                      return DropdownMenuItem<IndentorName>(
+                                items: snapshot?.data?.map<
+                                        DropdownMenuItem<IndentSelection>>((e) {
+                                      return DropdownMenuItem<IndentSelection>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.refDocId ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -340,7 +350,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
               formsHeadTextNew("PO Valid Date", width * .045),
               Container(
                 padding: dateFieldPadding,
-                height: height * .09,
+                height: height * .08,
                 child: TextFormField(
                   validator: (val) {
                     if (val.isEmpty) {
@@ -362,7 +372,7 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput1.text = formattedDate;
                       });
@@ -370,19 +380,17 @@ class MyPlacePurchaseOrderBody extends State<PlacePurchaseOrderBody> {
                   },
                 ),
               ),
-              selectIndentName != null
+              selectIndentSelection != null
                   ? InformationBoxContainer2(
-                      text1: selectIndentName.strName,
-                      text2: selectIndentName.strSubCode,
-                      text3: selectIndentName.strSubCode,
-                      text4: selectIndentName.strSubCode,
-                      text5: selectIndentName.strSubCode,
-                      text6: selectIndentName.strSubCode,
-                      text7: selectIndentName.strSubCode,
-                      text8: selectIndentName.strSubCode,
+                      text1: selectIndentSelection.itemName,
+                      text2: selectIndentSelection.indQty.toString(),
+                      text3: selectIndentSelection.rate.toString(),
+                      text4: selectIndentSelection.rate.toString(),
+                      text5: selectIndentSelection.indNo,
+                      text6: selectIndentSelection.hsnSacName,
                     )
                   : const SizedBox(),
-              selectIndentName != null ? sizedbox1 : const SizedBox(),
+              selectIndentSelection != null ? sizedbox1 : const SizedBox(),
               formsHeadTextNew("Remarks:", width * .045),
               Container(
                 //height: 70,
