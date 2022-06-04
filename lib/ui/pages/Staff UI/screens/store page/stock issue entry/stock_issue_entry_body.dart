@@ -19,6 +19,7 @@ import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/issued_to_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
+import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -34,6 +35,8 @@ import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:vvplus_app/domain/common/common_text.dart';
 import 'dart:io';
+
+import '../../../../../../Application/Bloc/Dropdown_Bloc/item_name_dropdown_bloc.dart';
 
 class StockIssueEntryBody extends StatefulWidget {
   const StockIssueEntryBody({Key key}) : super(key: key);
@@ -53,14 +56,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   IssuedToDropdownBloc issuedToDropdownBloc;
   GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
-  ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
+  ItemNameDropdownBloc itemNameDropdownBloc;
 
   VoucherType selectVoucherType1;
   IssuedTo selectIssuedTo;
   Godown selectGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
-  ItemCurrentStatus selectItemCurrentStatus;
+  ItemName selectItemName;
 
   double _amount;
   var subscription;
@@ -73,7 +76,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     selectGodown = null;
     selectVoucherType3 = null;
     selectItemCostCenter = null;
-    selectItemCurrentStatus = null;
+    selectItemName = '' as ItemName;
     reqQty.clear();
     remarks.clear();
   }
@@ -83,7 +86,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       () {
         //value1 = double.parse(reqQty.text);
         _amount = (double.parse(reqQty.text) *
-            double.parse(selectItemCurrentStatus.PurchaseRate));
+            double.parse(selectItemName.PurchaseRate));
         StringAmount = _amount.toStringAsFixed(3);
       },
     );
@@ -104,7 +107,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     issuedToDropdownBloc = IssuedToDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
-    dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
+    itemNameDropdownBloc = ItemNameDropdownBloc();
     _amount = 0;
     subscription = Connectivity()
         .onConnectivityChanged
@@ -156,9 +159,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     });
   }
 
-  void onDataChange5(ItemCurrentStatus state) {
+  void onDataChange5(ItemName state) {
     setState(() {
-      selectItemCurrentStatus = state;
+      selectItemName = state;
     });
   }
 
@@ -186,30 +189,15 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   }
 
   Future<dynamic> sendData() async {
-    // try {
-    //   await http.post(Uri.parse(ApiService.mockDataPostStockIssueEntry),
-    //       body: json.encode({
-    //         "Voucher Type": selectVoucherType1.strName,
-    //         "Issue By": selectIssuedTo.Name,
-    //         "Godown": selectGodown.GodName,
-    //         "Cost Center": selectItemCostCenter.Name,
-    //         "Item": selectItemCurrentStatus.Name,
-    //         "ReqQuantity": reqQty.text,
-    //         "Unit": selectItemCurrentStatus.strUnit,
-    //         "Rate": selectItemCurrentStatus.dblQty,
-    //       }));
-    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    // }
-    //ItemCode = "CG12"
     try {
       var baseUrl =
           'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue';
       var url = Uri.parse(baseUrl +
           '?' +
           'StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"$formatted","StrSiteCode":"AD",'
-              '"StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}",'
+              '"StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemName.SearchCode}",'
               '"DblQuantity":"${reqQty.text}",'
-              '"DblAmt":"${StringAmount}","DblRate":"${selectItemCurrentStatus.PurchaseRate}",'
+              '"DblAmt":"${StringAmount}","DblRate":"${selectItemName.PurchaseRate}",'
               '"StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}",'
               '"StrRemark":"${remarks.text}"}],"StrPreparedBy":"SA"}'}');
       var response = await http.get(url);
@@ -220,7 +208,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
         final String responseStatus = response.statusCode.toString();
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
         Scaffold.of(context).showSnackBar(snackBar(responseStatus));
-      } else {
+      }
+      else {
         return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
       }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
@@ -260,7 +249,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        reqQty.clear();
+                        clearData();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -458,32 +447,30 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                         padding: padding1,
                         child: Container(
                           decoration: decorationForms(),
-                          child: FutureBuilder<List<ItemCurrentStatus>>(
-                              future: dropdownBlocItemCurrentStatus
-                                  .itemCurrentStatusStockIssueEntryDropdownData,
+                          child: FutureBuilder<List<ItemName>>(
+                              future: itemNameDropdownBloc.itemNameStockIssueEntryDropdownData,
                               builder: (context, snapshot) {
-                                return StreamBuilder<ItemCurrentStatus>(
-                                    stream: dropdownBlocItemCurrentStatus
-                                        .selectedStateitemCurrentStatus,
+                                return StreamBuilder<ItemName>(
+                                    stream: itemNameDropdownBloc.selectedStateitemName,
                                     builder: (context, item) {
                                       return SearchChoices<
-                                          ItemCurrentStatus>.single(
+                                          ItemName>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
-                                        padding: selectItemCurrentStatus != null
+                                        padding: selectItemName != null
                                             ? height * .002
                                             : height * .015,
                                         isExpanded: true,
                                         hint: "Search here",
-                                        value: selectItemCurrentStatus,
+                                        value: selectItemName,
                                         displayClearIcon: false,
                                         onChanged: onDataChange5,
                                         items: snapshot?.data?.map<
                                                 DropdownMenuItem<
-                                                    ItemCurrentStatus>>((e) {
+                                                    ItemName>>((e) {
                                               return DropdownMenuItem<
-                                                  ItemCurrentStatus>(
+                                                  ItemName>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:
@@ -540,7 +527,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                               ),
                             ),
                           ),
-                          selectItemCurrentStatus != null
+                          selectItemName != null
                               ? Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -548,7 +535,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                   //     horizontal: 15.0),
                                   decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.SKU)))
+                                      child: Text(selectItemName.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -579,7 +566,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                           Row(
                             //mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              selectItemCurrentStatus != null
+                              selectItemName != null
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 40),
@@ -589,7 +576,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                           decoration: decoration1(),
                                           child: Center(
                                               child: Text(
-                                                  selectItemCurrentStatus
+                                                  selectItemName
                                                       .PurchaseRate))),
                                     )
                                   : Padding(
@@ -638,7 +625,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                   padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
-                                press: (selectItemCurrentStatus != null) &&
+                                press: (selectItemName != null) &&
                                         (isActive)
                                     ? () {
                                         _calculation();
@@ -670,9 +657,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               //-----------------------------------------------------------
               pressed
                   ? AddItemContainer(
-                      itemNameText: selectItemCurrentStatus.Name,
+                      itemNameText: selectItemName.Name,
                       orderQtyText: reqQty.text,
-                      rateText: selectItemCurrentStatus.PurchaseRate,
+                      rateText: selectItemName.PurchaseRate,
                       amountText: StringAmount.toString(),
                     )
                   : const SizedBox(),
@@ -719,7 +706,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                  }, roundedButtonHomeColor1)),
+                  },roundedButtonHomeColor1)),
             ],
           ),
         ),

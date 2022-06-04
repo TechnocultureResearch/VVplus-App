@@ -27,7 +27,7 @@ class ItemCurrentStatusDropdownBloc {
 
   ItemCurrentStatusDropdownBloc() {
     itemCurrentStatusDropdowndata = itemCurrentStatusDropdownRepository.getData();
-    itemCurrentStatusStockIssueEntryDropdownData = itemCurrentStatusDropdownRepository.getStockissueItemData();
+   // itemCurrentStatusStockIssueEntryDropdownData = itemCurrentStatusDropdownRepository.getStockissueItemData();
     itemCurrenStatusPhaseToPhaseDropdownData = itemCurrentStatusDropdownRepository.getPhaseToPhaseTransferItemData();
   }
 

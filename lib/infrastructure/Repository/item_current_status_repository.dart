@@ -23,17 +23,7 @@ class ItemCurrentStatusRepository {
     }
   }
   
-  Future<List<ItemCurrentStatus>> getStockissueItemData() async {
-    try{
-      final response = await client.get(Uri.parse(ApiService.getStockIssueItemCurrentStatusnewURL));
-      final items = (jsonDecode(response.body) as List)
-      .map((e) => ItemCurrentStatus.fromJson(e))
-      .toList();
-      return items;
-    } catch (e) {
-      rethrow;
-    }
-  }
+
   Future<List<ItemCurrentStatus>> getPhaseToPhaseTransferItemData() async {
     try{
       final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseItemCurrentStatusnewURL));

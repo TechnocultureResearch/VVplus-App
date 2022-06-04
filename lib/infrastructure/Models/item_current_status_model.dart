@@ -20,6 +20,7 @@ class ItemCurrentStatus {
     this.HSN_SAC,this.IGName,this.LotNoYN,this.MaintainStockOn,this.MaxStock,this.MinStock,
     this.PurchaseRate,this.ReOrder,this.SKU
   });
+
   @override
   String toString() => Name;
 

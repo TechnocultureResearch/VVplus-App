@@ -12,6 +12,12 @@ String strRecordToJson(List<ItemName> data) =>
 
 class ItemName {
   ItemName({
+    this.strCostCenterName,
+    this.dblQty,
+    this.strUnit,
+    this.SearchCode,this.Name,this.Code,this.BarCodeType,this.BatchApp,this.ExpiryApp,this.FixedBarCode,
+    this.HSN_SAC,this.IGName,this.LotNoYN,this.MaintainStockOn,this.MaxStock,this.MinStock,
+    this.PurchaseRate,this.ReOrder,this.SKU,
     this.strItemCode,
     this.strItemName,
     this.strItemManualCode,
@@ -25,9 +31,16 @@ class ItemName {
     this.strItemDescription,
     this.strItemMaintainStockOn,
   });
-
-  String strItemCode;
   String strItemName;
+  String strCostCenterName;
+  String dblQty;
+  String strUnit;
+  String SearchCode;
+  String Name;
+  String Code; String SKU; String IGName; String MinStock; String MaxStock; String ReOrder;
+  String BatchApp; String LotNoYN; String MaintainStockOn; String PurchaseRate; String BarCodeType;
+  String ExpiryApp; String FixedBarCode; String HSN_SAC;
+  String strItemCode;
   String strItemManualCode;
   String strItemMinStock;
   String strItemMaxStock;
@@ -40,6 +53,16 @@ class ItemName {
   String strItemMaintainStockOn;
 
   factory ItemName.fromJson(Map<String, dynamic> json) => ItemName(
+    strCostCenterName: json["StrCostCenterName"],
+    dblQty: json["DblQty"],
+    strUnit: json["StrUnit"],
+    SearchCode: json["SearchCode"],
+    Name: json["Name"],
+    Code: json["Code"],SKU: json["SKU"],IGName: json["IGName"],MinStock: json["MinStock"],
+    MaxStock: json["MaxStock"],ReOrder: json["ReOrder"],BatchApp: json["BatchApp"],
+    LotNoYN: json["LotNoYN"],MaintainStockOn: json["MaintainStockOn"],PurchaseRate: json["PurchaseRate"],
+    BarCodeType: json["BarCodeType"],ExpiryApp: json["ExpiryApp"],FixedBarCode: json["FixedBarCode"],
+    HSN_SAC: json["HSN_SAC"],
     strItemCode: json["StrItemCode"],
     strItemName: json["StrItemName"],
     strItemManualCode: json["StrItemManualCode"],
@@ -55,6 +78,15 @@ class ItemName {
   );
 
   Map<String, dynamic> toJson() => {
+    "StrItemName": strItemName,
+    "StrCostCenterName": strCostCenterName,
+    "DblQty": dblQty,
+    "StrUnit": strUnit,
+    "SearchCode": SearchCode,
+    "Name": Name,"Code": Code,"SKU": SKU,"IGName":IGName,"MinStock":MinStock,"MaxStock":MaxStock,
+    "ReOrder": ReOrder,"BatchApp":BatchApp,"LotNoYN":LotNoYN,"MaintainStockOn":MaintainStockOn,
+    "PurchaseRate": PurchaseRate,"BarCodeType":BarCodeType,"ExpiryApp":ExpiryApp,
+    "FixedBarCode": FixedBarCode,"HSNSAC": HSN_SAC,
     "StrItemCode": strItemCode,
     "StrItemName": strItemName,
     "StrItemManualCode": strItemManualCode,
