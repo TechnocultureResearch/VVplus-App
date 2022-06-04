@@ -33,4 +33,17 @@ class IndentSelectionRepositiry {
       rethrow;
     }
   }
+
+  Future<List<IndentSelection>> getPlacePoIndentSelectionData() async {
+    try {
+      final response =
+          await client.get(Uri.parse(ApiService.getPlacePOIndentSelectionURL));
+      final items = (jsonDecode(response.body) as List)
+          .map((e) => IndentSelection.fromJson(e))
+          .toList();
+      return items;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
