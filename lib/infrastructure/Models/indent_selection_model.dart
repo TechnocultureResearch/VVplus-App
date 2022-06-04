@@ -14,20 +14,34 @@ class IndentSelection {
   int pendingQty;
   int rate;
   String remark;
-  IndentSelection(
-      {this.StrDepartment,
-      this.StrDocID,
-      this.StrIndenter,
-      this.StrRecId,
-      this.StrV_Date,
-      this.searchCode,
-      this.itemCode,
-      this.maintainStockValue,
-      this.itemName,
-      this.unit,
-      this.pendingQty,
-      this.rate,
-      this.remark});
+  String refDocId;
+  String indNo;
+  String indDate;
+  int indQty;
+  String hsnSacName;
+  String hsnSacCode;
+
+  IndentSelection({
+    this.StrDepartment,
+    this.hsnSacName,
+    this.hsnSacCode,
+    this.StrDocID,
+    this.StrIndenter,
+    this.StrRecId,
+    this.StrV_Date,
+    this.searchCode,
+    this.itemCode,
+    this.maintainStockValue,
+    this.itemName,
+    this.unit,
+    this.pendingQty,
+    this.rate,
+    this.remark,
+    this.refDocId,
+    this.indNo,
+    this.indDate,
+    this.indQty,
+  });
   factory IndentSelection.fromJson(Map<String, dynamic> json) =>
       IndentSelection(
         StrDepartment: json["StrDepartment"],
@@ -43,10 +57,17 @@ class IndentSelection {
         pendingQty: json["PendingQty"],
         rate: json["Rate"],
         remark: json["Remark"],
+        refDocId: json["RefDocId"],
+        indNo: json["IndNo"],
+        indDate: json["IndDate"],
+        indQty: json["IndQty"],
+        hsnSacCode: json["HSN_SAC_Code"],
+        hsnSacName: json["HSN_SACName"],
       );
 
   Map<String, dynamic> toJson() => {
         "StrV_Date": StrV_Date,
+        "IndQty": indQty,
         "StrDocID": StrDocID,
         "StrIndenter": StrIndenter,
         "StrRecId": StrRecId,
@@ -59,5 +80,10 @@ class IndentSelection {
         "PendingQty": pendingQty,
         "Rate": rate,
         "Remark": remark,
+        "RefDocId": refDocId,
+        "IndNo": indNo,
+        "IndDate": indDate,
+        "HSN_SAC_Code": hsnSacCode,
+        "HSN_SACName": hsnSacName,
       };
 }
