@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/staff_provider.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/screens/purchase%20page/place%20purchase%20order/purchase_dialog.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_text_style.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
@@ -157,26 +160,23 @@ class InformationBoxContainer2 extends StatelessWidget {
   final String text4;
   final String text5;
   final String text6;
-  final String text7;
-  final String text8;
-  const InformationBoxContainer2(
-      {Key key,
-      this.text1,
-      this.text2,
-      this.text3,
-      this.text4,
-      this.text5,
-      this.text6,
-      this.text7,
-      this.text8})
-      : super(key: key);
+
+  const InformationBoxContainer2({
+    Key key,
+    this.text1,
+    this.text2,
+    this.text3,
+    this.text4,
+    this.text5,
+    this.text6,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 30, left: 11),
+      padding: const EdgeInsets.only(top: 10, left: 11),
       child: Container(
         //alignment: Alignment.center,
-        height: SizeConfig.getHeight(context) * .18,
+        height: SizeConfig.getHeight(context) * .13,
         width: SizeConfig.getWidth(context) * .95,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
@@ -192,82 +192,105 @@ class InformationBoxContainer2 extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 10, top: 10),
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("$text1",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  const SizedBox(
-                    height: 8,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.delete_outline_outlined,
+                    color: Colors.red,
+                    size: 30,
                   ),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 10),
+                  child: Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("$text1",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: textColor2,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "GHSN/SAC: $text2",
-                            style: containerTextStyle4(),
+                            "Qty: $text2",
+                            style: containerTextStyle2(),
                           ),
                           const SizedBox(
-                            height: 2,
+                            width: 23,
                           ),
                           Text(
-                            "Order no.: $text3",
-                            style: containerTextStyle3(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        "Order Qty.:\nReceive Qty.:\nRate:\nAmount:\nRemarks:",
-                        style: containerTextStyle2(),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        "$text4\n$text5\n$text6\n$text7\n$text8",
-                        style: containerTextStyle2(),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(icon15),
-                          const SizedBox(
-                            height: 12.5,
-                          ),
-                          Text(
-                            "Edit",
-                            style: containerTextStyle5(),
+                            "Rate: $text3",
+                            style: containerTextStyle2(),
                           ),
                           const SizedBox(
-                            height: 7,
+                            width: 23,
                           ),
                           Text(
-                            "Inc.Tax",
-                            style: containerTextStyle3(),
+                            "Amount: $text4",
+                            style: containerTextStyle2(),
+                          ),
+                          const SizedBox(
+                            width: 30,
                           ),
                         ],
                       ),
                       const SizedBox(
                         height: 8,
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Indent No: $text5",
+                            style: containerTextStyle4(),
+                          ),
+                          const SizedBox(
+                            width: 22,
+                          ),
+                          Text(
+                            "GHSN/SAC: $text6",
+                            style: containerTextStyle4(),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        barrierColor: Colors.transparent,
+                        builder: (BuildContext ctx) {
+                          return BackdropFilter(
+                              filter:
+                                  ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                              child: PurchaseDialog());
+                        });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.red,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
