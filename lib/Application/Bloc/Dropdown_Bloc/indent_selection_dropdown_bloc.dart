@@ -6,9 +6,11 @@ class IndentSelectionDropdownBloc {
   final indentSelectionRepository = IndentSelectionRepositiry();
   final indentSelectionDropdownGetData = BehaviorSubject<IndentSelection>();
   final indentSelectionBtoBGetData = BehaviorSubject<IndentSelection>();
+  final indentSelectionPlacePoGetData = BehaviorSubject<IndentSelection>();
 
   Future<List<IndentSelection>> indentSelectionDropdownData;
   Future<List<IndentSelection>> indentSelectionBtoBDropdownData;
+  Future<List<IndentSelection>> indentSelectionPlacePoDropdownData;
 
   Stream<IndentSelection> get selectedIndentSelectionState =>
       indentSelectionDropdownGetData;
@@ -20,14 +22,22 @@ class IndentSelectionDropdownBloc {
   void selectedIndentSelectionBtoBStateEvent(IndentSelection state) =>
       indentSelectionBtoBGetData.add(state);
 
+  Stream<IndentSelection> get selectedIndentSelectionPlacePoState =>
+      indentSelectionPlacePoGetData;
+  void selectedIndentSelectionPlacePoStateEvent(IndentSelection state) =>
+      indentSelectionPlacePoGetData.add(state);
+
   IndentSelectionDropdownBloc() {
     indentSelectionDropdownData =
         indentSelectionRepository.getIndentSelectionData();
     indentSelectionBtoBDropdownData =
         indentSelectionRepository.getBranchSendIndentSelectionData();
+    indentSelectionPlacePoDropdownData =
+        indentSelectionRepository.getPlacePoIndentSelectionData();
   }
   void dispose() {
     indentSelectionDropdownGetData.close();
     indentSelectionBtoBGetData.close();
+    indentSelectionPlacePoGetData.close();
   }
 }

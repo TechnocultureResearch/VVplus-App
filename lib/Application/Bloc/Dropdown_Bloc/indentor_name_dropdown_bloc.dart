@@ -9,10 +9,11 @@ class IndentorNameDropdownBloc {
 
   Future<List<IndentorName>> indentorNameDropdownData;
   Stream<IndentorName> get selectedState => indentorNameDropdownGetData;
-  void selectedStateEvent(IndentorName state) => indentorNameDropdownGetData.add(state);
+  void selectedStateEvent(IndentorName state) =>
+      indentorNameDropdownGetData.add(state);
 
   IndentorNameDropdownBloc() {
-    indentorNameDropdownData = indentorNameDropdownRepository.getData();
+    //indentorNameDropdownData = indentorNameDropdownRepository.getData();
   }
 
   void dispose() {
