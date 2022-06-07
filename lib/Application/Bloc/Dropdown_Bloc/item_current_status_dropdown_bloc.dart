@@ -26,14 +26,14 @@ class ItemCurrentStatusDropdownBloc {
   void selectedItemPhaseToPhaseStateEvent(ItemCurrentStatus state) => itemCurrentStatusPhaseToPhaseDropdownGetData.add(state);
 
   ItemCurrentStatusDropdownBloc() {
-    itemCurrentStatusDropdowndata = itemCurrentStatusDropdownRepository.getData();
+    //itemCurrentStatusDropdowndata = itemCurrentStatusDropdownRepository.getData();
    // itemCurrentStatusStockIssueEntryDropdownData = itemCurrentStatusDropdownRepository.getStockissueItemData();
     itemCurrenStatusPhaseToPhaseDropdownData = itemCurrentStatusDropdownRepository.getPhaseToPhaseTransferItemData();
   }
 
   void dispose() {
-    itemCurrentStatusDropdownGetData.close();
-    itemCurrentStatusStockIssueEntryDropdownGetData.close();
+    // itemCurrentStatusDropdownGetData.close();
+    //itemCurrentStatusStockIssueEntryDropdownGetData.close();
 
   }
 }

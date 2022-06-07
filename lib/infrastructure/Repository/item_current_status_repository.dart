@@ -11,7 +11,7 @@ String firebaseUrl = "https://vvplus-app-default-rtdb.firebaseio.com/StrRecord.j
 class ItemCurrentStatusRepository {
   Client client = Client();
 
-  Future<List<ItemCurrentStatus>> getData() async {
+  Future<List<ItemCurrentStatus>> getItemStockReceiveData() async {
     try {
       final response = await client.get(Uri.parse(ApiService.getStockReceiveItemCurrentStatusewURL));
       final items = (jsonDecode(response.body) as List)
@@ -22,7 +22,6 @@ class ItemCurrentStatusRepository {
       rethrow;
     }
   }
-  
 
   Future<List<ItemCurrentStatus>> getPhaseToPhaseTransferItemData() async {
     try{
