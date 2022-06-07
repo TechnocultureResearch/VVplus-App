@@ -9,11 +9,9 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/booking_id_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
-//import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/stage_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/taxoh_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Sales_page_bloc/extra_work_entry_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/booking_id_model.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/stage_model.dart';
@@ -43,7 +41,6 @@ class ExtraWorkEntryBody extends StatefulWidget {
 
 class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   final TextEditingController dateinput = TextEditingController();
-  final TextEditingController _voucherType = TextEditingController();
   final TextEditingController _remarks = TextEditingController();
   final TextEditingController _baseAmount = TextEditingController();
   final extraWorkEntryFormKey = GlobalKey<FormState>();
@@ -63,7 +60,6 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   VoucherType selectVoucherType2;
   var subscription;
   var connectionStatus;
-  //var size, height, width;
   void onDataChange1(DepartmentName state) {
     setState(() {
       selectDepartmentName = state;
@@ -156,9 +152,12 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       var url = Uri.parse(baseUrl +
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}",'
-              '"StrCustomer":"AD15","StrTax":"GST 01 PER",StrIndGrid:[{"StrStage":"${selectStage.SearchCode}","StrOverhead":"8","StrDueDate":"${selectStage.DueDate}","DblBaseAmt":"${_baseAmount.text}","DblTaxAmt":"10",'
-              'StrTaxGrid:[{"StrOH":"8","StrTaxOHCode":"138","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}","StrROff":"Y","DblAmt":"5","StrSubCode":"AD37"},'
-              '{"StrOH":"8","StrTaxOHCode":"139","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}","StrROff":"Y","DblAmt":"5","StrSubCode":"AD36"}],"DblNetAmt":"1010"}],'
+              '"StrCustomer":"AD15","StrTax":"${selectTaxOh.Description}",StrIndGrid:[{"StrStage":"${selectStage.SearchCode}","StrOverhead":"8","StrDueDate":"${selectStage.DueDate}",'
+              '"DblBaseAmt":"${_baseAmount.text}","DblTaxAmt":"10",'
+              'StrTaxGrid:[{"StrOH":"8","StrTaxOHCode":"${selectTaxOh.SubExpCode}","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}",'
+              '"StrROff":"Y","DblAmt":"5","StrSubCode":"${selectTaxOh.Account}"},'
+              '{"StrOH":"8","StrTaxOHCode":"${selectTaxOh.SubExpCode}","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}",'
+              '"StrROff":"Y","DblAmt":"5","StrSubCode":"${selectBookingId.SubCode}"}],"DblNetAmt":"1010"}],'
               '"StrRemark":"${_remarks.text}","StrPreparedBy":"SA"}'}');
 
       var response = await http.get(url);
@@ -271,7 +270,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text(e.V_Type ?? ''),
+                                          child: Text(e.description ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
