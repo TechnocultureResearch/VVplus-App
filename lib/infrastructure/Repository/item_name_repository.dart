@@ -10,9 +10,9 @@ import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 class ItemNameRepository {
   Client client = Client();
 
-  Future<List<ItemName>> getItemNameMaterialReqEntryData() async {
+  Future<List<ItemName>> getItemStockReceiveEntryData() async {
     try {
-      final response = await client.get(Uri.parse(ApiService.getItemMaterialReqEntrynewURL));
+      final response = await client.get(Uri.parse(ApiService.getItemNameStockReceiveEntrynewURL));
       final items = (jsonDecode(response.body) as List)
           .map((e) => ItemName.fromJson(e))
           .toList();
