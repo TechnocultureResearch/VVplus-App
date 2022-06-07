@@ -132,10 +132,10 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
         connectionStatus == ConnectivityResult.mobile) {
       if (/*selectDepartmentName != null &&
           selectVoucherType1 != null &&*/
-          // selectBookingNo != null &&
-          //     selectChangeApplicable != null &&
-          //     selectTAX != null &&
-          unitCancellationFormKey.currentState.validate()) {
+          selectBookingNo != null &&
+              selectChangeApplicable != null &&
+              // selectTAX != null &&
+              unitCancellationFormKey.currentState.validate()) {
         sendData();
       } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
@@ -151,8 +151,10 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
           "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
       var url = Uri.parse(baseUrl +
           "?" +
-          "StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}","StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",'
-              'StrTaxGrid:[{"StrOH":"${selectTAX.ExpCode}","StrTaxOHCode":"${selectTAX.SubExpCode}","DblTaxPer":"${selectTAX.TaxPer}","DblRC_TaxPer":"4.5","StrROff":"H","DblAmt":450,"StrSubCode":"GY1"}],"DblNetAmt":"10450","StrRemark":"${remarks.text}","StrBookingDate":"${selectBookingNo.V_Date}","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1"}'}");
+          "StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}",'
+              '"StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",StrTaxGrid:[{"StrOH":"${selectTAX.ExpCode}",'
+              '"StrTaxOHCode":"${selectTAX.SubExpCode}","DblTaxPer":"${selectTAX.TaxPer}","DblRC_TaxPer":"${selectTAX.RC_TaxPer}","StrROff":"H","DblAmt":450,"StrSubCode":"${selectTAX.Account}"}],"DblNetAmt":"10450",'
+              '"StrRemark":"${remarks.text}","StrBookingDate":"2022-06-07","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1"}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -451,7 +453,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.SubExpCode),
+                                          child: Text(e.Code),
                                         ),
                                       );
                                     })?.toList() ??
