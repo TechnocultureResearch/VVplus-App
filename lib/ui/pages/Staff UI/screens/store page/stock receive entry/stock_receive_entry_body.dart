@@ -6,6 +6,7 @@ import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/received_by_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/stock_receive_entry_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
+import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/received_by_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
@@ -48,10 +50,12 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   GodownDropdownBloc godownDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
+  ItemNameDropdownBloc itemNameDropdownBloc;
 
   VoucherType selectVoucherType1;
   ReceivedBy selectReceivedBy;
   Godown selectGodown;
+  ItemName selectItemName;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -66,7 +70,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       () {
         //value1 = double.parse(reqQty.text);
         _amount = (double.parse(reqQty.text) *
-            double.parse(selectItemCurrentStatus.PurchaseRate));
+            double.parse(selectItemName.PurchaseRate));
         StringAmount = _amount.toStringAsFixed(3);
       },
     );
@@ -88,6 +92,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     receivedByDropdownBloc = ReceivedByDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
+    itemNameDropdownBloc = ItemNameDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
@@ -131,9 +136,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
     });
   }
 
-  void onDataChange5(ItemCurrentStatus state) {
+  void onDataChange5(ItemName state) {
     setState(() {
-      selectItemCurrentStatus = state;
+      selectItemName = state;
     });
   }
 
@@ -163,7 +168,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var url = Uri.parse(
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemCurrentStatus.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemName.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -410,32 +415,30 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                         padding: padding1,
                         child: Container(
                           decoration: decorationForms(),
-                          child: FutureBuilder<List<ItemCurrentStatus>>(
-                              future: dropdownBlocItemCurrentStatus
-                                  .itemCurrentStatusDropdowndata,
+                          child: FutureBuilder<List<ItemName>>(
+                              future: itemNameDropdownBloc.itemNameStockReceiveDropdowndata,
                               builder: (context, snapshot) {
-                                return StreamBuilder<ItemCurrentStatus>(
-                                    stream: dropdownBlocItemCurrentStatus
-                                        .selectedStateitemCurrentStatus,
+                                return StreamBuilder<ItemName>(
+                                    stream: itemNameDropdownBloc.selectedItemStockReceiveState,
                                     builder: (context, item) {
                                       return SearchChoices<
-                                          ItemCurrentStatus>.single(
+                                          ItemName>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
-                                        padding: selectItemCurrentStatus != null
+                                        padding: selectItemName != null
                                             ? height * .002
                                             : height * .015,
                                         isExpanded: true,
                                         hint: "Search here",
-                                        value: selectItemCurrentStatus,
+                                        value: selectItemName,
                                         displayClearIcon: false,
                                         onChanged: onDataChange5,
                                         items: snapshot?.data?.map<
                                                 DropdownMenuItem<
-                                                    ItemCurrentStatus>>((e) {
+                                                    ItemName>>((e) {
                                               return DropdownMenuItem<
-                                                  ItemCurrentStatus>(
+                                                  ItemName>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:
@@ -488,7 +491,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                               ),
                             ),
                           ),
-                          selectItemCurrentStatus != null
+                          selectItemName != null
                               ? Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -496,7 +499,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                   //     horizontal: 15.0),
                                   decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.SKU)))
+                                      child: Text(selectItemName.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -527,7 +530,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                           Row(
                             //mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              selectItemCurrentStatus != null
+                              selectItemName != null
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 40),
@@ -537,7 +540,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                           decoration: decoration1(),
                                           child: Center(
                                               child: Text(
-                                                  selectItemCurrentStatus
+                                                  selectItemName
                                                       .PurchaseRate))),
                                     )
                                   : Padding(
@@ -586,7 +589,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                   padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
-                                press: (selectItemCurrentStatus != null) &&
+                                press: (selectItemName != null) &&
                                         (isActive)
                                     ? () {
                                         _calculation();
@@ -618,9 +621,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
 
               pressed
                   ? AddItemContainer(
-                      itemNameText: selectItemCurrentStatus.Name,
+                      itemNameText: selectItemName.Name,
                       orderQtyText: reqQty.text,
-                      rateText: selectItemCurrentStatus.PurchaseRate,
+                      rateText: selectItemName.PurchaseRate,
                       amountText: StringAmount.toString(),
                     )
                   : const SizedBox(),
