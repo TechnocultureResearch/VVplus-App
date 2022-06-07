@@ -181,6 +181,9 @@ class ApiService {
 
   static const String getVoucherTypeMaterialrequestEntrynewURL =
       "http://43.228.113.108:888//Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
+
+ static const String getItemNameStockReceiveEntrynewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStockReceive?StrRecord= ${'{"StrFilter":"Item","StrSiteCode":"AD","StrV_Type":""}'}";
+
   // mock database get url
 
   static const String mockDataIndentorNameURL =
