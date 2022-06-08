@@ -9,18 +9,18 @@ import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 class IndentorNameRepository {
   Client client = Client();
 
-  // Future<List<IndentorName>> getData() async {
-  //   try {
-  //     final response =
-  //         await client.get(Uri.parse(ApiService.getPOIndentNonewURL));
-  //     final items = (jsonDecode(response.body) as List)
-  //         .map((e) => IndentorName.fromJson(e))
-  //         .toList();
-  //     return items;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
+  Future<List<IndentorName>> geIndenterMaterialReqEntrytData() async {
+    try {
+      final response =
+          await client.get(Uri.parse(ApiService.getIndenterNameMaterialReqEntrynewURL));
+      final items = (jsonDecode(response.body) as List)
+          .map((e) => IndentorName.fromJson(e))
+          .toList();
+      return items;
+    } catch (e) {
+      rethrow;
+    }
+  }
   //
   // Future<List<IndentorName>> getIndentData() async {
   //   try {
