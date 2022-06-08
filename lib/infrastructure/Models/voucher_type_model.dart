@@ -19,6 +19,7 @@ class VoucherType {
     this.V_Type,
     this.Description,
     this.Name,
+    this.SubCode,
     this.vType,
     this.description,
   });
@@ -31,6 +32,7 @@ class VoucherType {
   String V_Type;
   String Description;
   String Name;
+  String SubCode;
   String vType;
   String description;
 
@@ -46,6 +48,7 @@ class VoucherType {
         V_Type: json["V_Type"],
         Description: json["Description"],
         Name: json["Name"],
+        SubCode: json["SubCode"],
         vType: json["V_Type"],
         description: json["Description"],
       );
@@ -59,6 +62,7 @@ class VoucherType {
         "V_Type": V_Type,
         "Description": Description,
         "Name": Name,
+        "SubCode": SubCode,
         "V_Type": vType,
         "Description": description,
       };
