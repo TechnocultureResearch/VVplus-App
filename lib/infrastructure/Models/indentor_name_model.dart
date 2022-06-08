@@ -13,6 +13,7 @@ String strRecordToJson(List<IndentorName> data) =>
 class IndentorName {
   IndentorName({
     this.strSubCode,
+    this.SubCode, this.Name,
     this.strName, this.Remark, this.ReOrder, this.MaxStock, this.MinStock, this.ApprovedBy,
     this.ApprovedDateTime, this.Aprqty, this.AprRemark, this.AssignedTo, this.ATName,
     this.Closed, this.CostCenter, this.CostCenterCode, this.Dept, this.icode, this.IndDocid,
@@ -21,6 +22,7 @@ class IndentorName {
   });
 
   String strSubCode;
+  String SubCode; String Name;
   String strName; String IndDocid; String IndSno; String Itemcode; String Item;
   String icode; String V_sno; String MinStock; String MaxStock; String ReOrder;
   String indqty; String Aprqty; String CostCenterCode; String Sku; String CostCenter;
@@ -31,6 +33,7 @@ class IndentorName {
 
     factory IndentorName.fromJson(Map<String, dynamic> json) => IndentorName(
     strSubCode: json["StrSubCode"],
+    SubCode: json["SubCode"], Name: json["Name"],
     strName: json["StrName"], IndDocid: json["IndDocid"], ReOrder: json["Reorder"],
         MaxStock: json["MaxStock"], MinStock: json["MinStock"], ApprovedBy: json["ApprovedBy"],
       ApprovedDateTime: json["ApprovedDateTime"], Aprqty: json["Aprqty"], AprRemark: json["AprRemark"],
@@ -44,6 +47,7 @@ class IndentorName {
 
   Map<String, dynamic> toJson() => {
     "StrSubCode": strSubCode,
+    "SubCode": SubCode,"Name": Name,
     "StrName": strName, "ReqDate": ReqDate, "MaintaintockValue": MaintaintockValue, "Itemcode": Itemcode,
     "Item": Item, "IndDocid": IndDocid, "ReOrder": ReOrder, "MaxStock": MaxStock, "MinStock": MinStock,
     "ApprovedBy": ApprovedBy, "ApprovedDateTime": ApprovedDateTime, "Aprqty": Aprqty,
