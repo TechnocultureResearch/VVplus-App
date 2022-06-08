@@ -2,19 +2,19 @@
 
 class VoucherTypeMaterialReqEntryModel{
 
-  String StrSubCode; String StrName;
+  String SubCode; String Name;
 
   VoucherTypeMaterialReqEntryModel({
-   this.StrSubCode, this.StrName
+   this.SubCode, this.Name
 });
 
   factory VoucherTypeMaterialReqEntryModel.fromJson(Map<String, dynamic> json) => VoucherTypeMaterialReqEntryModel(
-    StrSubCode: json['StrSubCode'],
-    StrName: json['StrName']
+    SubCode: json['SubCode'],
+    Name: json['Name']
   );
 
   Map<String, dynamic>toJson() => {
-    'StrSubCode': StrSubCode,
-    'StrName': StrName
+    'SubCode': SubCode,
+    'Name': Name
   };
 }
