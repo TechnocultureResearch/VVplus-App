@@ -143,7 +143,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
           // await http.post(Uri.parse(ApiService.postMaterialRequestEntryURL),
           body: json.encode({
             "StrRecord": {
-              "StrVType": selectVoucherType.StrSubCode,
+              "StrVType": selectVoucherType.SubCode,
               "StrVDate": intendDateInput.text,
               "StrSiteCode": "AD",
               "StrReceiveFrom": "SM149",
@@ -287,7 +287,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           value: e,
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
-                                            child: Text(e.StrName ?? ''),
+                                            child: Text(e.Name ?? ''),
                                           ),
                                         );
                                       })?.toList() ??
