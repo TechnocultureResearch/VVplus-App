@@ -55,7 +55,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   String StringAmount;
 
   void clearData() {
-    selectIndentName = null;
+    selectIndentorName = null;
     selectItemCurrentStatus = null;
     selectItemCostCenter = null;
     reqQty.clear();
@@ -78,6 +78,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   String dropdownValue = 'Choose an option';
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   ItemNameDropdownBloc itemNameDropdownBloc;
+  IndentorNameDropdownBloc indentorNameDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
   ItemCostCenterDropdownBloc dropdownBlocItemCostCenter;
 
@@ -107,6 +108,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     intendDateInput.text = "";
     reqDateInput.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
+    indentorNameDropdownBloc = IndentorNameDropdownBloc();
     itemNameDropdownBloc = ItemNameDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dropdownBlocItemCostCenter = ItemCostCenterDropdownBloc();
@@ -122,7 +124,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   verifyDetail() {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
-      if (selectIndentName != null &&
+      if (selectIndentorName != null &&
           selectItemCurrentStatus != null &&
           selectItemCostCenter != null &&
           materialRequestEntryFormKey.currentState.validate()) {
@@ -178,7 +180,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     }
   }
 
-  IndentorName selectIndentName;
+  IndentorName selectIndentorName;
   ItemName selectItemName;
   VoucherTypeMaterialReqEntryModel selectVoucherType;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -198,6 +200,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   void onDataChange3(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter = state;
+    });
+  }
+  void onDataChange4(IndentorName state){
+    setState(() {
+      selectIndentorName = state;
     });
   }
 
@@ -281,6 +288,49 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
                                             child: Text(e.StrName ?? ''),
+                                          ),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                );
+                              });
+                        }),
+                  ),
+                ),
+
+                formsHeadTextNew("Indentor Name", width * .045),
+                Padding(
+                  padding: padding1,
+                  child: Container(
+                    // height: 52, width: 343,
+                    decoration: decorationForms(),
+                    child: FutureBuilder<List<IndentorName>>(
+                        future:
+                        indentorNameDropdownBloc.indentorNameDropdownData,
+                        builder: (context, snapshot) {
+                          return StreamBuilder<IndentorName>(
+                              stream: indentorNameDropdownBloc.selectedIndentorNameMaterialReqEntryState,
+                              builder: (context, item) {
+                                return SearchChoices<IndentorName>.single(
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_sharp,
+                                      size: 30),
+                                  padding: selectIndentorName != null
+                                      ? height * .002
+                                      : height * .015,
+                                  isExpanded: true,
+                                  hint: textHint,
+                                  value: selectIndentorName,
+                                  displayClearIcon: false,
+                                  onChanged: onDataChange1,
+                                  items: snapshot?.data
+                                      ?.map<DropdownMenuItem<IndentorName>>(
+                                          (e) {
+                                        return DropdownMenuItem<IndentorName>(
+                                          value: e,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(e.Name ?? ''),
                                           ),
                                         );
                                       })?.toList() ??
