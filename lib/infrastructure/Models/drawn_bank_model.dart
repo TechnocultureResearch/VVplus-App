@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 List<DrawnBank> strRecordFromJson(String str) =>
@@ -8,22 +6,21 @@ List<DrawnBank> strRecordFromJson(String str) =>
 String strRecordToJson(List<DrawnBank> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-
-class DrawnBank{
-  String StrSubCode;
-  String StrName;
+class DrawnBank {
+  String subCode;
+  String name;
 
   DrawnBank({
-    this.StrName,
-    this.StrSubCode,
-});
+    this.subCode,
+    this.name,
+  });
 
   factory DrawnBank.fromJson(Map<String, dynamic> json) => DrawnBank(
-    StrName: json["StrName"],
-    StrSubCode: json["StrSubCode"],
-  );
+        subCode: json["SubCode"],
+        name: json["Name"],
+      );
   Map<String, dynamic> toJson() => {
-    "StrName": StrName,
-    "StrSubCode": StrSubCode,
-  };
+        "SubCode": subCode,
+        "Name": name,
+      };
 }
