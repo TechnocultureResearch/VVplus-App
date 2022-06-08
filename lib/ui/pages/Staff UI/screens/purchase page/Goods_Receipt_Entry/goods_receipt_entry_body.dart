@@ -5,12 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/Supplier_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/goods_receipt_entry_page_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
@@ -48,20 +46,29 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   IndentorNameDropdownBloc dropdownBlocIndentorName;
   VoucherType selectVoucherType;
   Supplier selectSupplier;
-
   VoucherType selectVoucherType3;
   IndentorName selectIndentName;
-  bool loading = false;
+
+  String StrPONo;
+  String StrOUnit;
+  String StrHSNSACCode;
+  String DblAmt;
+  String DblRate;
+  String StrPODate;
+  String StrItemCode;
+
   var subscription;
   var connectionStatus;
   List fillPO = List();
   List filllistdata = [];
-  List fillselectdata = [];
+  List fillselectlistdata = [];
+
   String fillSelectPoDoc;
   final TextEditingController _remarks = TextEditingController();
   String selectFillPo;
   Future<String> futureList;
   Future<String> myFuture;
+  Future<String> myFuturee;
 
   void onDataChange1(VoucherType state) {
     setState(() {
@@ -102,23 +109,21 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     }
   }
 
-  Future<String> fetchFillselectPoData() async {
-    if (selectFillPo != null) {
-      final String uri =
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
-              '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}";
-      // '"StrPartyCode":"AD59","StrPOValDate":"","StrPODocID":"DADGORD  2022       2"}'}";
-      var response = await http.get(Uri.parse(uri));
-      if (response.statusCode == 200) {
-        var res = await http.get(
-          Uri.parse(uri),
-        );
-        var respBody = json.decode(res.body);
-        setState(() {
-          fillselectdata = respBody;
-        });
-        return "Loaded Successfully";
-      }
+  Future<String> fetchFillselectPo() async {
+    final String uri =
+        "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+            '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}";
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      var res = await http.get(
+        Uri.parse(uri),
+      );
+      var respBody = json.decode(res.body);
+      setState(() {
+        fillselectlistdata = respBody;
+        //print("body: $fillselectlistdata");
+      });
+      return "Loaded Successfully";
     } else {
       throw Exception('Failed to load data.');
     }
@@ -127,7 +132,8 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   @override
   void initState() {
     myFuture = fetchFillPoData();
-    futureList = fetchFillselectPoData();
+    futureList = fetchFillselectPo();
+
     dateinput.text = "";
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
@@ -188,10 +194,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
           "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
       var url = Uri.parse(baseUrl +
           "?" +
-          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"11","StrPtyChlDate":"${dateinput1.text}",'
-              '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.subCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${fillSelectPoDoc}",'
-              '"StrPONo":"${selectFillPo}","DblQuantity":"100","DblPOQuantity":"1","DblAmt":"100","DblRate":"10",'
-              '"StrCostCenterCode":"AD1","StrOUnit":"Mtr","StrHSNSACCode":"CG1","StrGoodsServices":"G","StrPODate":"",'
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"15","StrPtyChlDate":"${dateinput1.text}",'
+              '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.subCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${StrItemCode}",'
+              '"StrPONo":"${StrPONo}","DblQuantity":"100","DblPOQuantity":"100","DblAmt":"100","DblRate":"100",'
+              '"StrCostCenterCode":"AD1","StrOUnit":"${StrOUnit}","StrHSNSACCode":"${StrHSNSACCode}","StrGoodsServices":"G","StrPODate":"2022-05-05",'
               '"StrRemark":"${_remarks.text}","DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0",'
               '"DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9",'
               '"DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118"}],'
@@ -199,7 +205,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               '"DblSGSTRate":"0","DblSGSTAmt":"9","DblCGSTRate":"0","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
               '"DblUGSTAmt":"0","DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0",'
               '"DblBillAmt":"118","DblRoundOffRate":"0","DblRoundOffAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118",'
-              '"StrPreparedBy":"SA","StrWarningDupChln":"S","StrWarningAbvTol":"S","StrVehicleNo":"${vechileNo.text}","DblGAmount":"100","StrAgtForm":"HO3"}'}');
+              '"StrPreparedBy":"SA","StrWarningDupChln":"A","StrWarningAbvTol":"S","StrVehicleNo":"${vechileNo.text}","DblGAmount":"100","StrAgtForm":"HO3"}'}');
 
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -340,7 +346,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
@@ -409,7 +415,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput1.text = formattedDate;
                       });
@@ -466,7 +472,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   width: 300,
                   height: height * .066,
                   decoration: decorationForms(),
-                  child: dataFillPoText(),
+                  child: dataFillPoDropdown(),
                 ),
               ),
               sizedbox1,
@@ -474,10 +480,11 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                    width: 300,
-                    height: height * .066,
-                    decoration: decorationForms(),
-                    child: dataFillselectPoText()),
+                  width: 300,
+                  height: height * .066,
+                  decoration: decorationForms(),
+                  child: dataFillselectPoText(),
+                ),
               ),
               sizedbox1,
               formsHeadTextNew("Vehicle No.", width * .045),
@@ -617,12 +624,12 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     );
   }
 
-  Widget dataFillPoText() {
+  Widget dataFillPoDropdown() {
     return StreamBuilder<String>(
         stream: fetchFillPoData().asStream(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+          // if (!snapshot.hasData)
+          //   return Center(child: CircularProgressIndicator());
           return DropdownButton(
             hint: Text("  Search here"),
             icon: Padding(
@@ -630,6 +637,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
             ),
             items: filllistdata.map((item) {
+              StrPONo = item['DocId'];
               return DropdownMenuItem(
                 value: item['DocId'],
                 child: Padding(
@@ -641,7 +649,8 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
             onChanged: (newVal) {
               setState(() {
                 selectFillPo = newVal;
-
+                print("selectFillPo: $selectFillPo");
+                print("value a : $StrPONo");
                 // print("selectFillPo$selectFillPo");
               });
             },
@@ -650,32 +659,31 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
         });
   }
 
-//dropdown
   Widget dataFillselectPoText() {
     return StreamBuilder<String>(
-        stream: fetchFillselectPoData().asStream(),
+        stream: fetchFillselectPo().asStream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
           return DropdownButton(
             hint: Text("  Search here "),
-            icon: Stack(
-              // alignment: Alignment.bottomCenter,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 120),
-                  child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
-                ),
-              ],
+            icon: Padding(
+              padding: EdgeInsets.only(left: 80),
+              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
             ),
-            items: fillselectdata.map((itemm) {
+            items: fillselectlistdata.map((itemm) {
+              StrOUnit = itemm['SKU'];
+              StrHSNSACCode = itemm['HSN_SAC_Code'];
+              DblAmt = itemm['Rate'];
+              DblRate = itemm['Amount'];
+              StrPODate = itemm['POrdDate'];
+              StrItemCode = itemm['ItemCode'];
               return DropdownMenuItem(
-                value: itemm['ItemCode'],
+                value: itemm['Item'],
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text(itemm['ItemCode'] ?? ""),
+                  child: Text(itemm['Item'] ?? ""),
                 ),
-                // value: item['DocId'],
               );
             }).toList(),
             onChanged: (newVal) {
