@@ -128,7 +128,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
             "ChequeReceivingDate": chequeReceivingDateInput.text,
             "PaymentType": selectPaymentType.Name,
             "CreditAmount": selectCreditAccount.Name,
-            "DrawnBank": selectDrawnBank.StrName,
+            "DrawnBank": selectDrawnBank.name,
             "ChequeNo": chequeNoInput.text,
             "Amount": amountInput.text
           }));
@@ -374,7 +374,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(4.0),
-                                              child: Text(e.StrName),
+                                              child: Text(e.name),
                                             ),
                                           );
                                         })?.toList() ??
