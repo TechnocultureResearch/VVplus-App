@@ -589,7 +589,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                               builder: (context, snapshot) {
                                 return StreamBuilder<ItemCurrentStatus>(
                                     stream: dropdownBlocItemCurrentStatus
-                                        .selectedStateitemCurrentStatus,
+                                        .selectedItemPhaseToPhaseState,
                                     builder: (context, item) {
                                       return SearchChoices<
                                           ItemCurrentStatus>.single(
