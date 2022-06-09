@@ -192,6 +192,16 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
     // }
   }
 
+  void clearData() {
+    selectVoucherType1 = null;
+    selectReceivedBy = null;
+    selectGodown = null;
+    selectVoucherType3 = null;
+    selectItemCostCenter = null;
+    selectItemName = null;
+    reqQty.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = StockReceiveEntryProvider.of(context);
@@ -217,13 +227,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        selectVoucherType1 = null;
-                        selectReceivedBy = null;
-                        selectGodown = null;
-                        selectVoucherType3 = null;
-                        selectItemCostCenter = null;
-                        selectItemCurrentStatus = null;
-                        reqQty.clear();
+                        clearData();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -416,13 +420,14 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                         child: Container(
                           decoration: decorationForms(),
                           child: FutureBuilder<List<ItemName>>(
-                              future: itemNameDropdownBloc.itemNameStockReceiveDropdowndata,
+                              future: itemNameDropdownBloc
+                                  .itemNameStockReceiveDropdowndata,
                               builder: (context, snapshot) {
                                 return StreamBuilder<ItemName>(
-                                    stream: itemNameDropdownBloc.selectedItemStockReceiveState,
+                                    stream: itemNameDropdownBloc
+                                        .selectedItemStockReceiveState,
                                     builder: (context, item) {
-                                      return SearchChoices<
-                                          ItemName>.single(
+                                      return SearchChoices<ItemName>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
@@ -435,10 +440,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                         displayClearIcon: false,
                                         onChanged: onDataChange5,
                                         items: snapshot?.data?.map<
-                                                DropdownMenuItem<
-                                                    ItemName>>((e) {
-                                              return DropdownMenuItem<
-                                                  ItemName>(
+                                                    DropdownMenuItem<ItemName>>(
+                                                (e) {
+                                              return DropdownMenuItem<ItemName>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:
@@ -498,8 +502,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                   // padding: const EdgeInsets.symmetric(
                                   //     horizontal: 15.0),
                                   decoration: decoration1(),
-                                  child: Center(
-                                      child: Text(selectItemName.SKU)))
+                                  child:
+                                      Center(child: Text(selectItemName.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -539,9 +543,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                           width: width * .28,
                                           decoration: decoration1(),
                                           child: Center(
-                                              child: Text(
-                                                  selectItemName
-                                                      .PurchaseRate))),
+                                              child: Text(selectItemName
+                                                  .PurchaseRate))),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -589,8 +592,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                   padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
-                                press: (selectItemName != null) &&
-                                        (isActive)
+                                press: (selectItemName != null) && (isActive)
                                     ? () {
                                         _calculation();
                                         setState(() {
@@ -635,6 +637,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),
