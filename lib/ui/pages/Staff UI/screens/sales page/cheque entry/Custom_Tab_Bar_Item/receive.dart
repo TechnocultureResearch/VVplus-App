@@ -44,6 +44,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   final TextEditingController voucherTypeInput = TextEditingController();
   final TextEditingController chequeNoInput = TextEditingController();
   final TextEditingController amountInput = TextEditingController();
+  TextEditingController remarks = TextEditingController();
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   PaymentTypeDropdownBloc paymentTypeDropdownBloc;
@@ -109,10 +110,10 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
 
   verifyDetail() {
     if (selectVoucherType != null &&
-        selectDrawnBank != null &&
-        selectPaymentType != null &&
-        selectDepartmentName != null &&
-        selectCreditAccount != null &&
+        // selectDrawnBank != null &&
+        // selectPaymentType != null &&
+        // selectDepartmentName != null &&
+        // selectCreditAccount != null &&
         receiveFormKey.currentState.validate()) {
       sendData();
     } else {
@@ -122,24 +123,46 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
 
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostChequeReceive),
-          body: json.encode({
-            "VoucherType": selectVoucherType.V_Type,
-            "ChequeReceivingDate": chequeReceivingDateInput.text,
-            "PaymentType": selectPaymentType.Name,
-            "CreditAmount": selectCreditAccount.Name,
-            "DrawnBank": selectDrawnBank.name,
-            "ChequeNo": chequeNoInput.text,
-            "Amount": amountInput.text
-          }));
-      Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+      var baseUrl =
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostChqReceived";
+      var url = Uri.parse(baseUrl +
+          "?" +
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrEntryNo":"","StrEntryDate":"2022-01-24","StrType":"${selectPaymentType.Code}",'
+              '"StrCustomer":"${selectCreditAccount.SubCode}","StrDebitAc":"KK174","StrDrawnBank":"${selectDrawnBank.subCode}","StrChequeNo":"${chequeNoInput.text}",'
+              '"StrChequeDate":"${chequeReceivingDateInput.text}","DblAmount":"${amountInput.text}","StrReceivedBy":"AS495","Strcreditac":"AD53",'
+              '"StrRemark":"remark1","StrDeposit_Date":"","StrClearing_Date":"","StrSiteCode":"AD","StrPreparedByCode":"SA"}'}');
+
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
+    } catch (e) {
+      rethrow;
     }
+    // try {
+    //   await http.post(Uri.parse(ApiService.mockDataPostChequeReceive),
+    //       body: json.encode({
+    //         "VoucherType": selectVoucherType.V_Type,
+    //         "ChequeReceivingDate": chequeReceivingDateInput.text,
+    //         "PaymentType": selectPaymentType.Name,
+    //         "CreditAmount": selectCreditAccount.Name,
+    //         "DrawnBank": selectDrawnBank.name,
+    //         "ChequeNo": chequeNoInput.text,
+    //         "Amount": amountInput.text
+    //       }));
+    // Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    // } on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    // }
   }
 
   @override
@@ -205,7 +228,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(4.0),
-                                              child: Text(e.V_Type),
+                                              child: Text(e.Description ?? ''),
                                             ),
                                           );
                                         })?.toList() ??
@@ -441,6 +464,40 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                         },
                         controller: amountInput,
                         onChanged: bloc.intextField3,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: primaryColor8,
+                            enabledBorder: textFieldBorder(),
+                            focusedBorder: textFieldBorder(),
+                            isDense: true,
+                            errorBorder: textFieldBorder(),
+                            errorText: snapshot.error),
+                        keyboardType: TextInputType.text,
+                        style: simpleTextStyle7(),
+                      ),
+                    ),
+                  ),
+                  sizedbox1,
+                  formsHeadTextNew("Remarks", width * .045),
+                  Container(
+                    padding: padding1,
+                    decoration: decoration1(),
+                    child: StreamBuilder<String>(
+                      stream: bloc.outtextField2,
+                      builder: (context, snapshot) => TextFormField(
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return 'Enter Detail';
+                          }
+                          if (val != remarks.text) {
+                            return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                                ? null
+                                : "Enter valid detail";
+                          }
+                          return null;
+                        },
+                        controller: remarks,
+                        onChanged: bloc.intextField2,
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: primaryColor8,
