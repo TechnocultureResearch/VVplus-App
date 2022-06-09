@@ -19,6 +19,18 @@ class DepartmentNameRepository {
       rethrow;
     }
   }
+
+  Future<List<DepartmentName>> getDepartmentMaterialReqEntryData() async{
+    try{
+      final response = await client.get(Uri.parse(ApiService.getDepartmentMaterialReqEntrynewURL));
+      final items = (jsonDecode(response.body)as List)
+      .map((e) => DepartmentName.fromJson(e))
+      .toList();
+      return items;
+    }catch(e){
+      rethrow;
+    }
+  }
 }
 Future<List<DepartmentName>> createUser(String strSubCode,String strName) async{
   final response = await http.post(Uri.parse(ApiService.getIndentorNameURL), body: {
