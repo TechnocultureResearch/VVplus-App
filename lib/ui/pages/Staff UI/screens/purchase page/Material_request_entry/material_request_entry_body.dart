@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/department_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Purchase_Page_Bloc/material_request_entry_page_bloc.dart';
 import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
+import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
@@ -79,6 +81,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   ItemNameDropdownBloc itemNameDropdownBloc;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
+  DepartmentNameDropdownBloc departmentNameDropdownBloc;
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
   ItemCostCenterDropdownBloc dropdownBlocItemCostCenter;
 
@@ -110,6 +113,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
     itemNameDropdownBloc = ItemNameDropdownBloc();
+    departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dropdownBlocItemCostCenter = ItemCostCenterDropdownBloc();
     _amount = 0;
@@ -183,6 +187,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   IndentorName selectIndentorName;
   ItemName selectItemName;
   VoucherTypeMaterialReqEntryModel selectVoucherType;
+  DepartmentName selectDepartment;
   ItemCurrentStatus selectItemCurrentStatus;
   ItemCostCenter selectItemCostCenter;
   void onDataChange1(VoucherTypeMaterialReqEntryModel state) {
@@ -205,6 +210,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   void onDataChange4(IndentorName state){
     setState(() {
       selectIndentorName = state;
+    });
+  }
+  void onDataChange5(DepartmentName state){
+    setState(() {
+      selectDepartment = state;
     });
   }
 
@@ -297,7 +307,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                         }),
                   ),
                 ),
-
+                sizedbox1,
                 formsHeadTextNew("Indentor Name", width * .045),
                 Padding(
                   padding: padding1,
@@ -327,6 +337,49 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                       ?.map<DropdownMenuItem<IndentorName>>(
                                           (e) {
                                         return DropdownMenuItem<IndentorName>(
+                                          value: e,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(e.Name ?? ''),
+                                          ),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                );
+                              });
+                        }),
+                  ),
+                ),
+                sizedbox1,
+                formsHeadTextNew("Department Name", width * .045),
+                Padding(
+                  padding: padding1,
+                  child: Container(
+                    // height: 52, width: 343,
+                    decoration: decorationForms(),
+                    child: FutureBuilder<List<DepartmentName>>(
+                        future:
+                        departmentNameDropdownBloc.departmentMaterialReqEntryData,
+                        builder: (context, snapshot) {
+                          return StreamBuilder<DepartmentName>(
+                              stream: departmentNameDropdownBloc.selectedDepartmentMaterialReqEntryState,
+                              builder: (context, item) {
+                                return SearchChoices<DepartmentName>.single(
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_sharp,
+                                      size: 30),
+                                  padding: selectDepartment != null
+                                      ? height * .002
+                                      : height * .015,
+                                  isExpanded: true,
+                                  hint: textHint,
+                                  value: selectDepartment,
+                                  displayClearIcon: false,
+                                  onChanged: onDataChange1,
+                                  items: snapshot?.data
+                                      ?.map<DropdownMenuItem<DepartmentName>>(
+                                          (e) {
+                                        return DropdownMenuItem<DepartmentName>(
                                           value: e,
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
@@ -426,7 +479,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child: Text(e.strItemName),
+                                                    child: Text(e.Name),
                                                   ),
                                                 );
                                               })?.toList() ??
