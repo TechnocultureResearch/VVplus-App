@@ -13,7 +13,6 @@ import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/raisedbutton_text.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/rounded_button.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:vvplus_app/domain/common/common_text.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'dart:io';
@@ -32,14 +31,33 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
   VoucherType selectVoucherType;
   final depositFormKey = GlobalKey<FormState>();
 
+  Future<String> gridList;
+  List fillgridlist = [];
+  String StrBank;
+  String NameofCust;
+  String ChequeDate;
+  String amount;
+  String StrSite;
+  String selectFillGrid;
+  String loginDate;
+  String V_date;
   void onDataChange(VoucherType state) {
     setState(() {
       selectVoucherType = state;
     });
   }
 
+  String formatted;
+
   @override
   void initState() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    formatted = formatter.format(now);
+    print("current date...$formatted");
+    loginDate = DateFormat('hh:mm:ss').format(DateTime.now());
+    print("$loginDate");
+    gridList = fetchFillGridData();
     chequeUpToDateInput.text = "";
     depositDateInput.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
@@ -58,7 +76,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
   }
 
   verifyDetail() {
-    if (selectVoucherType != null && depositFormKey.currentState.validate()) {
+    if (selectFillGrid != null && depositFormKey.currentState.validate()) {
       sendData();
     } else {
       Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
@@ -67,13 +85,25 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
 
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostChequeDeposit),
-          body: json.encode({
-            "ChequeUpTo": chequeUpToDateInput.text,
-            "ChooseCheque": selectVoucherType.StrSubCode,
-            "DepositDate": depositDateInput.text
-          }));
-      Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+      var baseUrl =
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostChqDeposit";
+      var url = Uri.parse(baseUrl +
+          "?" +
+          'StrRecord=${'{"StrSiteCode":"RN","StrChequeDate":"${chequeUpToDateInput.text}",'
+              '"StrLoginDate":"${formatted}",StrChqGrid:[{"StrChequeDate":"${ChequeDate}",'
+              '"StrDeposit_Date":"${V_date}","StrDocID":"${selectFillGrid}"}]}'}');
+
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+      }
+    } catch (e) {
+      rethrow;
     } on SocketException {
       Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
     } on HttpException {
@@ -81,6 +111,62 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
     } on FormatException {
       Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
+  }
+
+  Future<String> fetchFillGridData() async {
+    if (depositDateInput.text != null) {
+      final String uri =
+          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetChequeDeposit?StrRecord= ${'{"StrFilter":"FillGrid",'
+              '"StrSiteCode":"RN","StrChq_Date":"${depositDateInput.text}"}'}";
+
+      var response = await http.get(Uri.parse(uri));
+      if (response.statusCode == 200) {
+        var res = await http.get(
+          Uri.parse(uri),
+        );
+        var resBody = json.decode(res.body);
+        setState(() {
+          fillgridlist = resBody;
+        });
+      }
+    } else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Widget fillGridDropdown() {
+    return StreamBuilder<String>(
+        stream: fetchFillGridData().asStream(),
+        builder: (context, snapshot) {
+          return DropdownButton(
+            hint: Text("  Search here                      "),
+            icon: Padding(
+              padding: EdgeInsets.only(left: 65),
+              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
+            ),
+            items: fillgridlist.map((griditem) {
+              StrBank = griditem['Bank'];
+              NameofCust = griditem['CustomerName'];
+              ChequeDate = griditem['cheque_date'];
+              amount = griditem['cheque_amt'];
+              StrSite = griditem['site_name'];
+              V_date = griditem['v_date'];
+              return DropdownMenuItem(
+                value: griditem['docid'],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(griditem['docid'] ?? ''),
+                ),
+              );
+            }).toList(),
+            onChanged: (newVal) {
+              setState(() {
+                selectFillGrid = newVal;
+              });
+            },
+            value: selectFillGrid != null ? selectFillGrid : null,
+          );
+        });
   }
 
   @override
@@ -139,7 +225,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                             lastDate: DateTime(2101));
                         if (pickedDate != null) {
                           String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
                           setState(() {
                             chequeUpToDateInput.text = formattedDate;
                           });
@@ -188,25 +274,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                           }),
                     ),
                   ),
-                  Padding(padding: paddingFormsVertical),
-                  formsDetailText(
-                      "Bank: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
-                  Padding(padding: paddingFormsVertical),
-                  formsDetailText(
-                      "Name of Customer: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
-                  Padding(padding: paddingFormsVertical),
-                  formsDetailText(
-                      "Cheque Date: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
-                  Padding(padding: paddingFormsVertical),
-                  formsDetailText(
-                      "Bank: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
-                  Padding(padding: paddingFormsVertical),
-                  formsDetailText(
-                      "Amount: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
-                  Padding(padding: paddingFormsVertical),
-                  formsDetailText(
-                      "Site: ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
-                  Padding(padding: paddingFormsVertical),
+                  sizedbox1,
                   formsHeadText(
                       "Desposit Date ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Container(
@@ -233,7 +301,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                             lastDate: DateTime(2101));
                         if (pickedDate != null) {
                           String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
                           setState(() {
                             depositDateInput.text = formattedDate;
                           });
@@ -241,6 +309,88 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                       },
                     ),
                   ),
+                  formsHeadTextNew("Fill Grid", width * .045),
+                  Padding(
+                    padding: padding1,
+                    child: Container(
+                      height: height * .073,
+                      width: width * 3,
+                      decoration: decorationForms(),
+                      child: fillGridDropdown(),
+                    ),
+                  ),
+                  Padding(padding: paddingFormsVertical),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      formsDetailTextNew("Bank:  "),
+                      StrBank != null
+                          ? Expanded(
+                              child: Text(
+                                "$StrBank",
+                              ),
+                            )
+                          : Text("")
+                    ],
+                  ),
+                  Padding(padding: paddingFormsVertical),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      formsDetailTextNew("Name of Customer: "),
+                      NameofCust != null
+                          ? Expanded(
+                              child: Text(
+                                "$NameofCust",
+                                style: TextStyle(),
+                              ),
+                            )
+                          : Text("")
+                    ],
+                  ),
+                  Padding(padding: paddingFormsVertical),
+                  Row(
+                    children: [
+                      formsDetailTextNew("Cheque Date: "),
+                      ChequeDate != null
+                          ? Expanded(
+                              child: Text(
+                                "$ChequeDate",
+                                style: TextStyle(),
+                              ),
+                            )
+                          : Text("")
+                    ],
+                  ),
+                  Padding(padding: paddingFormsVertical),
+                  Row(
+                    children: [
+                      formsDetailTextNew("Amount: "),
+                      amount != null
+                          ? Expanded(
+                              child: Text(
+                                "$amount",
+                                style: TextStyle(),
+                              ),
+                            )
+                          : Text("")
+                    ],
+                  ),
+                  Padding(padding: paddingFormsVertical),
+                  Row(
+                    children: [
+                      formsDetailTextNew("Site: "),
+                      StrSite != null
+                          ? Expanded(
+                              child: Text(
+                                "$StrSite",
+                                style: TextStyle(),
+                              ),
+                            )
+                          : Text("")
+                    ],
+                  ),
+                  Padding(padding: paddingFormsVertical),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 40),
