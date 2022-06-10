@@ -31,6 +31,16 @@ Padding formsDetailText(String text) {
   );
 }
 
+Padding formsDetailTextNew(String text) {
+  return Padding(
+    padding: EdgeInsets.only(left: 30),
+    child: Text(
+      text,
+      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+    ),
+  );
+}
+
 Padding clearButton() {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
