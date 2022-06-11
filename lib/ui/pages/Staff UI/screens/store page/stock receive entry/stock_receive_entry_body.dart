@@ -55,7 +55,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   VoucherType selectVoucherType1;
   ReceivedBy selectReceivedBy;
   Godown selectGodown;
-  ItemName selectItemName;
+  ItemNameModel selectItemName;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -136,7 +136,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
     });
   }
 
-  void onDataChange5(ItemName state) {
+  void onDataChange5(ItemNameModel state) {
     setState(() {
       selectItemName = state;
     });
@@ -419,15 +419,15 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                         padding: padding1,
                         child: Container(
                           decoration: decorationForms(),
-                          child: FutureBuilder<List<ItemName>>(
+                          child: FutureBuilder<List<ItemNameModel>>(
                               future: itemNameDropdownBloc
                                   .itemNameStockReceiveDropdowndata,
                               builder: (context, snapshot) {
-                                return StreamBuilder<ItemName>(
+                                return StreamBuilder<ItemNameModel>(
                                     stream: itemNameDropdownBloc
                                         .selectedItemStockReceiveState,
                                     builder: (context, item) {
-                                      return SearchChoices<ItemName>.single(
+                                      return SearchChoices<ItemNameModel>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
@@ -440,9 +440,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                         displayClearIcon: false,
                                         onChanged: onDataChange5,
                                         items: snapshot?.data?.map<
-                                                    DropdownMenuItem<ItemName>>(
+                                                    DropdownMenuItem<ItemNameModel>>(
                                                 (e) {
-                                              return DropdownMenuItem<ItemName>(
+                                              return DropdownMenuItem<ItemNameModel>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:
