@@ -5,6 +5,7 @@ import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 
+
 class ItemNameDropdown extends StatefulWidget {
   const ItemNameDropdown({Key key}) : super(key: key);
 
@@ -33,13 +34,13 @@ class _ItemNameDropdownState extends State<ItemNameDropdown> {
       child: Container(
         height: 50, width: 343,
         decoration: decorationForms(),
-        child: FutureBuilder<List<ItemName>>(
+        child: FutureBuilder<List<ItemNameModel>>(
             future: _dropdownBloc.itemMaterialReqEntryDropdownData,
             builder: (context, snapshot) {
-              return StreamBuilder<ItemName>(
-                  stream: _dropdownBloc.selecteditemMaterialReqEnrtyState,
+              return StreamBuilder<ItemNameModel>(
+                  stream: _dropdownBloc.selecteditemMaterialReqEntryState,
                   builder: (context, item) {
-                    return SearchChoices<ItemName>.single(
+                    return SearchChoices<ItemNameModel>.single(
                       icon: const Icon(Icons.keyboard_arrow_down_sharp),
                       underline: "",
                       padding: 1,
@@ -49,10 +50,10 @@ class _ItemNameDropdownState extends State<ItemNameDropdown> {
                       displayClearIcon: false,
                       onChanged: _dropdownBloc.selecteditemMaterialReqEnrtyStateEvent,
                       items: snapshot?.data
-                          ?.map<DropdownMenuItem<ItemName>>((e) {
-                        return DropdownMenuItem<ItemName>(
+                          ?.map<DropdownMenuItem<ItemNameModel>>((e) {
+                        return DropdownMenuItem<ItemNameModel>(
                           value: e,
-                          child: Text(e.strItemName),
+                          child: Text(e.ItemName),
                         );
                       })?.toList() ??[],
                     );
