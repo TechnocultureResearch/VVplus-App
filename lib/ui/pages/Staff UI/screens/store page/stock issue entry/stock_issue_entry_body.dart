@@ -63,7 +63,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   Godown selectGodown;
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
-  ItemName selectItemName;
+  ItemNameModel selectItemName;
 
   double _amount;
   var subscription;
@@ -76,7 +76,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     selectGodown = null;
     selectVoucherType3 = null;
     selectItemCostCenter = null;
-    selectItemName = '' as ItemName;
+    selectItemName = '' as ItemNameModel;
     reqQty.clear();
     remarks.clear();
   }
@@ -159,7 +159,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
     });
   }
 
-  void onDataChange5(ItemName state) {
+  void onDataChange5(ItemNameModel state) {
     setState(() {
       selectItemName = state;
     });
@@ -447,14 +447,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                         padding: padding1,
                         child: Container(
                           decoration: decorationForms(),
-                          child: FutureBuilder<List<ItemName>>(
+                          child: FutureBuilder<List<ItemNameModel>>(
                               future: itemNameDropdownBloc.itemNameStockIssueEntryDropdownData,
                               builder: (context, snapshot) {
-                                return StreamBuilder<ItemName>(
+                                return StreamBuilder<ItemNameModel>(
                                     stream: itemNameDropdownBloc.selectedStateitemName,
                                     builder: (context, item) {
                                       return SearchChoices<
-                                          ItemName>.single(
+                                          ItemNameModel>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
@@ -468,9 +468,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                         onChanged: onDataChange5,
                                         items: snapshot?.data?.map<
                                                 DropdownMenuItem<
-                                                    ItemName>>((e) {
+                                                    ItemNameModel>>((e) {
                                               return DropdownMenuItem<
-                                                  ItemName>(
+                                                  ItemNameModel>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:
