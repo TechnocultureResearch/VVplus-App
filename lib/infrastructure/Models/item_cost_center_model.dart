@@ -15,7 +15,8 @@ class ItemCostCenter {
     this.strSubCode,
     this.strName,
     this.Code,
-    this.Name
+    this.Name,
+    this.SubCode
   });
   @override
   String toString() => Name;
@@ -23,18 +24,21 @@ class ItemCostCenter {
   String strName;
   String Code;
   String Name;
+  String SubCode;
 
   factory ItemCostCenter.fromJson(Map<String, dynamic> json) => ItemCostCenter(
     strSubCode: json["StrSubCode"],
     strName: json["StrName"],
     Code: json["Code"],
     Name: json["Name"],
+    SubCode: json["SubCode"]
   );
 
   Map<String, dynamic> toJson() => {
     "StrSubCode": strSubCode,
     "StrName": strName,
     "Code": Code,
-    "Name": Name
+    "Name": Name,
+    "SubCode": SubCode
   };
 }
