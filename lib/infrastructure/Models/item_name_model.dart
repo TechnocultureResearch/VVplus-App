@@ -4,58 +4,58 @@ import 'dart:convert';
 
 //String strRecordToJson(StrRecord data) => json.encode(data.toJson());
 
-List<ItemName> strRecordFromJson(String str) =>
-    List<ItemName>.from(json.decode(str).map((x) => ItemName.fromJson(x)));
+List<ItemNameModel> strRecordFromJson(String str) =>
+    List<ItemNameModel>.from(json.decode(str).map((x) => ItemNameModel.fromJson(x)));
 
-String strRecordToJson(List<ItemName> data) =>
+String strRecordToJson(List<ItemNameModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ItemName {
-  ItemName({
-    this.strCostCenterName,
+class ItemNameModel {
+  ItemNameModel({
+    this.CostCenterName,
     this.dblQty,
-    this.strUnit,
+    this.Unit,
     this.SearchCode,this.Name,this.Code,this.BarCodeType,this.BatchApp,this.ExpiryApp,this.FixedBarCode,
     this.HSN_SAC,this.IGName,this.LotNoYN,this.MaintainStockOn,this.MaxStock,this.MinStock,
     this.PurchaseRate,this.ReOrder,this.SKU,
-    this.strItemCode,
-    this.strItemName,
-    this.strItemManualCode,
-    this.strItemMinStock,
-    this.strItemMaxStock,
-    this.strItemReorder,
-    this.strItemSku,
-    this.strItemGroup,
-    this.strItemCategory,
-    this.strItemType,
-    this.strItemDescription,
-    this.strItemMaintainStockOn,
+    this.ItemName,
+    this.ItemCode,
+    this.ItemManualCode,
+    this.ItemMinStock,
+    this.ItemMaxStock,
+    this.ItemReorder,
+    this.ItemSKU,
+    this.ItemGroup,
+    this.ItemCategory,
+    this.ItemType,
+    this.ItemDescription,
+    this.ItemMaintainStockOn,
   });
-  String strItemName;
-  String strCostCenterName;
+  String ItemName;
+  String CostCenterName;
   String dblQty;
-  String strUnit;
+  String Unit;
   String SearchCode;
   String Name;
   String Code; String SKU; String IGName; String MinStock; String MaxStock; String ReOrder;
   String BatchApp; String LotNoYN; String MaintainStockOn; String PurchaseRate; String BarCodeType;
   String ExpiryApp; String FixedBarCode; String HSN_SAC;
-  String strItemCode;
-  String strItemManualCode;
-  String strItemMinStock;
-  String strItemMaxStock;
-  String strItemReorder;
-  String strItemSku;
-  String strItemGroup;
-  String strItemCategory;
-  String strItemType;
-  String strItemDescription;
-  String strItemMaintainStockOn;
+  String ItemCode;
+  String ItemManualCode;
+  String ItemMinStock;
+  String ItemMaxStock;
+  String ItemReorder;
+  String ItemSKU;
+  String ItemGroup;
+  String ItemCategory;
+  String ItemType;
+  String ItemDescription;
+  String ItemMaintainStockOn;
 
-  factory ItemName.fromJson(Map<String, dynamic> json) => ItemName(
-    strCostCenterName: json["StrCostCenterName"],
+  factory ItemNameModel.fromJson(Map<String, dynamic> json) => ItemNameModel(
+    CostCenterName: json["CostCenterName"],
     dblQty: json["DblQty"],
-    strUnit: json["StrUnit"],
+    Unit: json["Unit"],
     SearchCode: json["SearchCode"],
     Name: json["Name"],
     Code: json["Code"],SKU: json["SKU"],IGName: json["IGName"],MinStock: json["MinStock"],
@@ -63,41 +63,41 @@ class ItemName {
     LotNoYN: json["LotNoYN"],MaintainStockOn: json["MaintainStockOn"],PurchaseRate: json["PurchaseRate"],
     BarCodeType: json["BarCodeType"],ExpiryApp: json["ExpiryApp"],FixedBarCode: json["FixedBarCode"],
     HSN_SAC: json["HSN_SAC"],
-    strItemCode: json["StrItemCode"],
-    strItemName: json["StrItemName"],
-    strItemManualCode: json["StrItemManualCode"],
-    strItemMinStock: json["StrItemMinStock"],
-    strItemMaxStock: json["StrItemMaxStock"],
-    strItemReorder: json["StrItemReorder"],
-    strItemSku: json["StrItemSKU"],
-    strItemGroup: json["StrItemGroup"],
-    strItemCategory: json["StrItemCategory"],
-    strItemType: json["StrItemType"],
-    strItemDescription: json["StrItemDescription"],
-    strItemMaintainStockOn: json["StrItemMaintainStockOn"],
+    ItemCode: json["ItemCode"],
+    ItemName: json["ItemName"],
+    ItemManualCode: json["ItemManualCode"],
+    ItemMinStock: json["ItemMinStock"],
+    ItemMaxStock: json["ItemMaxStock"],
+    ItemReorder: json["ItemReorder"],
+    ItemSKU: json["ItemSKU"],
+    ItemGroup: json["ItemGroup"],
+    ItemCategory: json["ItemCategory"],
+    ItemType: json["ItemType"],
+    ItemDescription: json["ItemDescription"],
+    ItemMaintainStockOn: json["ItemMaintainStockOn"],
   );
 
   Map<String, dynamic> toJson() => {
-    "StrItemName": strItemName,
-    "StrCostCenterName": strCostCenterName,
+    "ItemName": ItemName,
+    "StrCostCenterName": CostCenterName,
     "DblQty": dblQty,
-    "StrUnit": strUnit,
+    "StrUnit": Unit,
     "SearchCode": SearchCode,
     "Name": Name,"Code": Code,"SKU": SKU,"IGName":IGName,"MinStock":MinStock,"MaxStock":MaxStock,
     "ReOrder": ReOrder,"BatchApp":BatchApp,"LotNoYN":LotNoYN,"MaintainStockOn":MaintainStockOn,
     "PurchaseRate": PurchaseRate,"BarCodeType":BarCodeType,"ExpiryApp":ExpiryApp,
     "FixedBarCode": FixedBarCode,"HSNSAC": HSN_SAC,
-    "StrItemCode": strItemCode,
-    "StrItemName": strItemName,
-    "StrItemManualCode": strItemManualCode,
-    "StrItemMinStock": strItemMinStock,
-    "StrItemMaxStock": strItemMaxStock,
-    "StrItemReorder": strItemReorder,
-    "StrItemSKU": strItemSku,
-    "StrItemGroup": strItemGroup,
-    "StrItemCategory": strItemCategory,
-    "StrItemType": strItemType,
-    "StrItemDescription": strItemDescription,
-    "StrItemMaintainStockOn": strItemMaintainStockOn,
+    "ItemCode": ItemCode,
+    "ItemName": ItemName,
+    "ItemManualCode": ItemManualCode,
+    "ItemMinStock": ItemMinStock,
+    "ItemMaxStock": ItemMaxStock,
+    "ItemReorder": ItemReorder,
+    "ItemSKU": ItemSKU,
+    "ItemGroup": ItemGroup,
+    "ItemCategory": ItemCategory,
+    "StrItemType": ItemType,
+    "ItemDescription": ItemDescription,
+    "ItemMaintainStockOn": ItemMaintainStockOn,
   };
 }
