@@ -3,28 +3,29 @@ import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 import 'dart:async';
 import 'package:vvplus_app/infrastructure/Repository/item_name_repository.dart';
 
+
 class ItemNameDropdownBloc {
   final itemNameDropdownRepository = ItemNameRepository();
-  final itemNameStockReceiveDropdownGetData = BehaviorSubject<ItemName>();
-  final itemMaterialReqEntryDropdownGetData = BehaviorSubject<ItemName>();
-  final itemNameStatusStockIssueEntryDropdownGetData = BehaviorSubject<ItemName>();
+  final itemNameStockReceiveDropdownGetData = BehaviorSubject<ItemNameModel>();
+  final itemMaterialReqEntryDropdownGetData = BehaviorSubject<ItemNameModel>();
+  final itemNameStatusStockIssueEntryDropdownGetData = BehaviorSubject<ItemNameModel>();
 
-  Future<List<ItemName>> itemNameStockReceiveDropdowndata;
-  Future<List<ItemName>> itemMaterialReqEntryDropdownData;
-  Future<List<ItemName>> itemNameStockIssueEntryDropdownData;
+  Future<List<ItemNameModel>> itemNameStockReceiveDropdowndata;
+  Future<List<ItemNameModel>> itemMaterialReqEntryDropdownData;
+  Future<List<ItemNameModel>> itemNameStockIssueEntryDropdownData;
 
-  Stream<ItemName> get selectedItemStockReceiveState => itemNameStockReceiveDropdownGetData;
-  void selectedItemStockReceiveStateEvent(ItemName state) => itemNameStockReceiveDropdownGetData.add(state);
+  Stream<ItemNameModel> get selectedItemStockReceiveState => itemNameStockReceiveDropdownGetData;
+  void selectedItemStockReceiveStateEvent(ItemNameModel state) => itemNameStockReceiveDropdownGetData.add(state);
 
-  Stream<ItemName> get selectedStateitemName => itemNameStatusStockIssueEntryDropdownGetData;
-  void selectedStateitemNameEvent(ItemName state) => itemNameStatusStockIssueEntryDropdownGetData.add(state);
+  Stream<ItemNameModel> get selectedStateitemName => itemNameStatusStockIssueEntryDropdownGetData;
+  void selectedStateitemNameEvent(ItemNameModel state) => itemNameStatusStockIssueEntryDropdownGetData.add(state);
 
-  Stream<ItemName> get selecteditemMaterialReqEnrtyState => itemMaterialReqEntryDropdownGetData;
-  void selecteditemMaterialReqEnrtyStateEvent(ItemName state) => itemMaterialReqEntryDropdownGetData.add(state);
+  Stream<ItemNameModel> get selecteditemMaterialReqEntryState => itemMaterialReqEntryDropdownGetData;
+  void selecteditemMaterialReqEnrtyStateEvent(ItemNameModel state) => itemMaterialReqEntryDropdownGetData.add(state);
 
   ItemNameDropdownBloc() {
     itemNameStockReceiveDropdowndata = itemNameDropdownRepository.getItemStockReceiveEntryData();
-    // itemMaterialReqEntryDropdownData = itemNameDropdownRepository.getItemNameMaterialReqEntryData();
+    itemMaterialReqEntryDropdownData = itemNameDropdownRepository.getItemMaterialReqEntryData();
     itemNameStockIssueEntryDropdownData = itemNameDropdownRepository.getStockissueItemData();
   }
 
