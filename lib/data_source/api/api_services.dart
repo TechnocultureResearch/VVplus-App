@@ -41,9 +41,6 @@ class ApiService {
   static const String getItemNameURL =
       "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
-  static const String getItemMaterialReqEntrynewURL =
-      "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
-
   static const String getItemCurrentStatusURL =
       "http://103.136.82.200:777/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"AL1","StrCostCenterCode":"AS1","StrAllCostCenter":"","StrUPCostCenter":[{"StrCostCenterCode":"AS1"},{"StrCostCenterCode":"AS1"}]}'}";
 
@@ -188,7 +185,9 @@ class ApiService {
 
  static const String getDepartmentMaterialReqEntrynewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Department","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
-  // mock database get url
+ static const String getItemMaterialReqEntrynewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
+
+ // mock database get url
 
   static const String mockDataIndentorNameURL =
       "https://vv-plus-app-default-rtdb.firebaseio.com/StrRecord/0/IndentorName.json";
