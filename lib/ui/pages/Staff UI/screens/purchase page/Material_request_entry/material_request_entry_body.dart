@@ -185,7 +185,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   }
 
   IndentorName selectIndentorName;
-  ItemName selectItemName;
+  ItemNameModel selectItemName;
   VoucherTypeMaterialReqEntryModel selectVoucherType;
   DepartmentName selectDepartment;
   ItemCurrentStatus selectItemCurrentStatus;
@@ -196,7 +196,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
   }
 
-  void onDataChange2(ItemName state) {
+  void onDataChange2(ItemNameModel state) {
     setState(() {
       selectItemName = state;
     });
@@ -449,14 +449,14 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           padding: padding1,
                           child: Container(
                             decoration: decorationForms(),
-                            child: FutureBuilder<List<ItemName>>(
+                            child: FutureBuilder<List<ItemNameModel>>(
                                 future: itemNameDropdownBloc.itemMaterialReqEntryDropdownData,
                                 builder: (context, snapshot) {
-                                  return StreamBuilder<ItemName>(
-                                      stream: itemNameDropdownBloc.selecteditemMaterialReqEnrtyState,
+                                  return StreamBuilder<ItemNameModel>(
+                                      stream: itemNameDropdownBloc.selecteditemMaterialReqEntryState,
                                       builder: (context, item) {
                                         return SearchChoices<
-                                            ItemName>.single(
+                                            ItemNameModel>.single(
                                           icon: const Icon(
                                               Icons.keyboard_arrow_down_sharp,
                                               size: 30),
@@ -471,15 +471,15 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           onChanged: onDataChange2,
                                           items: snapshot?.data?.map<
                                                   DropdownMenuItem<
-                                                      ItemName>>((e) {
+                                                      ItemNameModel>>((e) {
                                                 return DropdownMenuItem<
-                                                    ItemName>(
+                                                    ItemNameModel>(
                                                   value: e,
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child: Text(e.Name),
+                                                    child: Text(e.ItemName ?? ''),
                                                   ),
                                                 );
                                               })?.toList() ??
@@ -527,7 +527,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                 ),
                               ),
                             ),
-                            selectItemCurrentStatus != null
+                            selectItemName != null
                                 ? Container(
                                     height: height * .067,
                                     width: width * .18,
@@ -536,7 +536,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                     decoration: decoration1(),
                                     child: Center(
                                         child:
-                                            Text(selectItemCurrentStatus.SKU)))
+                                            Text(selectItemName.ItemSKU)))
                                 : Container(
                                     height: height * .067,
                                     width: width * .18,
@@ -567,7 +567,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                             Row(
                               //mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                selectItemCurrentStatus != null
+                                selectItemName != null
                                     ? Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 40),
@@ -627,7 +627,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                         EdgeInsets.symmetric(horizontal: 8)),
                                 RoundedButtonInput(
                                   text: "Add Item to List",
-                                  press: (selectItemCurrentStatus != null) &&
+                                  press: (selectItemName != null) &&
                                           (isActive)
                                       ? () {
                                           _calculation();
@@ -659,7 +659,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
                 pressed
                     ? AddItemContainer(
-                        itemNameText: selectItemCurrentStatus.Name,
+                        itemNameText: selectItemName.ItemName,
                         orderQtyText: reqQty.text,
                         rateText: selectItemCurrentStatus.PurchaseRate,
                         amountText: StringAmount.toString(),
