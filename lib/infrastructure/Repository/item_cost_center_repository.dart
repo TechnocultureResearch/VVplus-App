@@ -11,7 +11,7 @@ class ItemCostCenterRepository {
 
   Future<List<ItemCostCenter>> getData() async {
     try {
-      final response = await client.get(Uri.parse(ApiService.getItemCostCenternewURL));
+      final response = await client.get(Uri.parse(ApiService.getItemCostCenterMaterialReqEntrynewURL));
       final items = (jsonDecode(response.body) as List)
           .map((e) => ItemCostCenter.fromJson(e))
           .toList();

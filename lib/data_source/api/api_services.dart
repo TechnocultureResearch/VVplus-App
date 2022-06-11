@@ -187,6 +187,7 @@ class ApiService {
 
  static const String getItemMaterialReqEntrynewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AS","StrV_Type":"","StrChkNonStockable":"N","StrItemCode":"","StrCostCenterCode":"","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":""},{"StrCostCenterCode":""}]}'}";
 
+ static const String getItemCostCenterMaterialReqEntrynewURL = "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCostCenter","StrSiteCode":"AD","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"","StrCostCenterCode":"AD1","StrAllCostCenter":"N",StrUPCostCenter:[{"StrCostCenterCode":"ad1"},{"StrCostCenterCode":""}]}'}";
  // mock database get url
 
   static const String mockDataIndentorNameURL =

@@ -430,7 +430,47 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     },
                   ),
                 ),
-
+                formsHeadTextNew("Choose Phase (Cost Center)", width * .045),
+                Padding(
+                  padding: padding1,
+                  child: Container(
+                    decoration: decorationForms(),
+                    child: FutureBuilder<List<ItemCostCenter>>(
+                        future: dropdownBlocItemCostCenter.itemCostCenterData,
+                        builder: (context, snapshot) {
+                          return StreamBuilder<ItemCostCenter>(
+                              stream: dropdownBlocItemCostCenter.selectedState,
+                              builder: (context, item) {
+                                return SearchChoices<ItemCostCenter>.single(
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_sharp,
+                                      size: 30),
+                                  padding: selectItemCostCenter != null
+                                      ? height * .002
+                                      : height * .015,
+                                  isExpanded: true,
+                                  hint: "Search here",
+                                  value: selectItemCostCenter,
+                                  displayClearIcon: false,
+                                  onChanged: onDataChange3,
+                                  items: snapshot?.data?.map<
+                                      DropdownMenuItem<ItemCostCenter>>(
+                                          (e) {
+                                        return DropdownMenuItem<ItemCostCenter>(
+                                          value: e,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(e.Name),
+                                          ),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                );
+                              });
+                        }),
+                  ),
+                ),
+sizedbox1,
                 // ============================================================ FormsContainer
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -546,59 +586,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                     child: const Center(child: Text("Unit"))),
                           ],
                         ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10)),
+                        // const Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 10)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                formsHeadTextNew("Rate", width * .045),
-                                SizedBox(
-                                  width: 70,
-                                ),
-                                Column(
-                                  children: [
-                                    formsHeadTextNew("Amount:", width * .045),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              //mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                selectItemName != null
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 40),
-                                        child: Container(
-                                            height: height * .067,
-                                            width: width * .28,
-                                            decoration: decoration1(),
-                                            child: Center(
-                                                child: Text(
-                                                    selectItemCurrentStatus
-                                                        .PurchaseRate))),
-                                      )
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 40),
-                                        child: Container(
-                                            height: height * .067,
-                                            width: width * .28,
-                                            decoration: decoration1(),
-                                            child: const Center(
-                                                child: Text("00.00"))),
-                                      ),
-                                SizedBox(
-                                  width: 40,
-                                ),
-                                Text(
-                                  "$StringAmount",
-                                  style: containerTextStyle1(),
-                                ),
-                              ],
-                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -657,60 +649,21 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   ),
                 ),
 
-                pressed
-                    ? AddItemContainer(
-                        itemNameText: selectItemName.ItemName,
-                        orderQtyText: reqQty.text,
-                        rateText: selectItemCurrentStatus.PurchaseRate,
-                        amountText: StringAmount.toString(),
-                      )
-                    : const SizedBox(),
+                // pressed
+                //     ? AddItemContainer(
+                //         itemNameText: selectItemName.ItemName,
+                //         orderQtyText: reqQty.text,
+                //         rateText: selectItemCurrentStatus.PurchaseRate,
+                //         amountText: StringAmount.toString(),
+                //       )
+                //     : const SizedBox(),
 
                 //============================================================ popup container
 
 //=============================================================================
                 const Padding(padding: EdgeInsets.all(10)),
 
-                formsHeadTextNew("Choose Phase (Cost Center)", width * .045),
-                Padding(
-                  padding: padding1,
-                  child: Container(
-                    decoration: decorationForms(),
-                    child: FutureBuilder<List<ItemCostCenter>>(
-                        future: dropdownBlocItemCostCenter.itemCostCenterData,
-                        builder: (context, snapshot) {
-                          return StreamBuilder<ItemCostCenter>(
-                              stream: dropdownBlocItemCostCenter.selectedState,
-                              builder: (context, item) {
-                                return SearchChoices<ItemCostCenter>.single(
-                                  icon: const Icon(
-                                      Icons.keyboard_arrow_down_sharp,
-                                      size: 30),
-                                  padding: selectItemCostCenter != null
-                                      ? height * .002
-                                      : height * .015,
-                                  isExpanded: true,
-                                  hint: "Search here",
-                                  value: selectItemCostCenter,
-                                  displayClearIcon: false,
-                                  onChanged: onDataChange3,
-                                  items: snapshot?.data?.map<
-                                              DropdownMenuItem<ItemCostCenter>>(
-                                          (e) {
-                                        return DropdownMenuItem<ItemCostCenter>(
-                                          value: e,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Text(e.Name),
-                                          ),
-                                        );
-                                      })?.toList() ??
-                                      [],
-                                );
-                              });
-                        }),
-                  ),
-                ),
+
                 const SizedBox(height: 15),
                 formsHeadTextNew("Req. Date", width * .045),
                 Container(
