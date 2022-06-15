@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
@@ -39,8 +38,8 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
   String amount;
   String StrSite;
   String selectFillGrid;
-  String loginDate;
   String V_date;
+  bool showdetail = false;
   void onDataChange(VoucherType state) {
     setState(() {
       selectVoucherType = state;
@@ -55,8 +54,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     formatted = formatter.format(now);
     print("current date...$formatted");
-    loginDate = DateFormat('hh:mm:ss').format(DateTime.now());
-    print("$loginDate");
+
     gridList = fetchFillGridData();
     chequeUpToDateInput.text = "";
     depositDateInput.text = "";
@@ -70,7 +68,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(milliseconds: 800), () {
+    await Future.delayed(const Duration(milliseconds: 8), () {
       setState(() {});
     });
   }
@@ -89,9 +87,9 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
           "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostChqDeposit";
       var url = Uri.parse(baseUrl +
           "?" +
-          'StrRecord=${'{"StrSiteCode":"RN","StrChequeDate":"${chequeUpToDateInput.text}",'
-              '"StrLoginDate":"${formatted}",StrChqGrid:[{"StrChequeDate":"${ChequeDate}",'
-              '"StrDeposit_Date":"${V_date}","StrDocID":"${selectFillGrid}"}]}'}');
+          'StrRecord=${'{"StrSiteCode":"RN","StrChequeDate":"${depositDateInput.text}",'
+              '"StrLoginDate":"${formatted}",StrChqGrid:[{"StrChequeDate":"2022/06/14",'
+              '"StrDeposit_Date":"${chequeUpToDateInput.text}","StrDocID":"${selectFillGrid}"}]}'}');
 
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -162,6 +160,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
             onChanged: (newVal) {
               setState(() {
                 selectFillGrid = newVal;
+                showdetail = true;
               });
             },
             value: selectFillGrid != null ? selectFillGrid : null,
@@ -203,7 +202,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                   formsHeadTextNew("Cheque Up To", width * .045),
                   Container(
                     padding: dateFieldPadding,
-                    height: height * .09,
+                    height: height * .099,
                     child: TextFormField(
                       validator: (val) {
                         if (val.isEmpty) {
@@ -279,7 +278,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                       "Desposit Date ${selectVoucherType != null ? selectVoucherType.StrSubCode : ""}"),
                   Container(
                     padding: dateFieldPadding,
-                    height: height * .09,
+                    height: height * .099,
                     child: TextFormField(
                       validator: (val) {
                         if (val.isEmpty) {
@@ -320,75 +319,90 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                     ),
                   ),
                   Padding(padding: paddingFormsVertical),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      formsDetailTextNew("Bank:  "),
-                      StrBank != null
-                          ? Expanded(
-                              child: Text(
-                                "$StrBank",
-                              ),
-                            )
-                          : Text("")
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 4, right: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        formsDetailTextNew("Bank: "),
+                        StrBank != null && showdetail == true
+                            ? Expanded(
+                                child: Text(
+                                  "$StrBank",
+                                ),
+                              )
+                            : Text("")
+                      ],
+                    ),
                   ),
                   Padding(padding: paddingFormsVertical),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      formsDetailTextNew("Name of Customer: "),
-                      NameofCust != null
-                          ? Expanded(
-                              child: Text(
-                                "$NameofCust",
-                                style: TextStyle(),
-                              ),
-                            )
-                          : Text("")
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 4, right: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        formsDetailTextNew("Name of Customer: "),
+                        NameofCust != null && showdetail == true
+                            ? Expanded(
+                                child: Text(
+                                  "$NameofCust",
+                                  style: TextStyle(),
+                                ),
+                              )
+                            : Text("")
+                      ],
+                    ),
                   ),
                   Padding(padding: paddingFormsVertical),
-                  Row(
-                    children: [
-                      formsDetailTextNew("Cheque Date: "),
-                      ChequeDate != null
-                          ? Expanded(
-                              child: Text(
-                                "$ChequeDate",
-                                style: TextStyle(),
-                              ),
-                            )
-                          : Text("")
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 4, right: 10),
+                    child: Row(
+                      children: [
+                        formsDetailTextNew("Cheque Date: "),
+                        ChequeDate != null && showdetail == true
+                            ? Expanded(
+                                child: Text(
+                                  "$ChequeDate",
+                                  style: TextStyle(),
+                                ),
+                              )
+                            : Text("")
+                      ],
+                    ),
                   ),
                   Padding(padding: paddingFormsVertical),
-                  Row(
-                    children: [
-                      formsDetailTextNew("Amount: "),
-                      amount != null
-                          ? Expanded(
-                              child: Text(
-                                "$amount",
-                                style: TextStyle(),
-                              ),
-                            )
-                          : Text("")
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 4, right: 10),
+                    child: Row(
+                      children: [
+                        formsDetailTextNew("Amount: "),
+                        amount != null && showdetail == true
+                            ? Expanded(
+                                child: Text(
+                                  "$amount",
+                                  style: TextStyle(),
+                                ),
+                              )
+                            : Text("")
+                      ],
+                    ),
                   ),
                   Padding(padding: paddingFormsVertical),
-                  Row(
-                    children: [
-                      formsDetailTextNew("Site: "),
-                      StrSite != null
-                          ? Expanded(
-                              child: Text(
-                                "$StrSite",
-                                style: TextStyle(),
-                              ),
-                            )
-                          : Text("")
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 4, right: 10),
+                    child: Row(
+                      children: [
+                        formsDetailTextNew("Site: "),
+                        StrSite != null && showdetail == true
+                            ? Expanded(
+                                child: Text(
+                                  "$StrSite",
+                                  style: TextStyle(),
+                                ),
+                              )
+                            : Text("")
+                      ],
+                    ),
                   ),
                   Padding(padding: paddingFormsVertical),
                   Padding(
