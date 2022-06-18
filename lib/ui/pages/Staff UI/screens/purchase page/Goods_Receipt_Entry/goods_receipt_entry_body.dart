@@ -628,12 +628,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     return StreamBuilder<String>(
         stream: fetchFillPoData().asStream(),
         builder: (context, snapshot) {
-          // if (!snapshot.hasData)
-          //   return Center(child: CircularProgressIndicator());
           return DropdownButton(
-            hint: Text("  Search here"),
+            hint: Text("  Search here                     "),
             icon: Padding(
-              padding: EdgeInsets.only(left: 83),
+              padding: EdgeInsets.only(left: 75),
               child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
             ),
             items: filllistdata.map((item) {
@@ -650,6 +648,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               setState(() {
                 selectFillPo = newVal;
                 print("selectFillPo: $selectFillPo");
+
                 print("value a : $StrPONo");
                 // print("selectFillPo$selectFillPo");
               });
@@ -663,12 +662,10 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     return StreamBuilder<String>(
         stream: fetchFillselectPo().asStream(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
           return DropdownButton(
-            hint: Text("  Search here "),
+            hint: Text("  Search here                    "),
             icon: Padding(
-              padding: EdgeInsets.only(left: 80),
+              padding: EdgeInsets.only(left: 75),
               child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
             ),
             items: fillselectlistdata.map((itemm) {
