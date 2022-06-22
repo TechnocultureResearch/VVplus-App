@@ -10,11 +10,13 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.d
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/issued_to_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_current_status_dropdown_bloc.dart';
+import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/phase_to_phase_transfer_bloc.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
+import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
@@ -53,7 +55,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   GodownDropdownBloc godownDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
-  ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
+  ItemNameDropdownBloc itemNameDropdownBloc;
+  // ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
 
   VoucherType selectVoucherType;
   VoucherType selectVoucherType2;
@@ -63,7 +66,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   VoucherType selectVoucherType3;
   ItemCostCenter selectFromItemCostCenter;
   ItemCostCenter selectToItemCostCenter;
-  ItemCurrentStatus selectItemCurrentStatus;
+  ItemNameModel selectItemName;
+  // ItemCurrentStatus selectItemCurrentStatus;
   var subscription;
   var connectionStatus;
 
@@ -77,7 +81,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       () {
         //value1 = double.parse(reqQty.text);
         _amount = (double.parse(reqQty.text) *
-            double.parse(selectItemCurrentStatus.PurchaseRate));
+            double.parse(selectItemName.PurchaseRate));
         StringAmount = _amount.toStringAsFixed(3);
       },
     );
@@ -101,7 +105,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     godownDropdownBloc = GodownDropdownBloc();
     voucherTypeDropdownBloc3 = VoucherTypeDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
-    dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
+    itemNameDropdownBloc = ItemNameDropdownBloc();
+    // dropdownBlocItemCurrentStatus = ItemCurrentStatusDropdownBloc();
     dateinput.text = "";
     _amount = 0;
     subscription = Connectivity()
@@ -120,7 +125,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       selectFromGodown = null;
       selectToItemCostCenter = null;
       selectFromItemCostCenter = null;
-      selectItemCurrentStatus = null;
+      selectItemName = null;
       reqQty.clear();
       dateinput.clear();
       remarks.clear();
@@ -169,9 +174,9 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     });
   }
 
-  void onDataChange7(ItemCurrentStatus state) {
+  void onDataChange7(ItemNameModel state) {
     setState(() {
-      selectItemCurrentStatus = state;
+      selectItemName = state;
     });
   }
 
@@ -182,7 +187,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
     selectFromGodown = null;
     selectToItemCostCenter = null;
     selectFromItemCostCenter = null;
-    selectItemCurrentStatus = null;
+    selectItemName = null;
     reqQty.clear();
     remarks.clear();
   }
@@ -196,7 +201,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
           selectFromItemCostCenter != null &&
           selectToGodown != null &&
           selectToItemCostCenter != null &&
-          selectItemCurrentStatus != null &&
+          selectItemName != null &&
           phaseToPhaseTransferFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -227,7 +232,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       var url = Uri.parse(
           "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrNo":"2","StrDate":"${dateinput.text}",'
               '"StrIssuedTo":"${selectIssuedTo.SubCode}","StrPreparedByCode":"SA",StrIndGrid:[{"StrCostCenterCode":"${selectFromItemCostCenter.Code}","StrGodownCode":"${selectFromGodown.GodCode}","StrToCostCenterCode":"${selectFromItemCostCenter.Code} ",'
-              '"StrToGodownCode":"${selectToGodown.GodCode}","StrItemCode":"${selectToItemCostCenter.Code}","DblQuantity":"${reqQty.text}","StrSKU":"${selectItemCurrentStatus.SKU}","DblRate":"${selectItemCurrentStatus.PurchaseRate}","DblAmt":"${StringAmount}"}],"StrRemark":"${remarks.text}"}'}");
+              '"StrToGodownCode":"${selectToGodown.GodCode}","StrItemCode":"${selectToItemCostCenter.Code}","DblQuantity":"${reqQty.text}","StrSKU":"${selectItemName.SKU}","DblRate":"${selectItemName.PurchaseRate}","DblAmt":"${StringAmount}"}],"StrRemark":"${remarks.text}"}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -586,32 +591,30 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                         padding: padding1,
                         child: Container(
                           decoration: decorationForms(),
-                          child: FutureBuilder<List<ItemCurrentStatus>>(
-                              future: dropdownBlocItemCurrentStatus
-                                  .itemCurrentStatusStockIssueEntryDropdownData,
+                          child: FutureBuilder<List<ItemNameModel>>(
+                              future: itemNameDropdownBloc.itemNamePhaseToPhaseDropdownData,
                               builder: (context, snapshot) {
-                                return StreamBuilder<ItemCurrentStatus>(
-                                    stream: dropdownBlocItemCurrentStatus
-                                        .selectedItemPhaseToPhaseState,
+                                return StreamBuilder<ItemNameModel>(
+                                    stream: itemNameDropdownBloc.selecteditemPhaseToPhaseTransferState,
                                     builder: (context, item) {
                                       return SearchChoices<
-                                          ItemCurrentStatus>.single(
+                                          ItemNameModel>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
-                                        padding: selectItemCurrentStatus != null
+                                        padding: selectItemName != null
                                             ? height * .002
                                             : height * .015,
                                         isExpanded: true,
                                         hint: "Search here",
-                                        value: selectItemCurrentStatus,
+                                        value: selectItemName,
                                         displayClearIcon: false,
                                         onChanged: onDataChange7,
                                         items: snapshot?.data?.map<
                                                 DropdownMenuItem<
-                                                    ItemCurrentStatus>>((e) {
+                                                    ItemNameModel>>((e) {
                                               return DropdownMenuItem<
-                                                  ItemCurrentStatus>(
+                                                  ItemNameModel>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:
@@ -664,7 +667,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                               ),
                             ),
                           ),
-                          selectItemCurrentStatus != null
+                          selectItemName != null
                               ? Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -672,7 +675,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                   //     horizontal: 15.0),
                                   decoration: decoration1(),
                                   child: Center(
-                                      child: Text(selectItemCurrentStatus.SKU)))
+                                      child: Text(selectItemName.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -703,7 +706,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                           Row(
                             //mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              selectItemCurrentStatus != null
+                              selectItemName != null
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 40),
@@ -713,7 +716,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                           decoration: decoration1(),
                                           child: Center(
                                               child: Text(
-                                                  selectItemCurrentStatus
+                                                  selectItemName
                                                           .PurchaseRate
                                                       .toString()))),
                                     )
@@ -763,7 +766,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                   padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
-                                press: (selectItemCurrentStatus != null) &&
+                                press: (selectItemName != null) &&
                                         (isActive)
                                     ? () {
                                         _calculation();
@@ -794,9 +797,9 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               ),
               pressed
                   ? AddItemContainer(
-                      itemNameText: selectItemCurrentStatus.Name,
+                      itemNameText: selectItemName.Name,
                       orderQtyText: reqQty.text,
-                      rateText: selectItemCurrentStatus.PurchaseRate,
+                      rateText: selectItemName.PurchaseRate,
                       amountText: StringAmount.toString(),
                     )
                   : const SizedBox(),
