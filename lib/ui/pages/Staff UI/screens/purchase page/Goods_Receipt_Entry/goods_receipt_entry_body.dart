@@ -482,7 +482,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                         return DropdownButton(
                           hint: Text("  Search here                    "),
                           icon: Padding(
-                            padding: EdgeInsets.only(left: width * .22),
+                            padding: EdgeInsets.only(left: width * 0.29),
                             child: const Icon(Icons.keyboard_arrow_down_sharp,
                                 size: 30),
                           ),
@@ -491,7 +491,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                             return DropdownMenuItem(
                               value: item['DocId'],
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Text(item['DocId'] ?? ''),
                               ),
                             );
@@ -524,7 +524,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                         return DropdownButton(
                           hint: Text("  Search here                    "),
                           icon: Padding(
-                            padding: EdgeInsets.only(left: width * .22),
+                            padding: EdgeInsets.only(left: width * .29),
                             child: const Icon(Icons.keyboard_arrow_down_sharp,
                                 size: 30),
                           ),
