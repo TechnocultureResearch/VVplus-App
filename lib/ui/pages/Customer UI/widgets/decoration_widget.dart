@@ -4,7 +4,6 @@ import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
-
 // new complaint page widget
 
 OutlineInputBorder newComplaintTextFieldOutlineBorder() {
@@ -12,6 +11,7 @@ OutlineInputBorder newComplaintTextFieldOutlineBorder() {
       borderSide: const BorderSide(color: primaryColor2),
       borderRadius: BorderRadius.circular(10));
 }
+
 var newComplaintTextPadding = const EdgeInsets.symmetric(horizontal: 8);
 
 class TextFieldDecoration extends StatefulWidget {
@@ -23,7 +23,8 @@ class TextFieldDecoration extends StatefulWidget {
   @override
   _TextFieldDecorationState createState() => _TextFieldDecorationState();
 }
-class _TextFieldDecorationState extends State<TextFieldDecoration>{
+
+class _TextFieldDecorationState extends State<TextFieldDecoration> {
   final bloc = NewComplaintPageBloc();
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class _TextFieldDecorationState extends State<TextFieldDecoration>{
             keyboardType: TextInputType.emailAddress,
             onChanged: bloc.inDropField1,
             style: simpleTextStyle7(),
-            decoration:InputDecoration(
+            decoration: InputDecoration(
               fillColor: primaryColor3,
               filled: true,
               enabledBorder: OutlineInputBorder(
@@ -55,10 +56,8 @@ class _TextFieldDecorationState extends State<TextFieldDecoration>{
               errorText: snapshot.error,
             ),
           );
-        }
-    );
-}
-
+        });
+  }
 }
 /*
 TextFormField textFieldInputDecoration(String hintText) {
@@ -70,7 +69,7 @@ TextFormField textFieldInputDecoration2(String hintText) {
 
  */
 
-CountryCodePicker phoneTextFieldPicker(){
+CountryCodePicker phoneTextFieldPicker() {
   return CountryCodePicker(
     initialSelection: '+91',
     favorite: const ['+91', 'IN'],
@@ -78,22 +77,25 @@ CountryCodePicker phoneTextFieldPicker(){
     showFlag: true,
   );
 }
-OutlineInputBorder outlineBorder(){
+
+OutlineInputBorder outlineBorder() {
   return const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      borderSide: BorderSide(color: textColor4)
-  );
+      borderSide: BorderSide(color: textColor4));
 }
 
 BoxDecoration decoration1() {
   return BoxDecoration(
-    color: primaryColor3,
+    // color: primaryColor3,
+    color: Colors.transparent,
     borderRadius: BorderRadius.circular(12),
   );
 }
 
-BoxDecoration decoration2(){                                                       //Boxdecoration for containers
-  return BoxDecoration(borderRadius: BorderRadius.circular(5.0),
+BoxDecoration decoration2() {
+  //Boxdecoration for containers
+  return BoxDecoration(
+    borderRadius: BorderRadius.circular(5.0),
     color: primaryColor3,
     boxShadow: const [
       BoxShadow(
@@ -109,13 +111,14 @@ BoxDecoration decoration3() {
   return BoxDecoration(
     color: primaryColor3,
     borderRadius: BorderRadius.circular(5),
-    border: Border.all(color: primaryColor2,width: 1),
+    border: Border.all(color: primaryColor2, width: 1),
   );
 }
 
-BoxDecoration decoration4(var colorof){                                                       //Boxdecoration for containers
+BoxDecoration decoration4(var colorof) {
+  //Boxdecoration for containers
   return BoxDecoration(
-      border: Border.all(color: Colors.white),
+    border: Border.all(color: Colors.white),
     borderRadius: BorderRadius.circular(50.0),
     color: colorof,
     boxShadow: const [
