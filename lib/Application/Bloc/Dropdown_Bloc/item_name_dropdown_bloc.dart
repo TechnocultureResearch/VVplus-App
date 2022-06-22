@@ -15,6 +15,7 @@ class ItemNameDropdownBloc {
   Future<List<ItemNameModel>> itemNameStockReceiveDropdowndata;
   Future<List<ItemNameModel>> itemMaterialReqEntryDropdownData;
   Future<List<ItemNameModel>> itemNameStockIssueEntryDropdownData;
+  Future<List<ItemNameModel>> itemNamePhaseToPhaseDropdownData;
 
   Stream<ItemNameModel> get selectedItemStockReceiveState => itemNameStockReceiveDropdownGetData;
   void selectedItemStockReceiveStateEvent(ItemNameModel state) => itemNameStockReceiveDropdownGetData.add(state);
@@ -25,15 +26,20 @@ class ItemNameDropdownBloc {
   Stream<ItemNameModel> get selecteditemMaterialReqEntryState => itemMaterialReqEntryDropdownGetData;
   void selecteditemMaterialReqEnrtyStateEvent(ItemNameModel state) => itemMaterialReqEntryDropdownGetData.add(state);
 
+  Stream<ItemNameModel> get selecteditemPhaseToPhaseTransferState => itemNamePhaseToPhaseDropdownGetData;
+  void selecteditemPhaseToPhaseTransferStateEvent(ItemNameModel state) => itemNamePhaseToPhaseDropdownGetData.add(state);
+
   ItemNameDropdownBloc() {
     itemNameStockReceiveDropdowndata = itemNameDropdownRepository.getItemStockReceiveEntryData();
     itemMaterialReqEntryDropdownData = itemNameDropdownRepository.getItemMaterialReqEntryData();
     itemNameStockIssueEntryDropdownData = itemNameDropdownRepository.getStockissueItemData();
+    itemNamePhaseToPhaseDropdownData = itemNameDropdownRepository.getPhaseToPhaseTransferItemData();
   }
 
   void dispose() {
     itemNameStockReceiveDropdownGetData.close();
     itemMaterialReqEntryDropdownGetData.close();
     itemNameStatusStockIssueEntryDropdownGetData.close();
+    itemNamePhaseToPhaseDropdownGetData.close();
   }
 }
