@@ -111,7 +111,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
 
   Future<String> fetchFillselectPo() async {
     final String uri =
-        "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
             '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}";
     var response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
@@ -195,7 +195,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
       var url = Uri.parse(baseUrl +
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"23","StrPtyChlDate":"${dateinput1.text}",'
@@ -476,7 +476,38 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   width: width * .85,
                   height: height * .066,
                   decoration: decorationForms(),
-                  child: dataFillPoDropdown(),
+                  child: StreamBuilder<String>(
+                      stream: fetchFillPoData().asStream(),
+                      builder: (context, snapshot) {
+                        return DropdownButton(
+                          hint: Text("  Search here                    "),
+                          icon: Padding(
+                            padding: EdgeInsets.only(left: width * .22),
+                            child: const Icon(Icons.keyboard_arrow_down_sharp,
+                                size: 30),
+                          ),
+                          items: filllistdata.map((item) {
+                            StrPONo = item['DocId'];
+                            return DropdownMenuItem(
+                              value: item['DocId'],
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(item['DocId'] ?? ''),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              selectFillPo = newVal;
+                              print("selectFillPo: $selectFillPo");
+
+                              print("value a : $StrPONo");
+                              // print("selectFillPo$selectFillPo");
+                            });
+                          },
+                          value: selectFillPo != null ? selectFillPo : null,
+                        );
+                      }),
                 ),
               ),
               sizedbox1,
@@ -487,7 +518,40 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   width: width * .85,
                   height: height * .066,
                   decoration: decorationForms(),
-                  child: dataFillselectPoText(),
+                  child: StreamBuilder<String>(
+                      stream: fetchFillselectPo().asStream(),
+                      builder: (context, snapshot) {
+                        return DropdownButton(
+                          hint: Text("  Search here                    "),
+                          icon: Padding(
+                            padding: EdgeInsets.only(left: width * .22),
+                            child: const Icon(Icons.keyboard_arrow_down_sharp,
+                                size: 30),
+                          ),
+                          items: fillselectlistdata.map((itemm) {
+                            StrOUnit = itemm['SKU'];
+                            StrHSNSACCode = itemm['HSN_SAC_Code'];
+                            DblAmt = itemm['Rate'];
+                            DblRate = itemm['Amount'];
+                            StrPODate = itemm['POrdDate'];
+                            StrItemCode = itemm['ItemCode'];
+                            return DropdownMenuItem(
+                              value: itemm['Item'],
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(itemm['Item'] ?? ""),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              fillSelectPoDoc = value;
+                            });
+                          },
+                          value:
+                              fillSelectPoDoc != null ? fillSelectPoDoc : null,
+                        );
+                      }),
                 ),
               ),
               sizedbox1,
@@ -627,74 +691,5 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
         ),
       ),
     );
-  }
-
-  Widget dataFillPoDropdown() {
-    return StreamBuilder<String>(
-        stream: fetchFillPoData().asStream(),
-        builder: (context, snapshot) {
-          return DropdownButton(
-            hint: Text("  Search here                     "),
-            icon: Padding(
-              padding: EdgeInsets.only(left: 75),
-              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
-            ),
-            items: filllistdata.map((item) {
-              StrPONo = item['DocId'];
-              return DropdownMenuItem(
-                value: item['DocId'],
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(item['DocId'] ?? ''),
-                ),
-              );
-            }).toList(),
-            onChanged: (newVal) {
-              setState(() {
-                selectFillPo = newVal;
-                print("selectFillPo: $selectFillPo");
-
-                print("value a : $StrPONo");
-                // print("selectFillPo$selectFillPo");
-              });
-            },
-            value: selectFillPo != null ? selectFillPo : null,
-          );
-        });
-  }
-
-  Widget dataFillselectPoText() {
-    return StreamBuilder<String>(
-        stream: fetchFillselectPo().asStream(),
-        builder: (context, snapshot) {
-          return DropdownButton(
-            hint: Text("  Search here                    "),
-            icon: Padding(
-              padding: EdgeInsets.only(left: 75),
-              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
-            ),
-            items: fillselectlistdata.map((itemm) {
-              StrOUnit = itemm['SKU'];
-              StrHSNSACCode = itemm['HSN_SAC_Code'];
-              DblAmt = itemm['Rate'];
-              DblRate = itemm['Amount'];
-              StrPODate = itemm['POrdDate'];
-              StrItemCode = itemm['ItemCode'];
-              return DropdownMenuItem(
-                value: itemm['Item'],
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(itemm['Item'] ?? ""),
-                ),
-              );
-            }).toList(),
-            onChanged: (newVal) {
-              setState(() {
-                fillSelectPoDoc = newVal;
-              });
-            },
-            value: fillSelectPoDoc != null ? fillSelectPoDoc : null,
-          );
-        });
   }
 }
