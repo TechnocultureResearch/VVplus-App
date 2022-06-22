@@ -86,8 +86,8 @@ OutlineInputBorder outlineBorder() {
 
 BoxDecoration decoration1() {
   return BoxDecoration(
-    // color: primaryColor3,
-    color: Colors.transparent,
+    color: primaryColor3,
+    // color: Colors.transparent,
     borderRadius: BorderRadius.circular(12),
   );
 }
