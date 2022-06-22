@@ -482,10 +482,11 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                         return DropdownButton(
                           hint: Text("  Search here                    "),
                           icon: Padding(
-                            padding: EdgeInsets.only(left: width * 0.29),
+                            padding: EdgeInsets.symmetric(horizontal: 0.2),
                             child: const Icon(Icons.keyboard_arrow_down_sharp,
                                 size: 30),
                           ),
+                          isExpanded: true,
                           items: filllistdata.map((item) {
                             StrPONo = item['DocId'];
                             return DropdownMenuItem(
@@ -500,7 +501,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                             setState(() {
                               selectFillPo = newVal;
                               print("selectFillPo: $selectFillPo");
-
                               print("value a : $StrPONo");
                               // print("selectFillPo$selectFillPo");
                             });
@@ -524,10 +524,11 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                         return DropdownButton(
                           hint: Text("  Search here                    "),
                           icon: Padding(
-                            padding: EdgeInsets.only(left: width * .29),
+                            padding: EdgeInsets.symmetric(horizontal: 0.2),
                             child: const Icon(Icons.keyboard_arrow_down_sharp,
                                 size: 30),
                           ),
+                          isExpanded: true,
                           items: fillselectlistdata.map((itemm) {
                             StrOUnit = itemm['SKU'];
                             StrHSNSACCode = itemm['HSN_SAC_Code'];
