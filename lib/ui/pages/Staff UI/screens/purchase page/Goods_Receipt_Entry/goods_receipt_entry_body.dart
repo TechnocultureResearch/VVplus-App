@@ -198,9 +198,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
           "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
       var url = Uri.parse(baseUrl +
           "?" +
-          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"15","StrPtyChlDate":"${dateinput1.text}",'
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"23","StrPtyChlDate":"${dateinput1.text}",'
               '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.subCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${StrItemCode}",'
-              '"StrPONo":"${StrPONo}","DblQuantity":"100","DblPOQuantity":"100","DblAmt":"100","DblRate":"100",'
+              '"StrPONo":"${StrPONo}","DblQuantity":"10","DblPOQuantity":"10","DblAmt":"100","DblRate":"100",'
               '"StrCostCenterCode":"AD1","StrOUnit":"${StrOUnit}","StrHSNSACCode":"${StrHSNSACCode}","StrGoodsServices":"G","StrPODate":"2022-05-05",'
               '"StrRemark":"${_remarks.text}","DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0",'
               '"DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9",'
@@ -473,7 +473,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  width: 300,
+                  width: width * .85,
                   height: height * .066,
                   decoration: decorationForms(),
                   child: dataFillPoDropdown(),
@@ -484,7 +484,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
               Padding(
                 padding: padding1,
                 child: Container(
-                  width: 300,
+                  width: width * .85,
                   height: height * .066,
                   decoration: decorationForms(),
                   child: dataFillselectPoText(),
