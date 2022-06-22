@@ -115,12 +115,15 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   int valueChoose = 4;
 
   Future<void> _refresh() {
-    selectDepartmentName = null;
-    selectVoucherType1 = null;
-    selectVoucherType2 = null;
-    selectBookingNo = null;
-    selectTAX = null;
-    selectChangeApplicable = null;
+    setState(() {
+      selectBookingNo = null;
+      selectTAX = null;
+      selectDepartmentName = null;
+      selectVoucherType1 = null;
+      selectVoucherType2 = null;
+      selectChangeApplicable = null;
+    });
+
     dateinput.clear();
     dueDate.clear();
     baseAmount.clear();
@@ -148,13 +151,13 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
       var url = Uri.parse(baseUrl +
           "?" +
           "StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}",'
               '"StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",StrTaxGrid:[{"StrOH":"${selectTAX.ExpCode}",'
               '"StrTaxOHCode":"${selectTAX.SubExpCode}","DblTaxPer":"${selectTAX.TaxPer}","DblRC_TaxPer":"${selectTAX.RC_TaxPer}","StrROff":"H","DblAmt":450,"StrSubCode":"${selectTAX.Account}"}],"DblNetAmt":"10450",'
-              '"StrRemark":"${remarks.text}","StrBookingDate":"2022-06-07","StrPreparedBy":"SA","StrCustomer":"AD22","StrCostCenter":"AD1"}'}");
+              '"StrRemark":"${remarks.text}","StrBookingDate":"2022-06-07","StrPreparedBy":"SA","StrCustomer":"RN2000","StrCostCenter":"AD1"}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -342,7 +345,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.strName ?? ''),
+                                          child: Text(e.name ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -502,6 +505,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    _refresh();
                   }, roundedButtonHomeColor1)),
             ],
           ),

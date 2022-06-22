@@ -62,6 +62,13 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
     super.initState();
   }
 
+  void clearData() {
+    depositDateInput.clear();
+    chequeUpToDateInput.clear();
+    selectFillGrid = null;
+    showdetail = false;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -84,7 +91,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostChqDeposit";
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostChqDeposit";
       var url = Uri.parse(baseUrl +
           "?" +
           'StrRecord=${'{"StrSiteCode":"RN","StrChequeDate":"${depositDateInput.text}",'
@@ -114,7 +121,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
   Future<String> fetchFillGridData() async {
     if (depositDateInput.text != null) {
       final String uri =
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetChequeDeposit?StrRecord= ${'{"StrFilter":"FillGrid",'
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetChequeDeposit?StrRecord= ${'{"StrFilter":"FillGrid",'
               '"StrSiteCode":"RN","StrChq_Date":"${depositDateInput.text}"}'}";
 
       var response = await http.get(Uri.parse(uri));
@@ -137,7 +144,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
         stream: fetchFillGridData().asStream(),
         builder: (context, snapshot) {
           return DropdownButton(
-            hint: Text("  Search here                      "),
+            hint: Text("  Search here                       "),
             icon: Padding(
               padding: EdgeInsets.only(left: 65),
               child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
@@ -153,7 +160,9 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                 value: griditem['docid'],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(griditem['docid'] ?? ''),
+                  child: depositDateInput.text != null
+                      ? Text(griditem['docid'])
+                      : "",
                 ),
               );
             }).toList(),
@@ -163,7 +172,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                 showdetail = true;
               });
             },
-            value: selectFillGrid != null ? selectFillGrid : null,
+            value: selectFillGrid,
           );
         });
   }
@@ -190,8 +199,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     RaisedButton(
                       onPressed: () {
-                        depositDateInput.clear();
-                        chequeUpToDateInput.clear();
+                        clearData();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -320,7 +328,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                   ),
                   Padding(padding: paddingFormsVertical),
                   Padding(
-                    padding: EdgeInsets.only(left: 4, right: 10),
+                    padding: EdgeInsets.only(left: 4, right: 30),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -337,7 +345,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                   ),
                   Padding(padding: paddingFormsVertical),
                   Padding(
-                    padding: EdgeInsets.only(left: 4, right: 10),
+                    padding: EdgeInsets.only(left: 4, right: 35),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -410,6 +418,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryDepositBody> {
                           vertical: 10, horizontal: 40),
                       child: roundedButtonHome("Submit", () {
                         verifyDetail();
+                        clearData();
                       })),
                 ],
               ),

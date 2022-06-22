@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
@@ -60,7 +61,9 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   VoucherType selectVoucherType;
   DepartmentName selectDepartmentName;
   final receiveFormKey = GlobalKey<FormState>();
-
+  List selectdebitlist = [];
+  String selectdebit;
+  Future<String> debitData;
   void onDataChange1(PaymentType state) {
     setState(() {
       selectPaymentType = state;
@@ -85,8 +88,58 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
     });
   }
 
+  Future<String> fetchDebitAcData() async {
+    final String uri =
+        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetChequeReceiving?StrRecord=${'{"StrFilter":"DebitAc",'
+            '"StrSiteCode":"RN","StrV_Type":"","StrCustCode":"${selectCreditAccount.SubCode}"}'}";
+
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      var res = await http.get(
+        Uri.parse(uri),
+      );
+      var resBody = json.decode(res.body);
+      setState(() {
+        selectdebitlist = resBody;
+      });
+    } else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Widget debitAcDropdown() {
+    return StreamBuilder<String>(
+        stream: fetchDebitAcData().asStream(),
+        builder: (context, snapshot) {
+          return DropdownButton(
+            hint: Text("  Search here                   "),
+            icon: Padding(
+              padding: EdgeInsets.only(left: 80),
+              child: const Icon(Icons.keyboard_arrow_down_sharp, size: 30),
+            ),
+            items: selectdebitlist.map((item) {
+              //StrBank = griditem['Bank'];
+              return DropdownMenuItem(
+                value: item['SubCode'],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(item['SubCode'] ?? ''),
+                ),
+              );
+            }).toList(),
+            onChanged: (newVal) {
+              setState(() {
+                selectdebit = newVal;
+              });
+            },
+            value: selectdebit != null ? selectdebit : null,
+          );
+        });
+  }
+
   @override
   void initState() {
+    debitData = fetchDebitAcData();
     chequeReceivingDateInput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
@@ -103,17 +156,24 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(milliseconds: 800), () {
-      setState(() {});
+    setState(() {
+      selectVoucherType = null;
+      selectDrawnBank = null;
+      selectPaymentType = null;
+      selectCreditAccount = null;
+      chequeReceivingDateInput.clear();
+      chequeNoInput.clear();
+      amountInput.clear();
+      remarks.clear();
     });
   }
 
   verifyDetail() {
     if (selectVoucherType != null &&
-        // selectDrawnBank != null &&
-        // selectPaymentType != null &&
-        // selectDepartmentName != null &&
-        // selectCreditAccount != null &&
+        selectDrawnBank != null &&
+        selectPaymentType != null &&
+        //selectDepartmentName != null &&
+        selectCreditAccount != null &&
         receiveFormKey.currentState.validate()) {
       sendData();
     } else {
@@ -129,8 +189,8 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrEntryNo":"","StrEntryDate":"2022-01-24","StrType":"${selectPaymentType.Code}",'
               '"StrCustomer":"${selectCreditAccount.SubCode}","StrDebitAc":"KK174","StrDrawnBank":"${selectDrawnBank.subCode}","StrChequeNo":"${chequeNoInput.text}",'
-              '"StrChequeDate":"${chequeReceivingDateInput.text}","DblAmount":"${amountInput.text}","StrReceivedBy":"AS495","Strcreditac":"AD53",'
-              '"StrRemark":"remark1","StrDeposit_Date":"","StrClearing_Date":"","StrSiteCode":"AD","StrPreparedByCode":"SA"}'}');
+              '"StrChequeDate":"${chequeReceivingDateInput.text}","DblAmount":"${amountInput.text}","StrReceivedBy":"AS495","Strcreditac":" ",'
+              '"StrRemark":"${remarks.text}","StrDeposit_Date":"","StrClearing_Date":"","StrSiteCode":"AD","StrPreparedByCode":"SA"}'}');
 
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -188,7 +248,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     RaisedButton(
                       onPressed: () {
-                        chequeReceivingDateInput.clear();
+                        _refresh();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -264,7 +324,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                             lastDate: DateTime(2101));
                         if (pickedDate != null) {
                           String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
                           setState(() {
                             chequeReceivingDateInput.text = formattedDate;
                           });
@@ -362,6 +422,15 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                   ),
                   Padding(padding: paddingFormsVertical),
                   formsHeadTextNew("Debit Account (company):", width * .045),
+                  // Padding(
+                  //   padding: padding1,
+                  //   child: Container(
+                  //      height: height * .073,
+                  //     width: width * 3,
+                  //     decoration: decorationForms(),
+                  //     child: debitAcDropdown(),
+                  //   ),
+                  // ),
                   Padding(padding: paddingFormsVertical),
                   formsHeadTextNew("Drawn Bank", width * .045),
                   Padding(
@@ -516,6 +585,7 @@ class _ChequeEntryReceiveBody extends State<ChequeEntryReceiveBody> {
                           vertical: 0, horizontal: 40),
                       child: roundedButtonHome("Submit", () {
                         verifyDetail();
+                        _refresh();
                       })),
                 ],
               ),

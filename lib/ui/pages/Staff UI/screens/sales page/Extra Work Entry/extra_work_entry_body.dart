@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -43,8 +42,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   final TextEditingController dateinput = TextEditingController();
   final TextEditingController _remarks = TextEditingController();
   final TextEditingController _baseAmount = TextEditingController();
-  final extraWorkEntryFormKey = GlobalKey<FormState>();
-
+  final _extraWorkEntryFormKey = GlobalKey<FormState>();
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   StageDropdownBloc stageDropdownBloc;
@@ -126,16 +124,18 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
     selectVoucherType2 = null;
     _remarks.clear();
     _baseAmount.clear();
+    dateinput.clear();
   }
 
   verifyDetail() {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
-      if (selectVoucherType != null &&
+      if (
+          //selectVoucherType != null &&
           selectBookingId != null &&
-          selectStage != null &&
-          selectTaxOh != null &&
-          extraWorkEntryFormKey.currentState.validate()) {
+              selectStage != null &&
+              selectTaxOh != null &&
+              _extraWorkEntryFormKey.currentState.validate()) {
         sendData();
       } else {
         Scaffold.of(context).showSnackBar(snackBar(incorrectDetailText));
@@ -148,10 +148,10 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule';
+          'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule';
       var url = Uri.parse(baseUrl +
           "?" +
-          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}",'
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"RN","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}",'
               '"StrCustomer":"AD15","StrTax":"${selectTaxOh.Description}",StrIndGrid:[{"StrStage":"${selectStage.SearchCode}","StrOverhead":"8","StrDueDate":"${selectStage.DueDate}",'
               '"DblBaseAmt":"${_baseAmount.text}","DblTaxAmt":"10",'
               'StrTaxGrid:[{"StrOH":"8","StrTaxOHCode":"${selectTaxOh.SubExpCode}","DblTaxPer":"${selectTaxOh.TaxPer}","DblRC_TaxPer":"${selectTaxOh.RC_TaxPer}",'
@@ -201,6 +201,18 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
     // }
   }
 
+  void clearData() {
+    selectDepartmentName = null;
+    selectVoucherType = null;
+    selectStage = null;
+    selectBookingId = null;
+    selectTaxOh = null;
+    selectVoucherType2 = null;
+    _remarks.clear();
+    _baseAmount.clear();
+    dateinput.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     // size = MediaQuery.of(context).size;
@@ -215,7 +227,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       onRefresh: _refresh,
       child: SingleChildScrollView(
         child: Form(
-          key: extraWorkEntryFormKey,
+          key: _extraWorkEntryFormKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,9 +237,11 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    // ignore: deprecated_member_use
                     RaisedButton(
                       onPressed: () {
-                        _refresh();
+                        // _refresh();
+                        clearData();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -535,6 +549,9 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    setState(() {
+                      clearData();
+                    });
                   }, roundedButtonHomeColor1)),
             ],
           ),
