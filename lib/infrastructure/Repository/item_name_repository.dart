@@ -33,6 +33,19 @@ class ItemNameRepository {
       rethrow;
     }
   }
+
+  Future<List<ItemNameModel>> getPhaseToPhaseTransferItemData() async {
+    try{
+      final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseItemnewURL));
+      final items = (jsonDecode(response.body) as List)
+          .map((e) => ItemNameModel.fromJson(e))
+          .toList();
+      return items;
+    }catch(e){
+      rethrow;
+    }
+  }
+
   Future<List<ItemNameModel>> getItemMaterialReqEntryData() async{
     try{
 final response = await client.get(Uri.parse(ApiService.getItemMaterialReqEntrynewURL));
