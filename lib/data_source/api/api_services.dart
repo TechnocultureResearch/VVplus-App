@@ -116,7 +116,7 @@ class ApiService {
   static const String getPhaseToPhaseToCostCenternewURL =
       "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord= ${'{"StrFilter":"ToCostCenter","StrSiteCode":"AD"}'}";
 
-  static const String getPhaseToPhaseItemCurrentStatusnewURL =
+  static const String getPhaseToPhaseItemnewURL =
       "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetPhaseTransfer?StrRecord=${'{"StrFilter":"Item","StrSiteCode":"AD"}'}";
 
   static const String getMaterialReqApprovalIndentSelectionnewURL =
