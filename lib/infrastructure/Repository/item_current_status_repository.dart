@@ -11,29 +11,29 @@ String firebaseUrl = "https://vvplus-app-default-rtdb.firebaseio.com/StrRecord.j
 class ItemCurrentStatusRepository {
   Client client = Client();
 
-  Future<List<ItemCurrentStatus>> getItemStockReceiveData() async {
-    try {
-      final response = await client.get(Uri.parse(ApiService.getStockReceiveItemCurrentStatusewURL));
-      final items = (jsonDecode(response.body) as List)
-          .map((e) => ItemCurrentStatus.fromJson(e))
-          .toList();
-      return items;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  // Future<List<ItemCurrentStatus>> getItemStockReceiveData() async {
+  //   try {
+  //     final response = await client.get(Uri.parse(ApiService.getStockReceiveItemCurrentStatusewURL));
+  //     final items = (jsonDecode(response.body) as List)
+  //         .map((e) => ItemCurrentStatus.fromJson(e))
+  //         .toList();
+  //     return items;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
-  Future<List<ItemCurrentStatus>> getPhaseToPhaseTransferItemData() async {
-    try{
-      final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseItemCurrentStatusnewURL));
-      final items = (jsonDecode(response.body) as List)
-      .map((e) => ItemCurrentStatus.fromJson(e))
-          .toList();
-      return items;
-    }catch(e){
-      rethrow;
-    }
-  }
+  // Future<List<ItemCurrentStatus>> getPhaseToPhaseTransferItemData() async {
+  //   try{
+  //     final response = await client.get(Uri.parse(ApiService.getPhaseToPhaseItemCurrentStatusnewURL));
+  //     final items = (jsonDecode(response.body) as List)
+  //     .map((e) => ItemCurrentStatus.fromJson(e))
+  //         .toList();
+  //     return items;
+  //   }catch(e){
+  //     rethrow;
+  //   }
+  // }
 }
 Future<List<ItemCurrentStatus>> createUser( String strItemName, double dblQty,String strUnit) async{
   final response = await http.post(Uri.parse(ApiService.getItemCurrentStatusURL), body: {
