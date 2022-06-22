@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use, avoid_print, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +12,6 @@ import 'package:vvplus_app/Application/Bloc/staff%20bloc/Contractors_page_bloc/d
 import 'package:vvplus_app/domain/common/common_text.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
-//import 'package:vvplus_app/infrastructure/Models/department_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/resource_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
@@ -43,11 +41,9 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
 
   DepartmentNameDropdownBloc departmentNameDropdownBloc;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc;
-  // VoucherTypeDropdownBloc voucherTypeDropdownBloc;
   ResourceTypeDropdownBloc resourceTypeDropdownBloc;
 
   ItemCostCenter selectItemCostCenter;
-  // VoucherType selectVoucherType;
   ResourceType selectResourceType;
   DepartmentName selectDepartmentName;
 
@@ -83,7 +79,6 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
     dateInput.text = "";
     departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     itemCostCenterDropdownBloc = ItemCostCenterDropdownBloc();
-    // voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     resourceTypeDropdownBloc = ResourceTypeDropdownBloc();
     subscription = Connectivity()
         .onConnectivityChanged
@@ -94,12 +89,14 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
   }
 
   void clearData() {
-    selectItemCostCenter = null;
-    selectResourceType = null;
-    selectDepartmentName = null;
-    dateInput.clear();
-    _qty.clear();
-    _remarks.clear();
+    setState(() {
+      selectItemCostCenter = null;
+      selectResourceType = null;
+      selectDepartmentName = null;
+      dateInput.clear();
+      _qty.clear();
+      _remarks.clear();
+    });
   }
 
   verifyDetail() {
@@ -133,7 +130,9 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
       String remarks) async {
     try {
       var url = Uri.parse(
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostDRM?StrRecord=${'{"StrVType":"DRME","StrVDate":"${dateInput.text}","StrSiteCode":"AD","StrRemark":"${_remarks.text}","StrPreparedBy":"SA",StrDRMGrid:[{"StrCostcenter":"${selectItemCostCenter.strSubCode}","DblQty":"${_qty.text}","StrParty":"${selectDepartmentName.subCode}","StrItem":"${selectResourceType.SearchCode}","StrRemark":"${_remarks.text}"}]}'}");
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostDRM?StrRecord=${'{"StrVType":"DRME",'
+              '"StrVDate":"${dateInput.text}","StrSiteCode":"AD","StrRemark":"${_remarks.text}","StrPreparedBy":"SA",StrDRMGrid:[{"StrCostcenter":"${selectItemCostCenter.strSubCode}",'
+              '"DblQty":"${_qty.text}","StrParty":"${selectDepartmentName.subCode}","StrItem":"${selectResourceType.SearchCode}","StrRemark":"${_remarks.text}"}]}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -445,6 +444,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),

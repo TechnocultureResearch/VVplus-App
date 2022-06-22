@@ -186,6 +186,20 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     }
   }
 
+  void clearData() {
+    setState(() {
+      selectIndentNo = null;
+      selectSiteTo = null;
+      selectGodown = null;
+      selectIndentSelection = null;
+      selectVoucherType = null;
+      selectItemCostCenter = null;
+      selectItemCostCenter2 = null;
+      selectIndentorName = null;
+      dateinput.clear();
+    });
+  }
+
   Future<dynamic> sendData() async {
     try {
       var baseurl =
@@ -265,14 +279,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        selectIndentNo = null;
-                        selectSiteTo = null;
-                        selectGodown = null;
-                        selectIndentSelection = null;
-                        selectVoucherType = null;
-                        selectItemCostCenter = null;
-                        selectIndentorName = null;
-                        dateinput.clear();
+                        clearData();
                       },
                       elevation: 0.0,
                       color: Colors.white,
@@ -621,6 +628,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),

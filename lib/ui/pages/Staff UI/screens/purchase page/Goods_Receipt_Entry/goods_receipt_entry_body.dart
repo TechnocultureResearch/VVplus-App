@@ -90,7 +90,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
 
   Future<String> fetchFillPoData() async {
     final String uri =
-        "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
+        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
             '"StrSiteCode":"AD",'
             '"StrStateCode":"","StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"",'
             '"StrPODocID":"","Strv_type":"PCHLN"}'}";
@@ -149,15 +149,19 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   }
 
   void clearData() {
-    dateinput.clear();
-    dateinput1.clear();
-    partyBillNo.clear();
-    vechileNo.clear();
-    _remarks.clear();
-    selectVoucherType = null;
-    selectSupplier = null;
-    selectVoucherType3 = null;
-    selectIndentName = null;
+    setState(() {
+      dateinput.clear();
+      dateinput1.clear();
+      partyBillNo.clear();
+      vechileNo.clear();
+      _remarks.clear();
+      selectVoucherType = null;
+      selectSupplier = null;
+      selectVoucherType3 = null;
+      selectIndentName = null;
+      fillSelectPoDoc = null;
+      selectFillPo = null;
+    });
   }
 
   @override
@@ -616,6 +620,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),

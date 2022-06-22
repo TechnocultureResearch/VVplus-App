@@ -57,13 +57,18 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   String StringAmount;
 
   void clearData() {
-    selectIndentorName = null;
-    selectItemCurrentStatus = null;
-    selectItemCostCenter = null;
-    reqQty.clear();
-    remarks.clear();
-    intendDateInput.clear();
-    reqDateInput.clear();
+    setState(() {
+      selectVoucherType = null;
+      selectIndentorName = null;
+      selectItemCurrentStatus = null;
+      selectItemCostCenter = null;
+      selectDepartment = null;
+      reqQty.clear();
+      remarks.clear();
+      intendDateInput.clear();
+      reqDateInput.clear();
+      selectItemName = null;
+    });
   }
 
   TextEditingController intendDateInput = TextEditingController();
@@ -207,12 +212,14 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       selectItemCostCenter = state;
     });
   }
-  void onDataChange4(IndentorName state){
+
+  void onDataChange4(IndentorName state) {
     setState(() {
       selectIndentorName = state;
     });
   }
-  void onDataChange5(DepartmentName state){
+
+  void onDataChange5(DepartmentName state) {
     setState(() {
       selectDepartment = state;
     });
@@ -271,40 +278,47 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   child: Container(
                     // height: 52, width: 343,
                     decoration: decorationForms(),
-                    child: FutureBuilder<List<VoucherTypeMaterialReqEntryModel>>(
-                        future:
-                            voucherTypeDropdownBloc.voucherTypeMaterialReqEntryDropdownData,
-                        builder: (context, snapshot) {
-                          return StreamBuilder<VoucherTypeMaterialReqEntryModel>(
-                              stream: voucherTypeDropdownBloc.selectedMaterialReqEntryState,
-                              builder: (context, item) {
-                                return SearchChoices<VoucherTypeMaterialReqEntryModel>.single(
-                                  icon: const Icon(
-                                      Icons.keyboard_arrow_down_sharp,
-                                      size: 30),
-                                  padding: selectVoucherType != null
-                                      ? height * .002
-                                      : height * .015,
-                                  isExpanded: true,
-                                  hint: textHint,
-                                  value: selectVoucherType,
-                                  displayClearIcon: false,
-                                  onChanged: onDataChange1,
-                                  items: snapshot?.data
-                                          ?.map<DropdownMenuItem<VoucherTypeMaterialReqEntryModel>>(
+                    child:
+                        FutureBuilder<List<VoucherTypeMaterialReqEntryModel>>(
+                            future: voucherTypeDropdownBloc
+                                .voucherTypeMaterialReqEntryDropdownData,
+                            builder: (context, snapshot) {
+                              return StreamBuilder<
+                                      VoucherTypeMaterialReqEntryModel>(
+                                  stream: voucherTypeDropdownBloc
+                                      .selectedMaterialReqEntryState,
+                                  builder: (context, item) {
+                                    return SearchChoices<
+                                        VoucherTypeMaterialReqEntryModel>.single(
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          size: 30),
+                                      padding: selectVoucherType != null
+                                          ? height * .002
+                                          : height * .015,
+                                      isExpanded: true,
+                                      hint: textHint,
+                                      value: selectVoucherType,
+                                      displayClearIcon: false,
+                                      onChanged: onDataChange1,
+                                      items: snapshot?.data?.map<
+                                                  DropdownMenuItem<
+                                                      VoucherTypeMaterialReqEntryModel>>(
                                               (e) {
-                                        return DropdownMenuItem<VoucherTypeMaterialReqEntryModel>(
-                                          value: e,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Text(e.Name ?? ''),
-                                          ),
-                                        );
-                                      })?.toList() ??
-                                      [],
-                                );
-                              });
-                        }),
+                                            return DropdownMenuItem<
+                                                VoucherTypeMaterialReqEntryModel>(
+                                              value: e,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Text(e.Name ?? ''),
+                                              ),
+                                            );
+                                          })?.toList() ??
+                                          [],
+                                    );
+                                  });
+                            }),
                   ),
                 ),
                 sizedbox1,
@@ -316,10 +330,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     decoration: decorationForms(),
                     child: FutureBuilder<List<IndentorName>>(
                         future:
-                        indentorNameDropdownBloc.indentorNameDropdownData,
+                            indentorNameDropdownBloc.indentorNameDropdownData,
                         builder: (context, snapshot) {
                           return StreamBuilder<IndentorName>(
-                              stream: indentorNameDropdownBloc.selectedIndentorNameMaterialReqEntryState,
+                              stream: indentorNameDropdownBloc
+                                  .selectedIndentorNameMaterialReqEntryState,
                               builder: (context, item) {
                                 return SearchChoices<IndentorName>.single(
                                   icon: const Icon(
@@ -332,10 +347,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   hint: textHint,
                                   value: selectIndentorName,
                                   displayClearIcon: false,
-                                  onChanged: onDataChange1,
+                                  onChanged: onDataChange4,
                                   items: snapshot?.data
-                                      ?.map<DropdownMenuItem<IndentorName>>(
-                                          (e) {
+                                          ?.map<DropdownMenuItem<IndentorName>>(
+                                              (e) {
                                         return DropdownMenuItem<IndentorName>(
                                           value: e,
                                           child: Padding(
@@ -358,11 +373,12 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     // height: 52, width: 343,
                     decoration: decorationForms(),
                     child: FutureBuilder<List<DepartmentName>>(
-                        future:
-                        departmentNameDropdownBloc.departmentMaterialReqEntryData,
+                        future: departmentNameDropdownBloc
+                            .departmentMaterialReqEntryData,
                         builder: (context, snapshot) {
                           return StreamBuilder<DepartmentName>(
-                              stream: departmentNameDropdownBloc.selectedDepartmentMaterialReqEntryState,
+                              stream: departmentNameDropdownBloc
+                                  .selectedDepartmentMaterialReqEntryState,
                               builder: (context, item) {
                                 return SearchChoices<DepartmentName>.single(
                                   icon: const Icon(
@@ -375,9 +391,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   hint: textHint,
                                   value: selectDepartment,
                                   displayClearIcon: false,
-                                  onChanged: onDataChange1,
-                                  items: snapshot?.data
-                                      ?.map<DropdownMenuItem<DepartmentName>>(
+                                  onChanged: onDataChange5,
+                                  items: snapshot?.data?.map<
+                                              DropdownMenuItem<DepartmentName>>(
                                           (e) {
                                         return DropdownMenuItem<DepartmentName>(
                                           value: e,
@@ -454,7 +470,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   displayClearIcon: false,
                                   onChanged: onDataChange3,
                                   items: snapshot?.data?.map<
-                                      DropdownMenuItem<ItemCostCenter>>(
+                                              DropdownMenuItem<ItemCostCenter>>(
                                           (e) {
                                         return DropdownMenuItem<ItemCostCenter>(
                                           value: e,
@@ -470,7 +486,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                         }),
                   ),
                 ),
-sizedbox1,
+                sizedbox1,
                 // ============================================================ FormsContainer
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -490,20 +506,21 @@ sizedbox1,
                           child: Container(
                             decoration: decorationForms(),
                             child: FutureBuilder<List<ItemNameModel>>(
-                                future: itemNameDropdownBloc.itemMaterialReqEntryDropdownData,
+                                future: itemNameDropdownBloc
+                                    .itemMaterialReqEntryDropdownData,
                                 builder: (context, snapshot) {
                                   return StreamBuilder<ItemNameModel>(
-                                      stream: itemNameDropdownBloc.selecteditemMaterialReqEntryState,
+                                      stream: itemNameDropdownBloc
+                                          .selecteditemMaterialReqEntryState,
                                       builder: (context, item) {
                                         return SearchChoices<
                                             ItemNameModel>.single(
                                           icon: const Icon(
                                               Icons.keyboard_arrow_down_sharp,
                                               size: 30),
-                                          padding:
-                                              selectItemName != null
-                                                  ? height * .002
-                                                  : height * .015,
+                                          padding: selectItemName != null
+                                              ? height * .002
+                                              : height * .015,
                                           isExpanded: true,
                                           hint: "Search here",
                                           value: selectItemName,
@@ -519,7 +536,8 @@ sizedbox1,
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child: Text(e.ItemName ?? ''),
+                                                    child:
+                                                        Text(e.ItemName ?? ''),
                                                   ),
                                                 );
                                               })?.toList() ??
@@ -548,7 +566,8 @@ sizedbox1,
                                       builder: (context, snapshot) {
                                         return TextFormField(
                                           onEditingComplete: () {
-                                            FocusScope.of(context).requestFocus(FocusNode());
+                                            FocusScope.of(context)
+                                                .requestFocus(FocusNode());
                                             _calculation();
                                           },
                                           // initialValue: "no",
@@ -575,8 +594,7 @@ sizedbox1,
                                     //     horizontal: 15.0),
                                     decoration: decoration1(),
                                     child: Center(
-                                        child:
-                                            Text(selectItemName.ItemSKU)))
+                                        child: Text(selectItemName.ItemSKU)))
                                 : Container(
                                     height: height * .067,
                                     width: width * .18,
@@ -619,8 +637,7 @@ sizedbox1,
                                         EdgeInsets.symmetric(horizontal: 8)),
                                 RoundedButtonInput(
                                   text: "Add Item to List",
-                                  press: (selectItemName != null) &&
-                                          (isActive)
+                                  press: (selectItemName != null) && (isActive)
                                       ? () {
                                           _calculation();
                                           setState(() {
@@ -662,7 +679,6 @@ sizedbox1,
 
 //=============================================================================
                 const Padding(padding: EdgeInsets.all(10)),
-
 
                 const SizedBox(height: 15),
                 formsHeadTextNew("Req. Date", width * .045),
@@ -736,6 +752,7 @@ sizedbox1,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 10),
                     child: roundedButtonHome("Submit", () {
+                      clearData();
                       sendData();
                     })),
               ],

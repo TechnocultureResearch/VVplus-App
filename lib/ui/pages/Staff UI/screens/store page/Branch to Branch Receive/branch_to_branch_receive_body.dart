@@ -81,14 +81,16 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   }
 
   void clearData() {
-    selectVoucherType = null;
-    selectSupplier = null;
-    selectGodown = null;
-    selectIndentorName = null;
-    selectFillTransfer = null;
-    _vehicleNo.clear();
-    _gateEntryNo.clear();
-    _remarks.clear();
+    setState(() {
+      selectVoucherType = null;
+      selectSupplier = null;
+      selectGodown = null;
+      selectIndentorName = null;
+      selectFillTransfer = null;
+      _vehicleNo.clear();
+      _gateEntryNo.clear();
+      _remarks.clear();
+    });
   }
 
   @override
@@ -161,7 +163,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIntransit";
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIntransit";
       var url = Uri.parse(baseUrl +
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"2022-05-14","StrRefNo":"101","StrRefDate":"2022-05-14","StrSupplier":"${selectSupplier.SubCode}","StrFrmGodown":"${selectGodown.GodCode}","StrSiteCode":"AA","StrVehicleNo":"${_vehicleNo.text}","DblGAmount":"0","StrPreparedBy":"SA",'
@@ -370,31 +372,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                   child: FutureBuilder<List<FillTransferModel>>(
                       future: fillTransferDropdownBloc.fillTransferDropdownData,
                       builder: (context, snapshot) {
-                        // return SearchChoices<IndentorName>.single(
-                        //             icon: const Icon(
-                        //                 Icons.keyboard_arrow_down_sharp,
-                        //                 size: 30),
-                        //             padding: selectIndentorName != null
-                        //                 ? height * .002
-                        //                 : height * .015,
-                        //             isExpanded: true,
-                        //             hint: "Search here",
-                        //             value: selectIndentorName,
-                        //             displayClearIcon: false,
-                        //             onChanged: onDataChange4,
-                        //             items: snapshot?.data
-                        //                     ?.map<DropdownMenuItem<IndentorName>>(
-                        //                         (e) {
-                        //                   return DropdownMenuItem<IndentorName>(
-                        //                     value: e,
-                        //                     child: Padding(
-                        //                       padding: const EdgeInsets.all(4.0),
-                        //                       child: Text(e.strSubCode ?? ''),
-                        //                     ),
-                        //                   );
-                        //                 })?.toList() ??
-                        //                 [],
-                        //           );
                         return StreamBuilder<FillTransferModel>(
                             stream: fillTransferDropdownBloc
                                 .selectedFillTransferState,
@@ -554,6 +531,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Confirm Receiving", () {
                     verifyDetail();
+                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),

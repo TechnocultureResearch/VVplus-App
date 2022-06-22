@@ -154,7 +154,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       if (selectVoucherType1 != null &&
           selectReceivedBy != null &&
           selectGodown != null &&
-          selectItemCostCenter != null &&
+          //  selectItemCostCenter != null &&
           extraWorkEntryFormKey1.currentState.validate()) {
         sendData();
       } else {
@@ -168,7 +168,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var url = Uri.parse(
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemName.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0","StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
+          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}",'
+              '"StrVDate":"2022-01-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemName.SearchCode}","DblQuantity":"${reqQty.text}","DblAmt":"0.000","DblRate":"10.0",'
+              '"StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}","StrRemark":"Remark1"}],"StrPreparedBy":"SA"}'}');
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -193,13 +195,15 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   }
 
   void clearData() {
-    selectVoucherType1 = null;
-    selectReceivedBy = null;
-    selectGodown = null;
-    selectVoucherType3 = null;
-    selectItemCostCenter = null;
-    selectItemName = null;
-    reqQty.clear();
+    setState(() {
+      selectVoucherType1 = null;
+      selectReceivedBy = null;
+      selectGodown = null;
+      selectVoucherType3 = null;
+      selectItemCostCenter = null;
+      selectItemName = null;
+      reqQty.clear();
+    });
   }
 
   @override
@@ -427,7 +431,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                     stream: itemNameDropdownBloc
                                         .selectedItemStockReceiveState,
                                     builder: (context, item) {
-                                      return SearchChoices<ItemNameModel>.single(
+                                      return SearchChoices<
+                                          ItemNameModel>.single(
                                         icon: const Icon(
                                             Icons.keyboard_arrow_down_sharp,
                                             size: 30),
@@ -440,9 +445,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                         displayClearIcon: false,
                                         onChanged: onDataChange5,
                                         items: snapshot?.data?.map<
-                                                    DropdownMenuItem<ItemNameModel>>(
-                                                (e) {
-                                              return DropdownMenuItem<ItemNameModel>(
+                                                DropdownMenuItem<
+                                                    ItemNameModel>>((e) {
+                                              return DropdownMenuItem<
+                                                  ItemNameModel>(
                                                 value: e,
                                                 child: Padding(
                                                   padding:

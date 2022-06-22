@@ -71,14 +71,17 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   String StringAmount;
 
   void clearData() {
-    selectVoucherType1 = null;
-    selectIssuedTo = null;
-    selectGodown = null;
-    selectVoucherType3 = null;
-    selectItemCostCenter = null;
-    selectItemName = '' as ItemNameModel;
-    reqQty.clear();
-    remarks.clear();
+    setState(() {
+      selectVoucherType1 = null;
+      selectIssuedTo = null;
+      selectGodown = null;
+      selectVoucherType3 = null;
+      selectItemCostCenter = null;
+      //selectItemName = '' as ItemNameModel;
+      selectItemName = null;
+      reqQty.clear();
+      remarks.clear();
+    });
   }
 
   _calculation() {
@@ -191,7 +194,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue';
+          'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue';
       var url = Uri.parse(baseUrl +
           '?' +
           'StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"$formatted","StrSiteCode":"AD",'
@@ -208,8 +211,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
         final String responseStatus = response.statusCode.toString();
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
         Scaffold.of(context).showSnackBar(snackBar(responseStatus));
-      }
-      else {
+      } else {
         return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
       }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
@@ -448,10 +450,12 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                         child: Container(
                           decoration: decorationForms(),
                           child: FutureBuilder<List<ItemNameModel>>(
-                              future: itemNameDropdownBloc.itemNameStockIssueEntryDropdownData,
+                              future: itemNameDropdownBloc
+                                  .itemNameStockIssueEntryDropdownData,
                               builder: (context, snapshot) {
                                 return StreamBuilder<ItemNameModel>(
-                                    stream: itemNameDropdownBloc.selectedStateitemName,
+                                    stream: itemNameDropdownBloc
+                                        .selectedStateitemName,
                                     builder: (context, item) {
                                       return SearchChoices<
                                           ItemNameModel>.single(
@@ -534,8 +538,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                   // padding: const EdgeInsets.symmetric(
                                   //     horizontal: 15.0),
                                   decoration: decoration1(),
-                                  child: Center(
-                                      child: Text(selectItemName.SKU)))
+                                  child:
+                                      Center(child: Text(selectItemName.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -575,9 +579,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                           width: width * .28,
                                           decoration: decoration1(),
                                           child: Center(
-                                              child: Text(
-                                                  selectItemName
-                                                      .PurchaseRate))),
+                                              child: Text(selectItemName
+                                                  .PurchaseRate))),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -625,8 +628,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                   padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
-                                press: (selectItemName != null) &&
-                                        (isActive)
+                                press: (selectItemName != null) && (isActive)
                                     ? () {
                                         _calculation();
                                         setState(() {
@@ -706,7 +708,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                  },roundedButtonHomeColor1)),
+                    clearData();
+                  }, roundedButtonHomeColor1)),
             ],
           ),
         ),

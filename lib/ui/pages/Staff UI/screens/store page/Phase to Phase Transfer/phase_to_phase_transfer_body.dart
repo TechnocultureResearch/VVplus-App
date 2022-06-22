@@ -113,15 +113,18 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   }
 
   void clearData() {
-    voucherTypeDropdownBloc = null;
-    voucherTypeDropdownBloc2 = null;
-    issuedToDropdownBloc = null;
-    godownDropdownBloc = null;
-    voucherTypeDropdownBloc3 = null;
-    itemCostCenterDropdownBloc = null;
-    dropdownBlocItemCurrentStatus = null;
-    dateinput.clear();
-    remarks.clear();
+    setState(() {
+      selectVoucherType = null;
+      selectToGodown = null;
+      selectIssuedTo = null;
+      selectFromGodown = null;
+      selectToItemCostCenter = null;
+      selectFromItemCostCenter = null;
+      selectItemCurrentStatus = null;
+      reqQty.clear();
+      dateinput.clear();
+      remarks.clear();
+    });
   }
 
   @override
@@ -347,7 +350,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                         lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                       setState(() {
                         dateinput.text = formattedDate;
                       });
@@ -840,6 +843,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
+                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),
