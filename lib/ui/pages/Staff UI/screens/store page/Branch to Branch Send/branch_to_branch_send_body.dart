@@ -7,15 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_no_dropdown_bloc.dart';
-import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_selection_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/site_To_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indent_no_model.dart';
-import 'package:vvplus_app/infrastructure/Models/indent_selection_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/site_to_model.dart';
@@ -52,7 +49,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc2;
   ItemCostCenterDropdownBloc itemCostCenterDropdownBloc4;
   IndentorNameDropdownBloc indentorNameDropdownBloc;
-  IndentSelectionDropdownBloc indentSelectionBtoBDropdownBloc;
 
   VoucherType selectVoucherType;
   SiteTo selectSiteTo;
@@ -62,13 +58,16 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   ItemCostCenter selectItemCostCenter2;
   ItemCostCenter selectItemCostCenter4;
   IndentorName selectIndentorName;
-  IndentSelection selectIndentSelection;
 
   var subscription;
   var connectionStatus;
+  List indentlist = [];
+  Future<String> indentStr;
+  String selectindentselection;
 
   @override
   void initState() {
+    indentStr = fetchIndentselectionData();
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     siteToDropdownBloc = SiteToDropdownBloc();
     indentNoDropdownBloc = IndentNoDropdownBloc();
@@ -77,7 +76,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     itemCostCenterDropdownBloc2 = ItemCostCenterDropdownBloc();
     itemCostCenterDropdownBloc4 = ItemCostCenterDropdownBloc();
     indentorNameDropdownBloc = IndentorNameDropdownBloc();
-    indentSelectionBtoBDropdownBloc = IndentSelectionDropdownBloc();
     dateinput.text = "";
     subscription = Connectivity()
         .onConnectivityChanged
@@ -139,6 +137,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   void onDataChange7(IndentNo state) {
     setState(() {
       selectIndentNo = state;
+      selectindentselection = null;
     });
   }
 
@@ -151,12 +150,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   void onDataChange9(ItemCostCenter state) {
     setState(() {
       selectItemCostCenter4 = state;
-    });
-  }
-
-  void onDataChange10(IndentSelection state) {
-    setState(() {
-      selectIndentSelection = state;
     });
   }
 
@@ -191,13 +184,32 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       selectIndentNo = null;
       selectSiteTo = null;
       selectGodown = null;
-      selectIndentSelection = null;
       selectVoucherType = null;
       selectItemCostCenter = null;
       selectItemCostCenter2 = null;
       selectIndentorName = null;
       dateinput.clear();
+      selectindentselection = null;
     });
+  }
+
+  Future<String> fetchIndentselectionData() async {
+    final String uri =
+        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"FillSelectedIndent",'
+            '"StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"${selectIndentNo.RefDocId}","StrItemCode":"${selectIndentNo.ItemCode}","StrGodown":"","StrMaintainStockValue":""}'}";
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      var res = await http.get(
+        Uri.parse(uri),
+      );
+      var resBody = json.decode(res.body);
+      setState(() {
+        indentlist = resBody;
+      });
+      return "Loaded Successfully";
+    } else {
+      throw Exception('Failed to load data.');
+    }
   }
 
   Future<dynamic> sendData() async {
@@ -209,9 +221,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrFrmSite":"AA","StrFrmParty":"${selectSiteTo.SubCode}","StrFrmCC":"${selectItemCostCenter.Code}",'
               '"StrFrmGodown":"${selectGodown.GodCode}","StrToSite":"${selectSiteTo.Code}","StrToParty":"${selectSiteTo.SubCode}","StrToCC":"${selectItemCostCenter.Code}",'
-              '"StrVehicleNo":"","StrIndent":"","StrSiteCode":"AD",StrIndGrid:[{"StrItemCode":"${selectIndentSelection.itemCode}",'
+              '"StrVehicleNo":"","StrIndent":"","StrSiteCode":"AD",StrIndGrid:[{"StrItemCode":"${selectIndentNo.ItemCode}",'
               '"DblQuantity":"${selectIndentNo.IndQty}","StrSKU":"${selectIndentNo.Unit}","DblRate":"${selectIndentNo.Rate}","DblAmt":"10",StrItemGrid:[{"StrIndDocID":"${selectIndentNo.RefDocId}","DblTrnQuantity":"${selectIndentNo.AdjQty}"}],'
-              '"DblItemValueRate":"${selectIndentSelection.rate}","DblItemValueAmt":"0","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100","DblAVAmt":"100",'
+              '"DblItemValueRate":"${selectIndentNo.Rate}","DblItemValueAmt":"0","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"100","DblAVAmt":"100",'
               '"DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
               '"DblUGSTAmt":"0","DblNetValueRate":"118","DblNetValueAmt":"118"}],	'
               '"DblGrossRate":"0","DblGrossAmt":"118","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"100",'
@@ -547,7 +559,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                 icon: const Icon(
                                     Icons.keyboard_arrow_down_sharp,
                                     size: 30),
-                                padding: selectIndentNo != null ? 2 : 11,
+                                padding: selectIndentNo != null
+                                    ? height * .002
+                                    : height * .015,
                                 isExpanded: true,
                                 hint: "Search here",
                                 value: selectIndentNo,
@@ -574,40 +588,36 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
               Padding(
                 padding: padding1,
                 child: Container(
+                  width: width * .85,
+                  height: height * .066,
                   decoration: decorationForms(),
-                  child: FutureBuilder<List<IndentSelection>>(
-                      future: indentSelectionBtoBDropdownBloc
-                          .indentSelectionBtoBDropdownData,
+                  child: StreamBuilder<String>(
+                      stream: fetchIndentselectionData().asStream(),
                       builder: (context, snapshot) {
-                        return StreamBuilder<IndentSelection>(
-                            stream: indentSelectionBtoBDropdownBloc
-                                .selectedIndentSelectionBtoBState,
-                            builder: (context, item) {
-                              return SearchChoices<IndentSelection>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectIndentSelection != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectIndentSelection,
-                                displayClearIcon: false,
-                                onChanged: onDataChange10,
-                                items: snapshot?.data?.map<
-                                        DropdownMenuItem<IndentSelection>>((e) {
-                                      return DropdownMenuItem<IndentSelection>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.itemName ?? ""),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
+                        return DropdownButton(
+                          hint: Text("  Search here                    "),
+                          icon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Icon(Icons.keyboard_arrow_down_sharp,
+                                size: 30),
+                          ),
+                          isExpanded: true,
+                          items: indentlist.map((item) {
+                            return DropdownMenuItem(
+                              value: item['ItemName'],
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(item['ItemName'] ?? ''),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectindentselection = value;
                             });
+                          },
+                          value: selectindentselection,
+                        );
                       }),
                 ),
               ),
