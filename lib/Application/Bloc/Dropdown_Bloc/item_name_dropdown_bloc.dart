@@ -10,7 +10,6 @@ class ItemNameDropdownBloc {
   final itemMaterialReqEntryDropdownGetData = BehaviorSubject<ItemNameModel>();
   final itemNameStatusStockIssueEntryDropdownGetData = BehaviorSubject<ItemNameModel>();
   final itemNamePhaseToPhaseDropdownGetData = BehaviorSubject<ItemNameModel>();
-  // TODO: Phase to phase and branch to branch send item api need to be replaced here
 
   Future<List<ItemNameModel>> itemNameStockReceiveDropdowndata;
   Future<List<ItemNameModel>> itemMaterialReqEntryDropdownData;
