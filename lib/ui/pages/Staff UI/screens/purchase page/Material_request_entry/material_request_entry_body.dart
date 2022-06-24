@@ -50,11 +50,15 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   bool isActive = false;
   bool pressed = false;
   bool showAmount = false;
+  bool itemres =false;
   var subscription;
   var connectionStatus;
   double value1 = 0, value2 = 46.599;
   double _amount;
   String StringAmount;
+  // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
+  double Dblq;
+  String Unit;
 
   void clearData() {
     setState(() {
@@ -204,6 +208,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   void onDataChange2(ItemNameModel state) {
     setState(() {
       selectItemName = state;
+      itemres = true;
+      if(itemres == true) {
+        itemCurrentStock();
+      }
+      itemres = false;
     });
   }
 
@@ -225,6 +234,24 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
   }
 
+  Future<dynamic> itemCurrentStock() async {
+    final String uri = "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.ItemCode}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200){
+      final res = await http.get(Uri.parse(uri));
+      final resBody = jsonDecode(res.body);
+      itemres = false;
+      setState(() {
+        Dblq = double.parse((resBody[0]['DblQty']).toStringAsFixed(4)) ?? '';
+        Unit = resBody[0]['Unit'] ?? '';
+        print("Dblqty:  ${Dblq}");
+      });
+      itemres = false;
+    }else {
+      throw Exception ('Failed to load data');
+    }
+  }
+
   @override
   void dispose() {
     subscription.cancel();
@@ -243,6 +270,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     //_calculation();
+    if(selectItemName != null)  {
+      itemCurrentStock();
+    }
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -606,6 +636,21 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                         ),
                         // const Padding(
                         //     padding: EdgeInsets.symmetric(vertical: 10)),
+                        sizedbox1,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                             Padding(padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+                            child: Text("Current Stock : " , style: TextStyle(fontWeight: FontWeight.bold),),
+                             ),
+                             Expanded(
+                               child: Padding(padding: EdgeInsets.symmetric(horizontal: width * 0.2),
+                                 child:Text('${Dblq} ' + ' ${Unit}' ,
+                                   style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
+                            ),
+                             ),
+                          ],
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
