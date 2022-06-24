@@ -7,8 +7,7 @@ import 'package:vvplus_app/infrastructure/Repository/item_current_status_reposit
 class ItemCurrentStatusDropdownBloc {
   final itemCurrentStatusDropdownRepository = ItemCurrentStatusRepository();
   final itemCurrentStatusDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
-  final itemCurrentStatusStockIssueEntryDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
-  final itemCurrentStatusPhaseToPhaseDropdownGetData = BehaviorSubject<ItemCurrentStatus>();
+
   final itemCurrentStatusMaterialRequestEntryDropdownData = BehaviorSubject<ItemCurrentStatus>();
 
 
@@ -16,24 +15,17 @@ class ItemCurrentStatusDropdownBloc {
   Future<List<ItemCurrentStatus>> itemCurrentStatusStockIssueEntryDropdownData;
   Future<List<ItemCurrentStatus>> itemCurrenStatusPhaseToPhaseDropdownData;
 
-  Stream<ItemCurrentStatus> get selectedStateitemCurrentStatus => itemCurrentStatusStockIssueEntryDropdownGetData;
-  void selectedStateitemCurrentStatusEvent(ItemCurrentStatus state) => itemCurrentStatusStockIssueEntryDropdownGetData.add(state);
-
   Stream<ItemCurrentStatus> get selectedState => itemCurrentStatusDropdownGetData;
   void selectedStateEvent(ItemCurrentStatus state) => itemCurrentStatusDropdownGetData.add(state);
 
-  Stream<ItemCurrentStatus> get selectedItemPhaseToPhaseState => itemCurrentStatusPhaseToPhaseDropdownGetData;
-  void selectedItemPhaseToPhaseStateEvent(ItemCurrentStatus state) => itemCurrentStatusPhaseToPhaseDropdownGetData.add(state);
-
   ItemCurrentStatusDropdownBloc() {
-    //itemCurrentStatusDropdowndata = itemCurrentStatusDropdownRepository.getData();
+    itemCurrentStatusDropdowndata = itemCurrentStatusDropdownRepository.getData();
    // itemCurrentStatusStockIssueEntryDropdownData = itemCurrentStatusDropdownRepository.getStockissueItemData();
    //  itemCurrenStatusPhaseToPhaseDropdownData = itemCurrentStatusDropdownRepository.getPhaseToPhaseTransferItemData();
   }
 
   void dispose() {
-    // itemCurrentStatusDropdownGetData.close();
+    itemCurrentStatusDropdownGetData.close();
     //itemCurrentStatusStockIssueEntryDropdownGetData.close();
-
   }
 }
