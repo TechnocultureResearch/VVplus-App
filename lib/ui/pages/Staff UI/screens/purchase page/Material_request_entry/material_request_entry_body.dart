@@ -50,7 +50,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   bool isActive = false;
   bool pressed = false;
   bool showAmount = false;
-  bool itemres =false;
+  bool itemres = false;
   var subscription;
   var connectionStatus;
   double value1 = 0, value2 = 46.599;
@@ -209,7 +209,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     setState(() {
       selectItemName = state;
       itemres = true;
-      if(itemres == true) {
+      if (itemres == true) {
         itemCurrentStock();
       }
       itemres = false;
@@ -235,9 +235,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   }
 
   Future<dynamic> itemCurrentStock() async {
-    final String uri = "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.ItemCode}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
+    final String uri =
+        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.ItemCode}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
     var response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       final res = await http.get(Uri.parse(uri));
       final resBody = jsonDecode(res.body);
       itemres = false;
@@ -247,8 +248,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
         print("Dblqty:  ${Dblq}");
       });
       itemres = false;
-    }else {
-      throw Exception ('Failed to load data');
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
@@ -270,7 +271,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     //_calculation();
-    if(selectItemName != null)  {
+    if (selectItemName != null) {
       itemCurrentStock();
     }
     return RefreshIndicator(
@@ -640,15 +641,27 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                             Padding(padding: EdgeInsets.symmetric(horizontal: width * 0.1),
-                            child: Text("Current Stock : " , style: TextStyle(fontWeight: FontWeight.bold),),
-                             ),
-                             Expanded(
-                               child: Padding(padding: EdgeInsets.symmetric(horizontal: width * 0.2),
-                                 child:Text('${Dblq} ' + ' ${Unit}' ,
-                                   style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
+                            Padding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: width * 0.1),
+                              child: Text(
+                                "Current Stock : ",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                             ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: width * 0.09),
+                              child: Text(
+                                '${Dblq} ' + ' ${Unit}',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
                           ],
                         ),
                         Column(
