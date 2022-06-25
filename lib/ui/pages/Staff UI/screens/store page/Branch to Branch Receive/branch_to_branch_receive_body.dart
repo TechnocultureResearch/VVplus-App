@@ -282,47 +282,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("Receiving goods from branch ", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<Supplier>>(
-                      future:
-                          supplierDropdownBloc.supplierBToBReceiveDropdownData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<Supplier>(
-                            stream: supplierDropdownBloc.selectedSupplierState,
-                            builder: (context, item) {
-                              return SearchChoices<Supplier>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectSupplier != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectSupplier,
-                                displayClearIcon: false,
-                                onChanged: onDataChange2,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<Supplier>>((e) {
-                                      return DropdownMenuItem<Supplier>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.Name ?? ''),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
-              sizedbox1,
               formsHeadTextNew("Receiving in Godown", width * .045),
               Padding(
                 padding: padding1,
@@ -357,6 +316,47 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                                         ),
                                       );
                                     })?.toList() ??
+                                    [],
+                              );
+                            });
+                      }),
+                ),
+              ),
+              sizedbox1,
+              formsHeadTextNew("Receiving goods from branch(Supplier) ", width * .045),
+              Padding(
+                padding: padding1,
+                child: Container(
+                  decoration: decorationForms(),
+                  child: FutureBuilder<List<Supplier>>(
+                      future:
+                      supplierDropdownBloc.supplierBToBReceiveDropdownData,
+                      builder: (context, snapshot) {
+                        return StreamBuilder<Supplier>(
+                            stream: supplierDropdownBloc.selectedSupplierState,
+                            builder: (context, item) {
+                              return SearchChoices<Supplier>.single(
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_sharp,
+                                    size: 30),
+                                padding: selectSupplier != null
+                                    ? height * .002
+                                    : height * .015,
+                                isExpanded: true,
+                                hint: "Search here",
+                                value: selectSupplier,
+                                displayClearIcon: false,
+                                onChanged: onDataChange2,
+                                items: snapshot?.data
+                                    ?.map<DropdownMenuItem<Supplier>>((e) {
+                                  return DropdownMenuItem<Supplier>(
+                                    value: e,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(e.Name ?? ''),
+                                    ),
+                                  );
+                                })?.toList() ??
                                     [],
                               );
                             });
