@@ -31,6 +31,10 @@ class ItemNameModel {
     this.ItemDescription,
     this.ItemMaintainStockOn,
   });
+
+  @override
+  String toString() => Name;
+
   String ItemName;
   String CostCenterName;
   String dblQty;
