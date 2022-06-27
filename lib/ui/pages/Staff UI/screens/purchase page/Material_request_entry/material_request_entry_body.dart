@@ -236,7 +236,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   Future<dynamic> itemCurrentStock() async {
     final String uri =
-        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.ItemCode}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
+        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.Code}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
     var response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
       final res = await http.get(Uri.parse(uri));
@@ -314,8 +314,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                             future: voucherTypeDropdownBloc
                                 .voucherTypeMaterialReqEntryDropdownData,
                             builder: (context, snapshot) {
-                              return StreamBuilder<
-                                      VoucherTypeMaterialReqEntryModel>(
+                              return StreamBuilder<VoucherTypeMaterialReqEntryModel>(
                                   stream: voucherTypeDropdownBloc
                                       .selectedMaterialReqEntryState,
                                   builder: (context, item) {
@@ -568,7 +567,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                         const EdgeInsets.all(
                                                             4.0),
                                                     child:
-                                                        Text(e.ItemName ?? ''),
+                                                        Text(e.Name ?? ''),
                                                   ),
                                                 );
                                               })?.toList() ??
@@ -625,7 +624,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                     //     horizontal: 15.0),
                                     decoration: decoration1(),
                                     child: Center(
-                                        child: Text(selectItemName.ItemSKU)))
+                                        child: Text(selectItemName.SKU)))
                                 : Container(
                                     height: height * .067,
                                     width: width * .18,
@@ -724,14 +723,14 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   ),
                 ),
 
-                // pressed
-                //     ? AddItemContainer(
-                //         itemNameText: selectItemName.ItemName,
-                //         orderQtyText: reqQty.text,
-                //         rateText: selectItemCurrentStatus.PurchaseRate,
-                //         amountText: StringAmount.toString(),
-                //       )
-                //     : const SizedBox(),
+                pressed
+                    ? AddItemContainer(
+                        itemNameText: selectItemName.Name,
+                        orderQtyText: reqQty.text,
+                        rateText: selectItemName.PurchaseRate,
+                        amountText: StringAmount.toString(),
+                      )
+                    : const SizedBox(),
 
                 //============================================================ popup container
 
