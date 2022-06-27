@@ -19,9 +19,11 @@ import 'package:vvplus_app/infrastructure/Models/site_to_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_text_style.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/raisedbutton_text.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/rounded_button.dart';
+import 'package:vvplus_app/ui/widgets/constants/assets.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:connectivity/connectivity.dart';
@@ -62,12 +64,9 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   var subscription;
   var connectionStatus;
   List indentlist = [];
-  Future<String> indentStr;
-  String selectindentselection;
 
   @override
   void initState() {
-    indentStr = fetchIndentselectionData();
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     siteToDropdownBloc = SiteToDropdownBloc();
     indentNoDropdownBloc = IndentNoDropdownBloc();
@@ -137,7 +136,6 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   void onDataChange7(IndentNo state) {
     setState(() {
       selectIndentNo = state;
-      selectindentselection = null;
     });
   }
 
@@ -189,34 +187,29 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       selectItemCostCenter2 = null;
       selectIndentorName = null;
       dateinput.clear();
-      selectindentselection = null;
     });
   }
 
-  Future<String> fetchIndentselectionData() async {
-    final String uri =
-        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"FillSelectedIndent",'
-            '"StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"${selectIndentNo.RefDocId}","StrItemCode":"${selectIndentNo.ItemCode}","StrGodown":"","StrMaintainStockValue":""}'}";
-    var response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200) {
-      var res = await http.get(
-        Uri.parse(uri),
-      );
-      var resBody = json.decode(res.body);
-      setState(() {
-        indentlist = resBody;
-      });
-      return "Loaded Successfully";
-    } else {
-      throw Exception('Failed to load data.');
+  Future<List<dynamic>> getIndentItemData() async {
+    if (selectIndentNo != null) {
+      try {
+        var url = Uri.parse(
+            "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkTrnMan?StrRecord=${'{"StrFilter":"FillSelectedIndent",'
+                '"StrSiteCode":"AA","StrStateCode":"","StrPLTCode":"","StrIndDocID":"${selectIndentNo.RefDocId}",'
+                '"StrItemCode":"${selectIndentNo.ItemCode}","StrGodown":"","StrMaintainStockValue":""}'}");
+        final response = await http.get(url);
+        final List<dynamic> items = json.decode(response.body);
+        return items;
+      } catch (e) {
+        rethrow;
+      }
     }
   }
 
   Future<dynamic> sendData() async {
     try {
       var baseurl =
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkTransferMan';
-
+          'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkTransferMan';
       var url = Uri.parse(baseurl +
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrFrmSite":"AA","StrFrmParty":"${selectSiteTo.SubCode}","StrFrmCC":"${selectItemCostCenter.Code}",'
@@ -584,56 +577,153 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("Indent Selection", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  width: width * .85,
-                  height: height * .066,
-                  decoration: decorationForms(),
-                  child: StreamBuilder<String>(
-                      stream: fetchIndentselectionData().asStream(),
-                      builder: (context, snapshot) {
-                        return DropdownButton(
-                          hint: Text("  Search here                    "),
-                          icon: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Icon(Icons.keyboard_arrow_down_sharp,
-                                size: 30),
-                          ),
-                          isExpanded: true,
-                          items: indentlist.map((item) {
-                            return DropdownMenuItem(
-                              value: item['ItemName'],
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(item['ItemName'] ?? ''),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectindentselection = value;
-                            });
-                          },
-                          value: selectindentselection,
-                        );
-                      }),
-                ),
-              ),
-              selectIndentorName != null
-                  ? InformationBoxContainer6(
-                      text1: selectIndentorName.strName,
-                      text2: selectIndentorName.strSubCode,
-                      text3: selectIndentorName.strSubCode,
-                      text4: selectIndentorName.strSubCode,
-                      text5: selectIndentorName.strSubCode,
-                      text6: selectIndentorName.strSubCode,
-                      text7: selectIndentorName.strSubCode,
-                      //text8: selectIndentorName.strSubCode,
-                    )
-                  : const SizedBox(),
-              //sizedbox1,
+              //formsHeadTextNew("Indent Selection", width * .045),
+              StreamBuilder(
+                  stream: getIndentItemData().asStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 0.0),
+                        child: Container(
+                          height: height * 0.15,
+                          child: ListView.builder(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: height * .13,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: primaryColor3,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: primaryColor4,
+                                          offset: Offset(0.0, 2.0), //(x,y)
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                height: height * .06,
+                                                width: width * .3,
+                                                child: Text(
+                                                    snapshot.data[index]
+                                                        ['ItemName'],
+                                                    maxLines: 2,
+                                                    style:
+                                                        containerTextStyle1()),
+                                              ),
+                                              SizedBox(height: 7),
+                                              Text(
+                                                "Item Code: " +
+                                                    snapshot.data[index]
+                                                        ['ItemCode'],
+                                                style: TextStyle(
+                                                    color:
+                                                        boxDecorationTextColor2,
+                                                    fontSize: 14),
+                                              ),
+                                              SizedBox(height: 3),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 7,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text("Pending Qty.:   ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text("Rate:   ",
+                                                style: containerTextStyle2()),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]
+                                                            ['PendingQty']
+                                                        .toString() +
+                                                    " " +
+                                                    snapshot.data[index]
+                                                        ['Unit'],
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['Rate']
+                                                    .toString(),
+                                                style: containerTextStyle2()),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 12,
+                                            ),
+                                            Image.asset(icon15),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "Edit",
+                                              style: containerTextStyle5(),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              "Inc.Tax",
+                                              style: containerTextStyle3(),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
+
               Padding(
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
