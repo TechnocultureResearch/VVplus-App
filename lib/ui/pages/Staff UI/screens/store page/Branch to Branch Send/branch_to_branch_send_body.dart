@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
@@ -64,6 +65,8 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
   var subscription;
   var connectionStatus;
   List indentlist = [];
+  bool isEdit = false;
+  TextEditingController pendQty = TextEditingController();
 
   @override
   void initState() {
@@ -260,6 +263,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
     // }
   }
 
+  final node = FocusNode();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -654,12 +658,12 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            Text("Pending Qty.:   ",
+                                            Text("Pending Qty.: ",
                                                 style: containerTextStyle2()),
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            Text("Rate:   ",
+                                            Text("Rate: ",
                                                 style: containerTextStyle2()),
                                           ],
                                         ),
@@ -670,14 +674,29 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            Text(
-                                                snapshot.data[index]
-                                                            ['PendingQty']
-                                                        .toString() +
-                                                    " " +
-                                                    snapshot.data[index]
-                                                        ['Unit'],
-                                                style: containerTextStyle2()),
+                                            isEdit == false
+                                                ? Row(
+                                                    children: [
+                                                      Text(
+                                                          isEdit == false
+                                                              ? snapshot
+                                                                  .data[index][
+                                                                      'PendingQty']
+                                                                  .toString()
+                                                              : pendQty,
+                                                          style:
+                                                              containerTextStyle2()),
+                                                      Text(snapshot.data[index]
+                                                          ['Unit'])
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    children: [
+                                                      editTextfield(),
+                                                      Text(snapshot.data[index]
+                                                          ['Unit'])
+                                                    ],
+                                                  ),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -688,7 +707,7 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                           ],
                                         ),
                                         const SizedBox(
-                                          width: 2,
+                                          width: 5,
                                         ),
                                         Column(
                                           children: [
@@ -699,9 +718,18 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            Text(
-                                              "Edit",
-                                              style: containerTextStyle5(),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isEdit = true;
+                                                  snapshot.data[index]
+                                                      ['PendingQty'] = null;
+                                                });
+                                              },
+                                              child: Text(
+                                                "Edit",
+                                                style: containerTextStyle5(),
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 8,
@@ -736,4 +764,29 @@ class MyBranchtoBranchSendBody extends State<BranchtoBranchSendBody> {
       ),
     );
   }
+
+  Widget editTextfield() {
+    return Container(
+      width: 30,
+      height: 15,
+      // color: Colors.purpleAccent,
+      child: Center(
+        child: TextFormField(
+          focusNode: node,
+          // autofocus: false,
+          decoration: InputDecoration.collapsed(
+            border: InputBorder.none,
+          ),
+          controller: pendQty,
+          style: TextStyle(fontSize: 15.0, color: Colors.black),
+          inputFormatters: numberInputFormatters,
+          keyboardType: TextInputType.number,
+        ),
+      ),
+    );
+  }
+
+  var numberInputFormatters = [
+    new FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+  ];
 }
