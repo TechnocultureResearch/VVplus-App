@@ -12,26 +12,24 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.d
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indentor_name_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/branch_to_branch_receive_bloc.dart';
-import 'package:vvplus_app/data_source/api/api_services.dart';
-import 'package:vvplus_app/infrastructure/Models/fill_transfer_model.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/supplier_model.dart';
 import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
-import 'package:vvplus_app/infrastructure/Repository/supplier_repository.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_text_style.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/raisedbutton_text.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/rounded_button.dart';
+import 'package:vvplus_app/ui/widgets/constants/assets.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:vvplus_app/domain/common/common_text.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class BranchtoBranchReceiveBody extends StatefulWidget {
@@ -57,13 +55,55 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   Supplier selectSupplier;
   Godown selectGodown;
   IndentorName selectIndentorName;
-  FillTransferModel selectFillTransfer;
-
+  List filltransferdata = [];
+  Future<String> myFuture;
   var subscription;
   var connectionStatus;
   String formatted;
+  String selectFillTransfer;
+
+  Future<String> fetchFillTransferData() async {
+    if (selectSupplier != null) {
+      final String uri =
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer",'
+              '"StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":""}'}";
+
+      var response = await http.get(Uri.parse(uri));
+      if (response.statusCode == 200) {
+        var res = await http.get(
+          Uri.parse(uri),
+        );
+        var resBody = json.decode(res.body);
+        setState(() {
+          filltransferdata = resBody;
+          print("body:$resBody");
+        });
+        return "Loaded Successfully";
+      }
+    } else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Future<List<dynamic>> FillSelectedTransferNo() async {
+    if (selectFillTransfer != null) {
+      try {
+        var url = Uri.parse(
+            "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/"
+            "Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillSelectedTransferNo",'
+                '"StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":"${selectFillTransfer}"}'}");
+        final response = await http.get(url);
+        final List<dynamic> items = json.decode(response.body);
+        return items;
+      } catch (e) {
+        rethrow;
+      }
+    }
+  }
+
   @override
   void initState() {
+    myFuture = fetchFillTransferData();
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
     supplierDropdownBloc = SupplierDropdownBloc();
     godownDropdownBloc = GodownDropdownBloc();
@@ -108,6 +148,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   void onDataChange2(Supplier state) {
     setState(() {
       selectSupplier = state;
+      selectFillTransfer = null;
     });
   }
 
@@ -115,26 +156,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     setState(() {
       selectGodown = state;
     });
-  }
-
-  void onDataChange4(FillTransferModel state) {
-    setState(() {
-      selectFillTransfer = state;
-    });
-  }
-
-  Future<dynamic> FillTransfer() async {
-    try {
-      var url = Uri.parse(
-          'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer","StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":""}'}');
-      final response = await http.get(url);
-      final items = (jsonDecode(response.body) as List)
-          .map((e) => FillTransferModel.fromJson(e))
-          .toList();
-      return items;
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<void> _refresh() async {
@@ -168,7 +189,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"2022-05-14","StrRefNo":"101","StrRefDate":"2022-05-14","StrSupplier":"${selectSupplier.SubCode}","StrFrmGodown":"${selectGodown.GodCode}","StrSiteCode":"AA","StrVehicleNo":"${_vehicleNo.text}","DblGAmount":"0","StrPreparedBy":"SA",'
               '"StrRemark":"${_remarks.text}",StrIndGrid:[{"StrItemCode":"PN25","StrPONo":"DADSTKML 2022       2","DblPOQuantity":"5","DblQuantity":"5","StrOUnit":"PIECE","DblRate":"10","DblAmt":"50","StrCostCenterCode":"AA504",'
-              '"StrHSNSACCode":"","StrGoodsServices":"","StrTransferNo":"${selectFillTransfer.DocId}","DblItemValueRate":"10","DblItemValueAmt":"50","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"50","DblSGSTRate":"9","DblSGSTAmt":"4.5","DblCGSTRate":"9","DblCGSTAmt":"4.5","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
+              '"StrHSNSACCode":"","StrGoodsServices":"","StrTransferNo":"${selectFillTransfer}","DblItemValueRate":"10","DblItemValueAmt":"50","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"50","DblSGSTRate":"9","DblSGSTAmt":"4.5","DblCGSTRate":"9","DblCGSTAmt":"4.5","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
               '"DblUGSTAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"59"}],"DblGrossRate":"0","DblGrossAmt":"0","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"50","DblSGSTRate":"0","DblSGSTAmt":"4.5","DblCGSTRate":"0","DblCGSTAmt":"4.5","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0",'
               '"DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0","DblBillAmt":"59",'
               '"DblRoundOffRate":"0","DblRoundOffAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"59"}'}');
@@ -323,14 +344,15 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("Receiving goods from branch(Supplier) ", width * .045),
+              formsHeadTextNew(
+                  "Receiving goods from branch(Supplier) ", width * .045),
               Padding(
                 padding: padding1,
                 child: Container(
                   decoration: decorationForms(),
                   child: FutureBuilder<List<Supplier>>(
                       future:
-                      supplierDropdownBloc.supplierBToBReceiveDropdownData,
+                          supplierDropdownBloc.supplierBToBReceiveDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<Supplier>(
                             stream: supplierDropdownBloc.selectedSupplierState,
@@ -348,55 +370,12 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                                 displayClearIcon: false,
                                 onChanged: onDataChange2,
                                 items: snapshot?.data
-                                    ?.map<DropdownMenuItem<Supplier>>((e) {
-                                  return DropdownMenuItem<Supplier>(
-                                    value: e,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(e.Name ?? ''),
-                                    ),
-                                  );
-                                })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
-              sizedbox1,
-              formsHeadTextNew("Transfer Entry Selection", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<FillTransferModel>>(
-                      future: fillTransferDropdownBloc.fillTransferDropdownData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<FillTransferModel>(
-                            stream: fillTransferDropdownBloc
-                                .selectedFillTransferState,
-                            builder: (context, item) {
-                              return SearchChoices<FillTransferModel>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectFillTransfer != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectFillTransfer,
-                                displayClearIcon: false,
-                                onChanged: onDataChange4,
-                                items: snapshot?.data?.map<
-                                        DropdownMenuItem<
-                                            FillTransferModel>>((e) {
-                                      return DropdownMenuItem<
-                                          FillTransferModel>(
+                                        ?.map<DropdownMenuItem<Supplier>>((e) {
+                                      return DropdownMenuItem<Supplier>(
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.DocId ?? ''),
+                                          child: Text(e.Name ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
@@ -406,6 +385,237 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                       }),
                 ),
               ),
+              sizedbox1,
+              formsHeadTextNew("Fill Transfer Entry", width * .045),
+              Padding(
+                padding: padding1,
+                child: Container(
+                  width: width * .85,
+                  height: height * .066,
+                  decoration: decorationForms(),
+                  child: StreamBuilder<String>(
+                      stream: fetchFillTransferData().asStream(),
+                      builder: (context, snapshot) {
+                        return DropdownButton(
+                          hint: Text("  Search here                    "),
+                          icon: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            // padding: EdgeInsets.symmetric(horizontal: 0.15),
+                            child: const Icon(Icons.keyboard_arrow_down_sharp,
+                                size: 30),
+                          ),
+                          isExpanded: true,
+                          items: filltransferdata.map((item) {
+                            return DropdownMenuItem(
+                              value: item['DocId'],
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(item['DocId'] ?? ''),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              selectFillTransfer = newVal;
+                              print("selectFillPo: $selectFillTransfer");
+                            });
+                          },
+                          value: selectFillTransfer != null
+                              ? selectFillTransfer
+                              : null,
+                        );
+                      }),
+                ),
+              ),
+              StreamBuilder(
+                  stream: FillSelectedTransferNo().asStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Container(
+                          height: height * 0.15,
+                          child: ListView.builder(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: height * .12,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: primaryColor3,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: primaryColor4,
+                                          offset: Offset(0.0, 2.0), //(x,y)
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                height: height * .04,
+                                                width: width * .3,
+                                                child: Text(
+                                                    snapshot.data[index]
+                                                        ['Item'],
+                                                    maxLines: 2,
+                                                    style:
+                                                        containerTextStyle1()),
+                                              ),
+                                              SizedBox(height: 3),
+                                              Text(
+                                                "Item Code: " +
+                                                    snapshot.data[index]
+                                                        ['ItemCode'],
+                                                style: TextStyle(
+                                                    color: boxDecorationColor1,
+                                                    fontSize: 14),
+                                              ),
+                                              SizedBox(height: 3),
+                                              Text(
+                                                "Order no: " +
+                                                    snapshot.data[index]
+                                                        ['POrdNo'],
+                                                style: TextStyle(
+                                                    color:
+                                                        boxDecorationTextColor2,
+                                                    fontSize: 14),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text("Order Qty.: ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text("Receive Qty.: ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text("Rate: ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text("Amount: ",
+                                                style: containerTextStyle2()),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['OrdQty']
+                                                        .toString() +
+                                                    " " +
+                                                    snapshot.data[index]
+                                                        ['Unit'],
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]
+                                                            ['RecievedQty']
+                                                        .toString() +
+                                                    "  " +
+                                                    snapshot.data[index]
+                                                        ['Unit'],
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['Rate']
+                                                    .toString(),
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['Amount']
+                                                    .toString(),
+                                                style: containerTextStyle2()),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 23,
+                                        ),
+                                        Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 12,
+                                            ),
+                                            Image.asset(icon15),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  //  isEdit = true;
+                                                  snapshot.data[index]
+                                                      ['PendingQty'] = null;
+                                                });
+                                              },
+                                              child: Text(
+                                                "Edit",
+                                                style: containerTextStyle5(),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              "Inc.Tax",
+                                              style: containerTextStyle3(),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
               sizedbox1,
               formsHeadText("Gate Entry No."),
               Container(
