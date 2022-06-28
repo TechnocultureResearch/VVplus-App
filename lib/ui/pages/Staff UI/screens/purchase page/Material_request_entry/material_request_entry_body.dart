@@ -56,9 +56,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   double value1 = 0, value2 = 46.599;
   double _amount;
   String StringAmount;
+  List<Widget> _itemContainer = [];
   // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
+  int _i = 0;
 
   void clearData() {
     setState(() {
@@ -94,17 +96,17 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   ItemCurrentStatusDropdownBloc dropdownBlocItemCurrentStatus;
   ItemCostCenterDropdownBloc dropdownBlocItemCostCenter;
 
-  _calculation() {
-    setState(
-      () {
-        //value1 = double.parse(reqQty.text);
-        _amount = (double.parse(reqQty.text) *
-            double.parse(selectItemCurrentStatus.PurchaseRate));
-        StringAmount = _amount.toStringAsFixed(3);
-      },
-    );
-    print(_amount);
-  }
+  // _calculation() {
+  //   setState(
+  //     () {
+  //       //value1 = double.parse(reqQty.text);
+  //       _amount = (double.parse(reqQty.text) *
+  //           double.parse(selectItemCurrentStatus.PurchaseRate));
+  //       StringAmount = _amount.toStringAsFixed(3);
+  //     },
+  //   );
+  //   print(_amount);
+  // }
 
   @override
   void initState() {
@@ -270,7 +272,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     final bloc = MaterialRequestEntryProvider.of(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    //_calculation();
     if (selectItemName != null) {
       itemCurrentStock();
     }
@@ -598,7 +599,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           onEditingComplete: () {
                                             FocusScope.of(context)
                                                 .requestFocus(FocusNode());
-                                            _calculation();
+                                            // _calculation();
                                           },
                                           // initialValue: "no",
                                           controller: reqQty,
@@ -696,9 +697,40 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   text: "Add Item to List",
                                   press: (selectItemName != null) && (isActive)
                                       ? () {
-                                          _calculation();
+                                          // _calculation();
                                           setState(() {
                                             pressed = true;
+                                            _itemContainer.add(Row(
+                                              children:[
+                                                Padding(
+                                                  padding: EdgeInsets.only(left: 15),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      // const SizedBox(
+                                                      //   height: 10,
+                                                      // ),
+                                                      Container(
+                                                        // height: height * 0.3,
+                                                        // width: width * .3,
+                                                        child: Text(selectItemName.Name,maxLines: 3,style: containerTextStyle1(),),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 7),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    // SizedBox(height: 15,),
+                                                    Text('OrderQty: ${reqQty.text + ' ' + selectItemName.SKU}', style: containerTextStyle2(),),
+                                                    SizedBox(height: 5),
+                                                    Text('Item Code: ${selectItemName.Code}')
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            );
                                           });
                                           //clearData();
                                         }
@@ -723,14 +755,21 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   ),
                 ),
 
-                pressed
-                    ? AddItemContainer(
-                        itemNameText: selectItemName.Name,
-                        orderQtyText: reqQty.text,
-                        rateText: selectItemName.PurchaseRate,
-                        amountText: StringAmount.toString(),
-                      )
-                    : const SizedBox(),
+pressed? ListView.builder(
+  shrinkWrap: true,
+  itemCount: _itemContainer.length,
+    itemBuilder: (context, index) => _itemContainer[index],
+)
+          :const SizedBox(),
+
+                // pressed
+                //     ? AddItemContainer(
+                //         itemNameText: selectItemName.Name,
+                //         orderQtyText: reqQty.text,
+                //         rateText: selectItemName.PurchaseRate,
+                //         amountText: StringAmount.toString(),
+                //       )
+                //     : const SizedBox(),
 
                 //============================================================ popup container
 
