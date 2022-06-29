@@ -42,7 +42,6 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   TextEditingController dueDate = TextEditingController();
   TextEditingController baseAmount = TextEditingController();
   TextEditingController remarks = TextEditingController();
-  DepartmentNameDropdownBloc departmentNameDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc2;
   TAXOHDropdownBloc taxohDropdownBloc;
@@ -92,7 +91,6 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   @override
   void initState() {
     dateinput.text = "";
-    departmentNameDropdownBloc = DepartmentNameDropdownBloc();
     voucherTypeDropdownBloc1 = VoucherTypeDropdownBloc();
     voucherTypeDropdownBloc2 = VoucherTypeDropdownBloc();
     bookingIdDropdownBloc3 = BookingIdDropdownBloc();
@@ -297,20 +295,21 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                                     [],
                               );
                             });
-                      }),
+                      }
+                      ),
                 ),
               ),
-              selectDepartmentName != null
+              selectBookingNo != null
                   ? InformationBoxContainer4(
-                      text1: selectDepartmentName.strName,
-                      text2: selectDepartmentName.strSubCode,
-                      text3: selectDepartmentName.strSubCode,
-                      text4: selectDepartmentName.strSubCode,
-                      text5: selectDepartmentName.strSubCode,
-                      text6: selectDepartmentName.strSubCode,
-                      text7: selectDepartmentName.strSubCode,
-                      text8: selectDepartmentName.strSubCode,
-                      text9: selectDepartmentName.strSubCode,
+                      text1: selectBookingNo.Customer,
+                      text2: selectBookingNo.DocId,
+                      text3: selectBookingNo.UnitName,
+                      text4: selectBookingNo.V_Date,
+                      text5: selectBookingNo.UnitCategoryname,
+                      text6: selectBookingNo.FloorName,
+                      text7: selectBookingNo.PName,
+                      text8: selectBookingNo.UnitArea,
+                      text9: selectBookingNo.UnitCost,
                     )
                   : const SizedBox(),
               sizedbox1,
