@@ -553,7 +553,7 @@ class InformationBoxContainer4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 32, left: 15),
+      padding: const EdgeInsets.all(10),
       child: Container(
         alignment: Alignment.center,
         height: SizeConfig.getHeight(context) * .20,
@@ -582,6 +582,7 @@ class InformationBoxContainer4 extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       "Name: $text1",
+                      maxLines: 2,
                       style: containerTextStyle6(),
                     ),
                     const SizedBox(
@@ -593,6 +594,7 @@ class InformationBoxContainer4 extends StatelessWidget {
                           children: [
                             Text(
                               "Booking ID: $text2",
+                              maxLines: 2,
                               style: containerTextStyle3(),
                             ),
                             const SizedBox(
@@ -600,6 +602,7 @@ class InformationBoxContainer4 extends StatelessWidget {
                             ),
                             Text(
                               "Unit: $text3",
+                              maxLines: 2,
                               style: containerTextStyle3(),
                             ),
                           ],
