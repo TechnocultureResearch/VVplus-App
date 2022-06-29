@@ -457,11 +457,11 @@ class InformationBoxContainer3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 32, left: 11),
+      padding: const EdgeInsets.all(10),
       child: Container(
         //alignment: Alignment.center,
-        height: SizeConfig.getHeight(context) * .18,
-        width: SizeConfig.getWidth(context) * .95,
+        height: SizeConfig.getHeight(context) * .2,
+        // width: SizeConfig.getWidth(context) * .95,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
           color: primaryColor3,
@@ -486,34 +486,76 @@ class InformationBoxContainer3 extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       "Name: $text8",
-                      style: containerTextStyle6(),
+                      maxLines: 2,
+                      style: textStyle1(
+                          boxDecorationTextColor2, 14, FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     Row(
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Booking ID: $text1",
-                              style: containerTextStyle3(),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              "Unit: $text2",
-                              style: containerTextStyle3(),
-                            ),
-                          ],
+                        Container(
+                          width: SizeConfig.getWidth(context) * .3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Booking ID: $text1",
+                                style: containerTextStyle3(),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                "Unit: $text2",
+                                style: containerTextStyle3(),
+                              ),
+                            ],
+                          ),
                         ),
                         const SizedBox(
-                          width: 41,
+                          width: 0,
                         ),
-                        Text(
-                          "Booking Date: $text3\nUnit Category: $text4\nFloor: $text5\nName: $text6\nStructure: $text7",
-                          style: containerTextStyle2(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Booking Date:",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("Unit Category:",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("Floor:",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("Unit Area:",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("UnitCost:",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("$text3",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("$text4",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("$text5",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("$text6",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                            Text("$text7",
+                                style: textStyle1(boxDecorationTextColor1, 14,
+                                    FontWeight.w500)),
+                          ],
                         ),
                       ],
                     ),
@@ -553,11 +595,11 @@ class InformationBoxContainer4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       child: Container(
         alignment: Alignment.center,
-        height: SizeConfig.getHeight(context) * .20,
-        width: SizeConfig.getWidth(context) * .93,
+        height: SizeConfig.getHeight(context) * .21,
+        // width: SizeConfig.getWidth(context) * .93,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
           color: primaryColor3,
