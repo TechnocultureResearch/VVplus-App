@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:search_choices/search_choices.dart';
@@ -19,10 +20,8 @@ import 'package:vvplus_app/infrastructure/Models/indentor_name_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_current_status_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_name_model.dart';
-import 'package:vvplus_app/infrastructure/Models/voucher_type_model.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
-import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/add_item_container.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_text_style.dart';
@@ -60,8 +59,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
-  int _i = 0;
-
+  int index = 0;
+  bool isdelet = true;
   void clearData() {
     setState(() {
       selectVoucherType = null;
@@ -236,6 +235,12 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
   }
 
+  void removeItem(int index) {
+    setState(() {
+      _itemContainer = List.from(_itemContainer)..removeAt(index);
+    });
+  }
+
   Future<dynamic> itemCurrentStock() async {
     final String uri =
         "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.Code}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
@@ -247,7 +252,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       setState(() {
         Dblq = double.parse((resBody[0]['DblQty']).toStringAsFixed(4)) ?? '';
         Unit = resBody[0]['Unit'] ?? '';
-        print("Dblqty:  ${Dblq}");
+        // print("Dblqty:  ${Dblq}");
       });
       itemres = false;
     } else {
@@ -315,7 +320,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                             future: voucherTypeDropdownBloc
                                 .voucherTypeMaterialReqEntryDropdownData,
                             builder: (context, snapshot) {
-                              return StreamBuilder<VoucherTypeMaterialReqEntryModel>(
+                              return StreamBuilder<
+                                      VoucherTypeMaterialReqEntryModel>(
                                   stream: voucherTypeDropdownBloc
                                       .selectedMaterialReqEntryState,
                                   builder: (context, item) {
@@ -567,8 +573,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             4.0),
-                                                    child:
-                                                        Text(e.Name ?? ''),
+                                                    child: Text(e.Name ?? ''),
                                                   ),
                                                 );
                                               })?.toList() ??
@@ -624,8 +629,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                     // padding: const EdgeInsets.symmetric(
                                     //     horizontal: 15.0),
                                     decoration: decoration1(),
-                                    child: Center(
-                                        child: Text(selectItemName.SKU)))
+                                    child:
+                                        Center(child: Text(selectItemName.SKU)))
                                 : Container(
                                     height: height * .067,
                                     width: width * .18,
@@ -700,36 +705,152 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           // _calculation();
                                           setState(() {
                                             pressed = true;
-                                            _itemContainer.add(Row(
-                                              children:[
-                                                Padding(
-                                                  padding: EdgeInsets.only(left: 15),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      // const SizedBox(
-                                                      //   height: 10,
-                                                      // ),
-                                                      Container(
-                                                        // height: height * 0.3,
-                                                        // width: width * .3,
-                                                        child: Text(selectItemName.Name,maxLines: 3,style: containerTextStyle1(),),
+                                            _itemContainer.add(
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      height: height * .12,
+                                                      width: width * .95,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0),
+                                                        color: primaryColor3,
+                                                        boxShadow: const [
+                                                          BoxShadow(
+                                                            color:
+                                                                primaryColor5,
+                                                            offset: Offset(0.0,
+                                                                1.0), //(x,y)
+                                                            blurRadius: 6.0,
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                const SizedBox(
+                                                                  width: 15,
+                                                                ),
+                                                                Container(
+                                                                  height:
+                                                                      height *
+                                                                          .07,
+                                                                  width: width *
+                                                                      .35,
+                                                                  child: Text(
+                                                                    selectItemName
+                                                                        .Name,
+                                                                    maxLines: 3,
+                                                                    style:
+                                                                        containerTextStyle1(),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  'Code: ${selectItemName.Code}',
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          boxDecorationTextColor2,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 25,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: 15,
+                                                              ),
+                                                              Text(
+                                                                'OrderQty: ',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                'Unit: ',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: 15,
+                                                              ),
+                                                              Text(
+                                                                '${reqQty.text}',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                '${selectItemName.SKU}',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 25,
+                                                          ),
+                                                          GestureDetector(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  // index + 1 ==
+                                                                  //         _itemContainer
+                                                                  //             .length
+                                                                  //     ? _itemContainer.removeAt(
+                                                                  //         index):
+                                                                  _itemContainer.removeWhere((selectItemName) =>
+                                                                      selectItemName ==
+                                                                      _itemContainer[
+                                                                          index]);
+                                                                });
+                                                              },
+                                                              child: Icon(
+                                                                Icons.delete,
+                                                                color:
+                                                                    Colors.red,
+                                                              ))
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(width: 7),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    // SizedBox(height: 15,),
-                                                    Text('OrderQty: ${reqQty.text + ' ' + selectItemName.SKU}', style: containerTextStyle2(),),
-                                                    SizedBox(height: 5),
-                                                    Text('Item Code: ${selectItemName.Code}')
-                                                  ],
-                                                )
-                                              ],
-                                            ),
+                                                ],
+                                              ),
                                             );
                                           });
                                           //clearData();
@@ -755,12 +876,13 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   ),
                 ),
 
-pressed? ListView.builder(
-  shrinkWrap: true,
-  itemCount: _itemContainer.length,
-    itemBuilder: (context, index) => _itemContainer[index],
-)
-          :const SizedBox(),
+                pressed
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _itemContainer.length,
+                        itemBuilder: (context, index) => _itemContainer[index],
+                      )
+                    : const SizedBox(),
 
                 // pressed
                 //     ? AddItemContainer(
