@@ -84,7 +84,7 @@ class ApiService {
       "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"Stage","StrSiteCode":"AD","StrDueDate":"2022-04-25"}'}";
 
   static const String getBookingIdnewUrl =
-      "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"BookingNo","StrSiteCode":"AD","StrDueDate":""}'}";
+      "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"BookingNo","StrSiteCode":"BR","StrDueDate":""}'}";
 
   static const String getExtraWorkVouchernewURL =
       "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetOtherSchedule?StrRecord=${'{"StrFilter":"VoucherType","StrSiteCode":"AD","StrDueDate":""}'}";
