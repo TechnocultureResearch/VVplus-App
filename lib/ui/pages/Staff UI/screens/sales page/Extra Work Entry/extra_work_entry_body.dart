@@ -296,6 +296,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
               ),
               sizedbox1,
               formsHeadTextNew("Booking Id", width * .045),
+
               Padding(
                 padding: padding1,
                 child: Container(
@@ -338,16 +339,16 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                       }),
                 ),
               ),
-              selectDepartmentName != null
+              selectBookingId != null
                   ? InformationBoxContainer3(
-                      text1: selectDepartmentName.strSubCode,
-                      text2: selectDepartmentName.strSubCode,
-                      text3: selectDepartmentName.strSubCode,
-                      text4: selectDepartmentName.strSubCode,
-                      text5: selectDepartmentName.strSubCode,
-                      text6: selectDepartmentName.strSubCode,
-                      text7: selectDepartmentName.strSubCode,
-                      text8: selectDepartmentName.strName,
+                      text1: selectBookingId.DocId,
+                      text2: selectBookingId.UnitName,
+                      text3: selectBookingId.V_Date,
+                      text4: selectBookingId.UnitCategoryname,
+                      text5: selectBookingId.FloorName,
+                      text6: selectBookingId.UnitArea,
+                      text7: selectBookingId.UnitCost,
+                      text8: selectBookingId.Customer,
                     )
                   : const SizedBox(),
               sizedbox1,
