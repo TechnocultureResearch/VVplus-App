@@ -16,9 +16,11 @@ import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/form_text.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_containers.dart';
+import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/staff_text_style.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/widgets/text_form_field.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/raisedbutton_text.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/rounded_button.dart';
+import 'package:vvplus_app/ui/widgets/constants/assets.dart';
 import 'package:vvplus_app/ui/widgets/constants/colors.dart';
 import 'package:vvplus_app/ui/widgets/constants/size.dart';
 import 'package:connectivity/connectivity.dart';
@@ -126,6 +128,22 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
       return "Loaded Successfully";
     } else {
       throw Exception('Failed to load data.');
+    }
+  }
+
+  Future<List<dynamic>> getFillselectPo() async {
+    if (selectFillPo != null) {
+      try {
+        var url = Uri.parse(
+            "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+                '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}");
+
+        final response = await http.get(url);
+        final List<dynamic> items = json.decode(response.body);
+        return items;
+      } catch (e) {
+        rethrow;
+      }
     }
   }
 
@@ -511,50 +529,212 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 ),
               ),
               sizedbox1,
-              formsHeadTextNew("Purchase Order Select", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  width: width * .85,
-                  height: height * .066,
-                  decoration: decorationForms(),
-                  child: StreamBuilder<String>(
-                      stream: fetchFillselectPo().asStream(),
-                      builder: (context, snapshot) {
-                        return DropdownButton(
-                          hint: Text("  Search here                    "),
-                          icon: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 0.2),
-                            child: const Icon(Icons.keyboard_arrow_down_sharp,
-                                size: 30),
-                          ),
-                          isExpanded: true,
-                          items: fillselectlistdata.map((itemm) {
-                            StrOUnit = itemm['SKU'];
-                            StrHSNSACCode = itemm['HSN_SAC_Code'];
-                            DblAmt = itemm['Rate'];
-                            DblRate = itemm['Amount'];
-                            StrPODate = itemm['POrdDate'];
-                            StrItemCode = itemm['ItemCode'];
-                            return DropdownMenuItem(
-                              value: itemm['Item'],
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(itemm['Item'] ?? ""),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              fillSelectPoDoc = value;
-                            });
-                          },
-                          value:
-                              fillSelectPoDoc != null ? fillSelectPoDoc : null,
-                        );
-                      }),
-                ),
-              ),
+              // formsHeadTextNew("Purchase Order Select", width * .045),
+              // Padding(
+              //   padding: padding1,
+              //   child: Container(
+              //     width: width * .85,
+              //     height: height * .066,
+              //     decoration: decorationForms(),
+              //     child: StreamBuilder<String>(
+              //         stream: fetchFillselectPo().asStream(),
+              //         builder: (context, snapshot) {
+              //           return DropdownButton(
+              //             hint: Text("  Search here                    "),
+              //             icon: Padding(
+              //               padding: EdgeInsets.symmetric(horizontal: 0.2),
+              //               child: const Icon(Icons.keyboard_arrow_down_sharp,
+              //                   size: 30),
+              //             ),
+              //             isExpanded: true,
+              //             items: fillselectlistdata.map((itemm) {
+              //               StrOUnit = itemm['SKU'];
+              //               StrHSNSACCode = itemm['HSN_SAC_Code'];
+              //               DblAmt = itemm['Rate'];
+              //               DblRate = itemm['Amount'];
+              //               StrPODate = itemm['POrdDate'];
+              //               StrItemCode = itemm['ItemCode'];
+              //               return DropdownMenuItem(
+              //                 value: itemm['Item'],
+              //                 child: Padding(
+              //                   padding: EdgeInsets.all(8.0),
+              //                   //child: Text(itemm['Item'] ?? ""),
+              //                 ),
+              //               );
+              //             }).toList(),
+              //             onChanged: (value) {
+              //               setState(() {
+              //                 fillSelectPoDoc = value;
+              //               });
+              //             },
+              //             value:
+              //                 fillSelectPoDoc != null ? fillSelectPoDoc : null,
+              //           );
+              //         }),
+              //
+              //   ),
+              // ),
+              StreamBuilder(
+                  stream: getFillselectPo().asStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 0.0),
+                        child: Container(
+                          height: height * 0.15,
+                          child: ListView.builder(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: height * .12,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: primaryColor3,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: primaryColor4,
+                                          offset: Offset(0.0, 2.0), //(x,y)
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                height: height * .05,
+                                                width: width * .3,
+                                                child: Text(
+                                                  snapshot.data[index]['Item'],
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: textColor4,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                "HSN/SAC Code: " +
+                                                    snapshot.data[index]
+                                                        ['HSN_SAC_Code'],
+                                                style: TextStyle(
+                                                    color: boxDecorationColor1,
+                                                    fontSize: 12),
+                                              ),
+                                              SizedBox(height: 1),
+                                              Text(
+                                                "Order no: " +
+                                                    snapshot.data[index]
+                                                        ['POrdNo'],
+                                                style: TextStyle(
+                                                    color:
+                                                        boxDecorationTextColor2,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 35,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text("Order Qty.: ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text("Receive Qty.: ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text("Rate: ",
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text("Amount: ",
+                                                style: containerTextStyle2()),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['OrdQty']
+                                                        .toString() +
+                                                    " " +
+                                                    snapshot.data[index]
+                                                        ['Unit'],
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]
+                                                            ['RecievedQty']
+                                                        .toString() +
+                                                    "  " +
+                                                    snapshot.data[index]
+                                                        ['Unit'],
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['Rate']
+                                                    .toString(),
+                                                style: containerTextStyle2()),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Text(
+                                                snapshot.data[index]['Amount']
+                                                    .toString(),
+                                                style: containerTextStyle2()),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 23,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
               sizedbox1,
               formsHeadTextNew("Vehicle No.", width * .045),
               Container(
@@ -589,48 +769,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   ),
                 ),
               ),
-              sizedbox1,
-              formsHeadTextNew("Godown", width * .045),
-              Padding(
-                padding: padding1,
-                child: Container(
-                  decoration: decorationForms(),
-                  child: FutureBuilder<List<VoucherType>>(
-                      future: voucherTypeDropdownBloc3.voucherTypeDropdownData,
-                      builder: (context, snapshot) {
-                        return StreamBuilder<VoucherType>(
-                            stream: voucherTypeDropdownBloc3.selectedState,
-                            builder: (context, item) {
-                              return SearchChoices<VoucherType>.single(
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    size: 30),
-                                padding: selectVoucherType3 != null
-                                    ? height * .002
-                                    : height * .015,
-                                isExpanded: true,
-                                hint: "Search here",
-                                value: selectVoucherType3,
-                                displayClearIcon: false,
-                                onChanged: onDataChange5,
-                                items: snapshot?.data
-                                        ?.map<DropdownMenuItem<VoucherType>>(
-                                            (e) {
-                                      return DropdownMenuItem<VoucherType>(
-                                        value: e,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(e.StrName ?? ''),
-                                        ),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              );
-                            });
-                      }),
-                ),
-              ),
-              sizedbox1,
               selectVoucherType3 != null
                   ? InformationBoxContainer6(
                       text1: selectVoucherType3.StrName,
