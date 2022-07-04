@@ -56,11 +56,12 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   double _amount;
   String StringAmount;
   List<Widget> _itemContainer = [];
-  // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
-  int index = 0;
+
+  //int index;
   bool isdelet = true;
+
   void clearData() {
     setState(() {
       selectVoucherType = null;
@@ -106,6 +107,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   //   );
   //   print(_amount);
   // }
+  StreamController<List<ItemNameModel>> listStream = StreamController();
+  List<ItemNameModel> list1 = [];
 
   @override
   void initState() {
@@ -200,6 +203,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   DepartmentName selectDepartment;
   ItemCurrentStatus selectItemCurrentStatus;
   ItemCostCenter selectItemCostCenter;
+
   void onDataChange1(VoucherTypeMaterialReqEntryModel state) {
     setState(() {
       selectVoucherType = state;
@@ -232,12 +236,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   void onDataChange5(DepartmentName state) {
     setState(() {
       selectDepartment = state;
-    });
-  }
-
-  void removeItem(int index) {
-    setState(() {
-      _itemContainer = List.from(_itemContainer)..removeAt(index);
     });
   }
 
@@ -705,155 +703,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           // _calculation();
                                           setState(() {
                                             pressed = true;
-                                            _itemContainer.add(
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: height * .12,
-                                                      width: width * .95,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                        color: primaryColor3,
-                                                        boxShadow: const [
-                                                          BoxShadow(
-                                                            color:
-                                                                primaryColor5,
-                                                            offset: Offset(0.0,
-                                                                1.0), //(x,y)
-                                                            blurRadius: 6.0,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const SizedBox(
-                                                                  width: 15,
-                                                                ),
-                                                                Container(
-                                                                  height:
-                                                                      height *
-                                                                          .07,
-                                                                  width: width *
-                                                                      .35,
-                                                                  child: Text(
-                                                                    selectItemName
-                                                                        .Name,
-                                                                    maxLines: 3,
-                                                                    style:
-                                                                        containerTextStyle1(),
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  'Code: ${selectItemName.Code}',
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          boxDecorationTextColor2,
-                                                                      fontSize:
-                                                                          14),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 25,
-                                                          ),
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              const SizedBox(
-                                                                height: 15,
-                                                              ),
-                                                              Text(
-                                                                'OrderQty: ',
-                                                                style:
-                                                                    containerTextStyle2(),
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                'Unit: ',
-                                                                style:
-                                                                    containerTextStyle2(),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              const SizedBox(
-                                                                height: 15,
-                                                              ),
-                                                              Text(
-                                                                '${reqQty.text}',
-                                                                style:
-                                                                    containerTextStyle2(),
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                '${selectItemName.SKU}',
-                                                                style:
-                                                                    containerTextStyle2(),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 25,
-                                                          ),
-                                                          GestureDetector(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  // index + 1 ==
-                                                                  //         _itemContainer
-                                                                  //             .length
-                                                                  //     ? _itemContainer.removeAt(
-                                                                  //         index):
-                                                                  _itemContainer.removeWhere((selectItemName) =>
-                                                                      selectItemName ==
-                                                                      _itemContainer[
-                                                                          index]);
-                                                                });
-                                                              },
-                                                              child: Icon(
-                                                                Icons.delete,
-                                                                color:
-                                                                    Colors.red,
-                                                              ))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                            list1.add(
+                                              selectItemName,
                                             );
+                                            listStream.add(list1);
                                           });
-                                          //clearData();
                                         }
                                       : null,
                                   /*press: !snapshot.hasData ? null: (){
@@ -877,27 +731,122 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 ),
 
                 pressed
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _itemContainer.length,
-                        itemBuilder: (context, index) => _itemContainer[index],
-                      )
+                    ? StreamBuilder<List<ItemNameModel>>(
+                        stream: listStream.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data?.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Stack(
+                                    alignment: Alignment.centerRight,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            height: height * .12,
+                                            width: width * .95,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: primaryColor3,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: primaryColor5,
+                                                  offset:
+                                                      Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 6.0,
+                                                ),
+                                              ],
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            width: width * .35,
+                                                            child: Text(
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .Name,
+                                                              maxLines: 3,
+                                                              style:
+                                                                  containerTextStyle1(),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                            height: 10,
+                                                          ),
+                                                          Text(
+                                                            'Order Qty: ${reqQty.text}' +
+                                                                "    " +
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .SKU,
+                                                            style:
+                                                                containerTextStyle2(),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        "Code: " +
+                                                            snapshot.data[index]
+                                                                .Code,
+                                                        style:
+                                                            containerTextStyle3(),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            )),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            list1.removeAt(index);
+                                            listStream.add(list1);
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                          return Container();
+                        })
                     : const SizedBox(),
-
-                // pressed
-                //     ? AddItemContainer(
-                //         itemNameText: selectItemName.Name,
-                //         orderQtyText: reqQty.text,
-                //         rateText: selectItemName.PurchaseRate,
-                //         amountText: StringAmount.toString(),
-                //       )
-                //     : const SizedBox(),
-
-                //============================================================ popup container
 
 //=============================================================================
                 const Padding(padding: EdgeInsets.all(10)),
-
                 const SizedBox(height: 15),
                 formsHeadTextNew("Req. Date", width * .045),
                 Container(
