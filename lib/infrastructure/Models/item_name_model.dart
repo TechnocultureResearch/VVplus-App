@@ -12,6 +12,7 @@ String strRecordToJson(List<ItemNameModel> data) =>
 
 class ItemNameModel {
   ItemNameModel({
+    this.requestQty,
     this.CostCenterName,
     this.dblQty,
     this.Unit,
@@ -35,6 +36,7 @@ class ItemNameModel {
   @override
   String toString() => Name;
 
+  String requestQty;
   String ItemName;
   String CostCenterName;
   String dblQty;
@@ -57,6 +59,7 @@ class ItemNameModel {
   String ItemMaintainStockOn;
 
   factory ItemNameModel.fromJson(Map<String, dynamic> json) => ItemNameModel(
+    requestQty: json["requestQty"],
     CostCenterName: json["CostCenterName"],
     dblQty: json["DblQty"],
     Unit: json["Unit"],
@@ -82,6 +85,7 @@ class ItemNameModel {
   );
 
   Map<String, dynamic> toJson() => {
+    "requestQty": requestQty,
     "ItemName": ItemName,
     "StrCostCenterName": CostCenterName,
     "DblQty": dblQty,
