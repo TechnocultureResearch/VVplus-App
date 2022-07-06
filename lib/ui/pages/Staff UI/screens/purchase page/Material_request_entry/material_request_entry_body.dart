@@ -82,6 +82,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   TextEditingController indentType = TextEditingController();
   TextEditingController item = TextEditingController();
   TextEditingController reqQty = TextEditingController(text: '0');
+  TextEditingController itemContReqQty = TextEditingController();
   TextEditingController rate = TextEditingController();
   TextEditingController costCenter = TextEditingController();
   TextEditingController remarks = TextEditingController();
@@ -215,6 +216,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       selectItemName = state;
       itemres = true;
       if (itemres == true) {
+        // testreqqty = reqQty.text as ItemNameModel;
         itemCurrentStock();
       }
       itemres = false;
@@ -446,9 +448,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 ),
 
                 const Padding(padding: EdgeInsets.all(10)),
-
                 formsHeadTextNew(text045, width * .045),
-
                 Container(
                   padding: dateFieldPadding,
                   height: height * .09,
@@ -700,6 +700,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   text: "Add Item to List",
                                   press: (selectItemName != null) && (isActive)
                                       ? () {
+                                    selectItemName.requestQty = reqQty.text;
                                           // _calculation();
                                           setState(() {
                                             pressed = true;
@@ -732,6 +733,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
                 pressed
                     ? StreamBuilder<List<ItemNameModel>>(
+                    // ? StreamBuilder<List<String>>(
                         stream: listStream.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
@@ -780,9 +782,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                           Container(
                                                             width: width * .35,
                                                             child: Text(
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .Name,
+                                                              snapshot.data[index].Name
+                                                                  ,
                                                               maxLines: 3,
                                                               style:
                                                                   containerTextStyle1(),
@@ -792,14 +793,16 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                             width: 10,
                                                             height: 10,
                                                           ),
+                                                          SizedBox(width: 2,),
                                                           Text(
-                                                            'Order Qty: ${reqQty.text}' +
-                                                                "    " +
+                                                            'Order Qty: ${snapshot.data[index].requestQty}' +
+                                                                "  " +
                                                                 snapshot
                                                                     .data[index]
                                                                     .SKU,
                                                             style:
                                                                 containerTextStyle2(),
+
                                                           ),
                                                         ],
                                                       ),
@@ -808,8 +811,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                       ),
                                                       Text(
                                                         "Code: " +
-                                                            snapshot.data[index]
-                                                                .Code,
+                                                            snapshot.data[index].Code,
                                                         style:
                                                             containerTextStyle3(),
                                                       ),
