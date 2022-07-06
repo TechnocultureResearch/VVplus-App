@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "649768696236",
-    "firebase_url": "https://vv-plus-app-default-rtdb.firebaseio.com",
-    "project_id": "vv-plus-app",
-    "storage_bucket": "vv-plus-app.appspot.com"
+    "project_number": "418368219711",
+    "project_id": "vvplus-64236",
+    "storage_bucket": "vvplus-64236.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:649768696236:android:0c9dcadc3beda1d3186209",
+        "mobilesdk_app_id": "1:418368219711:android:6fb49a5e731b2f36b1a68a",
         "android_client_info": {
           "package_name": "com.TechnoCulture.vvplus_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "649768696236-36mmlqtpjku7p6upkirg87n9r8igktmd.apps.googleusercontent.com",
+          "client_id": "418368219711-vp3e9rr4jqe8uut1udss1pjtkm3mke46.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBVjtayB4LW2ARiVnwFL1Ho0zgh-OxPNoI"
+          "current_key": "AIzaSyBoFPxwx1OqTbABPs6YnUIVrx6LDOg1ZRE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "649768696236-36mmlqtpjku7p6upkirg87n9r8igktmd.apps.googleusercontent.com",
+              "client_id": "418368219711-vp3e9rr4jqe8uut1udss1pjtkm3mke46.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
