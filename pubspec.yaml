@@ -54,8 +54,8 @@ dependencies:
   xml2json: ^5.3.1
   xml: ^5.3.1
   shared_preferences: ^2.0.9
-  firebase_auth: ^3.3.0
-  firebase_core: ^1.10.2
+  #firebase_auth: ^3.3.0
+  #firebase_core: ^1.10.2
   cloud_firestore: ^3.1.1
   firebase_database: ^7.0.0
   firebase_storage: ^9.0.0
@@ -69,11 +69,10 @@ dependencies:
   fluttertoast: ^8.0.8
   connectivity: ^3.0.6
   find_dropdown: ^1.0.0
-
-
-
-
-
+  flutter_secure_storage: ^4.2.0
+  firebase_core: ^1.0.3
+  firebase_auth: ^1.2.0
+  otp_text_field: ^1.1.1
 
 dev_dependencies:
   flutter_test:

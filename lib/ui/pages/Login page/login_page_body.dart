@@ -1,15 +1,17 @@
 // Login page Ui
-
 // ignore_for_file: prefer_typing_uninitialized_variables
-
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:otp_text_field/otp_text_field.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:vvplus_app/Application/Bloc/Login_Bloc/login_page_bloc.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/screens/homepage/home_page.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/decoration_widget.dart';
 import 'package:vvplus_app/ui/pages/Customer%20UI/widgets/text_style_widget.dart';
+import 'package:vvplus_app/ui/pages/Login%20page/auth_service.dart';
 import 'package:vvplus_app/ui/pages/Staff%20UI/screens/home%20page/staff_homepage.dart';
 import 'package:vvplus_app/ui/widgets/Utilities/rounded_button.dart';
 import 'package:vvplus_app/ui/widgets/constants/assets.dart';
@@ -26,7 +28,13 @@ class LoginPageBody extends StatefulWidget {
 class _LoginPageBodyState extends State<LoginPageBody> {
   final _phoneNumberFocusNode = FocusNode();
   final _otpFocusNode = FocusNode();
-
+  int start = 30;
+  bool wait = false;
+  String buttonName = "Send";
+  TextEditingController phoneController = TextEditingController();
+  AuthClass authClass = AuthClass();
+  String verificationIdFinal = "";
+  String smsCode = "";
   @override
   void initState() {
     // Calling Phone number validation with BLoc
@@ -56,8 +64,8 @@ class _LoginPageBodyState extends State<LoginPageBody> {
 //Widgets
   @override
   Widget build(BuildContext context) {
-    // var height = SizeConfig.getHeight(context);
-    // var width = SizeConfig.getWidth(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
@@ -84,7 +92,9 @@ class _LoginPageBodyState extends State<LoginPageBody> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(50.0),
-                  child: Image.asset(imageLogo,),
+                  child: Image.asset(
+                    imageLogo,
+                  ),
                 ),
                 Text(
                   text1,
@@ -104,7 +114,8 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                 Container(
                   color: primaryColor3,
                   height: textFeildHeight,
-                  child: PhoneNumberInput(focusNode: _phoneNumberFocusNode),
+                  child: PhoneNoInput(),
+                  //child: PhoneNumberInput(focusNode: _phoneNumberFocusNode),
                 ),
                 const SizedBox(
                   height: 20,
@@ -119,39 +130,184 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                   style: t2Style(),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  text5,
-                  textAlign: TextAlign.center,
-                  style: simpleTextStyle2(),
-                ),
-                const SizedBox(height: 25),
+                // const SizedBox(height: 20),
+                // RichText(
+                //     text: TextSpan(
+                //   children: [
+                //     TextSpan(
+                //       text: "Send OTP again in ",
+                //       style: TextStyle(fontSize: 16, color: textColor4),
+                //     ),
+                //     TextSpan(
+                //       text: "00:$start",
+                //       style: TextStyle(fontSize: 16, color: stepperColor1),
+                //     ),
+                //     TextSpan(
+                //       text: " sec ",
+                //       style: TextStyle(fontSize: 16, color: textColor4),
+                //     ),
+                //   ],
+                // )),
+                // Text(
+                //   text5,
+                //   textAlign: TextAlign.center,
+                //   style: simpleTextStyle2(),
+                // ),
+                const SizedBox(height: 30),
                 Container(
                   height: textFeildHeight,
                   decoration: decoration1(),
                   child: Center(
-                    child: OtpInput(focusNode: _otpFocusNode),
+                    //child: OtpInput(focusNode: _otpFocusNode),
+                    child: otpField(),
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
-                    SubmitButton2(),
-          ],
+                InkWell(
+                  onTap: () {
+                    // otp 10 no count limit
+                    authClass.signInwithPhoneNumber(
+                        verificationIdFinal, smsCode, context);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const HomePageStaff()));
+                  },
+                  child: Container(
+                    height: height * .06,
+                    width: MediaQuery.of(context).size.width - 60,
+                    decoration: BoxDecoration(
+                        color: primaryColor1,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                      child: Text(
+                        "Sign in",
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: primaryColor8,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ),
       ),
     );
   }
+
+  Widget PhoneNoInput() {
+    return Container(
+      width: MediaQuery.of(context).size.width - 40,
+      //height: 80,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: textColor4),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Center(
+        child: TextFormField(
+          controller: phoneController,
+          style: TextStyle(color: Colors.black, fontSize: 19),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            //isDense: true,
+            border: InputBorder.none,
+            hintText: "Enter your phone Number",
+            hintStyle: TextStyle(color: Colors.black, fontSize: 17),
+            // contentPadding:
+            //     const EdgeInsets.symmetric(vertical: 19, horizontal: 8),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+              child: Text(
+                " (+91) ",
+                style: TextStyle(color: Colors.black, fontSize: 17),
+              ),
+            ),
+            suffixIcon: InkWell(
+              onTap: wait
+                  ? null
+                  : () async {
+                      setState(() {
+                        start = 30;
+                        wait = true;
+                        buttonName = "Resend";
+                      });
+                      await authClass.verifyPhoneNumber(
+                          "+91 ${phoneController.text}", context, setData);
+                    },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                child: Text(
+                  buttonName,
+                  style: TextStyle(
+                    color: wait ? Colors.grey : Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget otpField() {
+    return OTPTextField(
+      length: 6,
+      width: MediaQuery.of(context).size.width,
+      fieldWidth: 45,
+      otpFieldStyle: OtpFieldStyle(
+        backgroundColor: Color(0xff1d1d1d),
+        borderColor: Colors.white,
+      ),
+      style: TextStyle(fontSize: 18, color: Colors.white),
+      textFieldAlignment: MainAxisAlignment.spaceAround,
+      fieldStyle: FieldStyle.underline,
+      onCompleted: (pin) {
+        print("Completed: " + pin);
+        setState(() {
+          smsCode = pin;
+        });
+      },
+    );
+  }
+
+  void setData(String verificationId) {
+    setState(() {
+      verificationIdFinal = verificationId;
+    });
+    startTimer();
+  }
+
+  void startTimer() {
+    const onsec = Duration(seconds: 1);
+    Timer _timer = Timer.periodic(onsec, (timer) {
+      if (start == 0) {
+        setState(() {
+          timer.cancel();
+          wait = false;
+        });
+      } else {
+        setState(() {
+          start--;
+        });
+      }
+    });
+  }
 }
 
 //Phone number text field class
 class PhoneNumberInput extends StatelessWidget {
   const PhoneNumberInput({Key key, this.focusNode}) : super(key: key);
-
   final FocusNode focusNode;
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -173,9 +329,7 @@ class PhoneNumberInput extends StatelessWidget {
             hintStyle: const TextStyle(
               color: primaryColor2,
             ),
-            errorText: state.phoneNumber.invalid
-                ? text03
-                : null,
+            errorText: state.phoneNumber.invalid ? text03 : null,
           ),
           keyboardType: TextInputType.number,
           onChanged: (value) {
@@ -240,9 +394,7 @@ class _OtpInputState extends State<OtpInput> {
             prefix: Padding(
               padding: phoneTextFieldPadding1,
             ),
-            errorText: state.otp.invalid
-                ? text04
-                : null,
+            errorText: state.otp.invalid ? text04 : null,
           ),
           onChanged: (value) {
             context.read<LoginBloc>().add(OtpChanged(otp: value));
@@ -255,32 +407,6 @@ class _OtpInputState extends State<OtpInput> {
   }
 }
 
-// class SubmitButton1 extends StatelessWidget {
-//   const SubmitButton1({Key key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<LoginBloc, LoginState>(
-//       buildWhen: (previous, current) => previous.status != current.status,
-//       builder: (context, state) {
-//         return RoundedButtonInput(
-//           color1: primaryColor1,
-//           fontsize1: 14,
-//           size1: 0.37,
-//           horizontal1: 30,
-//           vertical1: 17,
-//           press: () {
-//             Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => const HomePage()));
-//           },
-//           text: text05,
-//         );
-//       },
-//     );
-//   }
-// }
-
-//Submit button class
 class SubmitButton2 extends StatelessWidget {
   const SubmitButton2({Key key}) : super(key: key);
 
