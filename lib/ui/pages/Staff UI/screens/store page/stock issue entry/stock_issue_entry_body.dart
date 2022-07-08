@@ -735,7 +735,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                                   .start,
                                                           children: [
                                                             Text(
-                                                              'Order Qty:',
+                                                              'Issue Qty:',
                                                               style:
                                                                   containerTextStyle2(),
                                                             ),
@@ -743,10 +743,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                               height: 5,
                                                             ),
                                                             Text(
-                                                              'Purchase Rate:',
+                                                              'Rate:',
                                                               style:
                                                                   containerTextStyle2(),
                                                             ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text('Amount:', style: containerTextStyle2(),)
                                                           ],
                                                         ),
                                                         SizedBox(
@@ -777,6 +781,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                               style:
                                                                   containerTextStyle2(),
                                                             ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(StringAmount, style: containerTextStyle2(),)
                                                           ],
                                                         ),
                                                       ],
@@ -785,9 +793,9 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                       height: 5,
                                                     ),
                                                     Text(
-                                                      "Code: " +
+                                                      "HSN/SAC: " +
                                                           snapshot
-                                                              .data[index].Code,
+                                                              .data[index].HSN_SAC,
                                                       style:
                                                           containerTextStyle3(),
                                                     ),
