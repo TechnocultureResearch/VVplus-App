@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -69,6 +70,8 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   var subscription;
   var connectionStatus;
   String StringAmount;
+  StreamController<List<ItemNameModel>> listStockIssue = StreamController();
+  List<ItemNameModel> listIssue = [];
 
   void clearData() {
     setState(() {
@@ -630,9 +633,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                 text: "Add Item to List",
                                 press: (selectItemName != null) && (isActive)
                                     ? () {
+                                        selectItemName.requestQty = reqQty.text;
                                         _calculation();
                                         setState(() {
                                           pressed = true;
+                                          listIssue.add(
+                                            selectItemName,
+                                          );
+                                          listStockIssue.add(listIssue);
                                         });
                                         //clearData();
                                       }
@@ -658,13 +666,169 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
               ),
               //-----------------------------------------------------------
               pressed
-                  ? AddItemContainer(
-                      itemNameText: selectItemName.Name,
-                      orderQtyText: reqQty.text,
-                      rateText: selectItemName.PurchaseRate,
-                      amountText: StringAmount.toString(),
-                    )
+                  ? StreamBuilder<List<ItemNameModel>>(
+                      // ? StreamBuilder<List<String>>(
+                      stream: listStockIssue.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                          alignment: Alignment.center,
+                                          height: height * .14,
+                                          width: width * .95,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            color: primaryColor3,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: primaryColor5,
+                                                offset:
+                                                    Offset(0.0, 1.0), //(x,y)
+                                                blurRadius: 6.0,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          width: width * .35,
+                                                          child: Text(
+                                                            snapshot.data[index]
+                                                                .Name,
+                                                            maxLines: 3,
+                                                            style:
+                                                                containerTextStyle1(),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                          height: 13,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              'Order Qty:',
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(
+                                                              'Purchase Rate:',
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              '${snapshot.data[index].requestQty}' +
+                                                                  "  " +
+                                                                  snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .SKU,
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .PurchaseRate,
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      "Code: " +
+                                                          snapshot
+                                                              .data[index].Code,
+                                                      style:
+                                                          containerTextStyle3(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          listIssue.removeAt(index);
+                                          listStockIssue.add(listIssue);
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        }
+                        return Container();
+                      })
                   : const SizedBox(),
+              // AddItemContainer(
+              //         itemNameText: selectItemName.Name,
+              //         orderQtyText: reqQty.text,
+              //         rateText: selectItemName.PurchaseRate,
+              //         amountText: StringAmount.toString(),
+              //       )
+              //     : const SizedBox(),
 
               sizedbox1,
               formsHeadTextNew("Remarks", width * .045),

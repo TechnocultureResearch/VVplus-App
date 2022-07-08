@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables, deprecated_member_use
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/godown_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_cost_center_dropdown_bloc.dart';
@@ -10,6 +13,7 @@ import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/item_name_dropdown_blo
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/received_by_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/voucher_type_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/staff%20bloc/Store_Page_Bloc/stock_receive_entry_bloc.dart';
+import 'package:vvplus_app/data_source/api/api_services.dart';
 import 'package:vvplus_app/domain/common/snackbar_widget.dart';
 import 'package:vvplus_app/infrastructure/Models/godown_model.dart';
 import 'package:vvplus_app/infrastructure/Models/item_cost_center_model.dart';
@@ -43,7 +47,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   TextEditingController reqQty = TextEditingController();
   final extraWorkEntryFormKey1 = GlobalKey<FormState>();
   bool pressed = false;
-
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   ReceivedByDropdownBloc receivedByDropdownBloc;
   VoucherTypeDropdownBloc voucherTypeDropdownBloc3;
@@ -61,9 +64,14 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   ItemCurrentStatus selectItemCurrentStatus;
   var subscription;
   var connectionStatus;
-
+  List<ItemNameModel> cartList = [];
   double _amount;
   String StringAmount;
+  int i = 0;
+  List<List<String>> droppedImages = [];
+  int getDragTargetListLength = 0;
+  StreamController<List<ItemNameModel>> listStockReceive = StreamController();
+  List<ItemNameModel> listReceive = [];
 
   _calculation() {
     setState(
@@ -528,13 +536,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                             children: [
                               formsHeadTextNew("Rate", width * .045),
                               SizedBox(
-                                width: 70,
+                                width: 85,
                               ),
-                              Column(
-                                children: [
-                                  formsHeadTextNew("Amount:", width * .045),
-                                ],
-                              ),
+                              formsHeadTextNew("Amount:", width * .045),
                             ],
                           ),
                           Row(
@@ -563,7 +567,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                               child: Text("100.00"))),
                                     ),
                               SizedBox(
-                                width: 40,
+                                width: 70,
                               ),
                               Text(
                                 "$StringAmount",
@@ -600,9 +604,16 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                 text: "Add Item to List",
                                 press: (selectItemName != null) && (isActive)
                                     ? () {
+                                        droppedImages.add([]);
+                                        getDragTargetListLength++;
                                         _calculation();
+                                        selectItemName.requestQty = reqQty.text;
                                         setState(() {
                                           pressed = true;
+                                          listReceive.add(
+                                            selectItemName,
+                                          );
+                                          listStockReceive.add(listReceive);
                                         });
                                         //clearData();
                                       }
@@ -627,14 +638,177 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                 ),
               ),
 
+              // pressed
+              //     ? AddCard(
+              //         itemNameTt: selectItemName.Name,
+              //         addList: cartList,
+              //       )
+              //     : const SizedBox(),
+
               pressed
-                  ? AddItemContainer(
-                      itemNameText: selectItemName.Name,
-                      orderQtyText: reqQty.text,
-                      rateText: selectItemName.PurchaseRate,
-                      amountText: StringAmount.toString(),
-                    )
+                  ? StreamBuilder<List<ItemNameModel>>(
+                      // ? StreamBuilder<List<String>>(
+                      stream: listStockReceive.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                          alignment: Alignment.center,
+                                          height: height * .14,
+                                          width: width * .95,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            color: primaryColor3,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: primaryColor5,
+                                                offset:
+                                                    Offset(0.0, 1.0), //(x,y)
+                                                blurRadius: 6.0,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          width: width * .35,
+                                                          child: Text(
+                                                            snapshot.data[index]
+                                                                .Name,
+                                                            maxLines: 3,
+                                                            style:
+                                                                containerTextStyle1(),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                          height: 13,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              'Order Qty:',
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(
+                                                              'Purchase Rate:',
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              '${snapshot.data[index].requestQty}' +
+                                                                  "  " +
+                                                                  snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .SKU,
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .PurchaseRate,
+                                                              style:
+                                                                  containerTextStyle2(),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      "Code: " +
+                                                          snapshot
+                                                              .data[index].Code,
+                                                      style:
+                                                          containerTextStyle3(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          listReceive.removeAt(index);
+                                          listStockReceive.add(listReceive);
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        }
+                        return Container();
+                      })
                   : const SizedBox(),
+              // ? AddItemContainer(
+              //     itemNameText: selectItemName.Name,
+              //     orderQtyText: reqQty.text,
+              //     rateText: selectItemName.PurchaseRate,
+              //     amountText: StringAmount.toString(),
+              //   )
+              // : const SizedBox(),
 
               sizedbox1,
               formsHeadText("Total Amount:"),
