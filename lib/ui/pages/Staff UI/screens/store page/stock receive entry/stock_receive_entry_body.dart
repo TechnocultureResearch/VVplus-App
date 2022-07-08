@@ -715,7 +715,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                                                   .start,
                                                           children: [
                                                             Text(
-                                                              'Order Qty:',
+                                                              'Receive Qty:',
                                                               style:
                                                                   containerTextStyle2(),
                                                             ),
@@ -727,6 +727,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                                               style:
                                                                   containerTextStyle2(),
                                                             ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text('Amount:', style: containerTextStyle2(),),
                                                           ],
                                                         ),
                                                         SizedBox(
@@ -757,6 +761,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                                               style:
                                                                   containerTextStyle2(),
                                                             ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(StringAmount, style: containerTextStyle2(),),
                                                           ],
                                                         ),
                                                       ],
@@ -765,9 +773,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                                       height: 5,
                                                     ),
                                                     Text(
-                                                      "Code: " +
+                                                      "HSN/SAC: " +
                                                           snapshot
-                                                              .data[index].Code,
+                                                              .data[index].HSN_SAC,
                                                       style:
                                                           containerTextStyle3(),
                                                     ),
