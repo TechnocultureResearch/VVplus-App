@@ -54,14 +54,13 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   var connectionStatus;
   double value1 = 0, value2 = 46.599;
   double _amount;
-  String StringAmount;
+  String order = '';
   List<Widget> _itemContainer = [];
+  // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
-
   //int index;
   bool isdelet = true;
-
   void clearData() {
     setState(() {
       selectVoucherType = null;
@@ -204,7 +203,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   DepartmentName selectDepartment;
   ItemCurrentStatus selectItemCurrentStatus;
   ItemCostCenter selectItemCostCenter;
-
   void onDataChange1(VoucherTypeMaterialReqEntryModel state) {
     setState(() {
       selectVoucherType = state;
@@ -214,12 +212,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   void onDataChange2(ItemNameModel state) {
     setState(() {
       selectItemName = state;
-      itemres = true;
+      Dblq = null;
+      Unit = null;
       if (itemres == true) {
-        // testreqqty = reqQty.text as ItemNameModel;
         itemCurrentStock();
       }
-      itemres = false;
     });
   }
 
@@ -241,20 +238,28 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     });
   }
 
+  void removeServiceCard(index) {
+    setState(() {
+      _itemContainer.remove(index);
+    });
+  }
+
   Future<dynamic> itemCurrentStock() async {
-    final String uri =
-        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.Code}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
-    var response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200) {
-      final res = await http.get(Uri.parse(uri));
-      final resBody = jsonDecode(res.body);
-      itemres = false;
-      setState(() {
-        Dblq = double.parse((resBody[0]['DblQty']).toStringAsFixed(4)) ?? '';
-        Unit = resBody[0]['Unit'] ?? '';
-        // print("Dblqty:  ${Dblq}");
-      });
-      itemres = false;
+    if (selectItemName != null) {
+      final String uri =
+          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.Code}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
+      var response = await http.get(Uri.parse(uri));
+      if (response.statusCode == 200) {
+        final res = await http.get(Uri.parse(uri));
+        final resBody = jsonDecode(res.body);
+        itemres = true;
+        setState(() {
+          Dblq = double.parse((resBody[0]['DblQty']).toStringAsFixed(4)) ?? '';
+          Unit = resBody[0]['Unit'] ?? '';
+          // print("Dblqty:  ${Dblq}");
+        });
+      }
+      // itemres = false;
     } else {
       throw Exception('Failed to load data');
     }
@@ -263,6 +268,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   @override
   void dispose() {
     subscription.cancel();
+    reqQty.dispose();
     super.dispose();
   }
 
@@ -277,9 +283,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
     final bloc = MaterialRequestEntryProvider.of(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    if (selectItemName != null) {
+    if (selectItemName != null && itemres == false) {
       itemCurrentStock();
     }
+
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 20,
@@ -613,7 +620,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           ),
                                           onChanged: bloc.changerequestQty,
                                           keyboardType: TextInputType.number,
-                                          //onSaved: selectItemCurrentStatus.strItemName,
+                                          // onSaved: selectItemName.requestQty(),
                                           style: simpleTextStyle7(),
                                         );
                                       }),
@@ -700,7 +707,11 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   text: "Add Item to List",
                                   press: (selectItemName != null) && (isActive)
                                       ? () {
-                                    selectItemName.requestQty = reqQty.text;
+                                          materialRequestEntryFormKey
+                                              .currentState
+                                              .save();
+                                          selectItemName.requestQty =
+                                              reqQty.text;
                                           // _calculation();
                                           setState(() {
                                             pressed = true;
@@ -733,7 +744,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
                 pressed
                     ? StreamBuilder<List<ItemNameModel>>(
-                    // ? StreamBuilder<List<String>>(
+                        // ? StreamBuilder<List<String>>(
                         stream: listStream.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
@@ -782,8 +793,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                           Container(
                                                             width: width * .35,
                                                             child: Text(
-                                                              snapshot.data[index].Name
-                                                                  ,
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .Name,
                                                               maxLines: 3,
                                                               style:
                                                                   containerTextStyle1(),
@@ -793,7 +805,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                             width: 10,
                                                             height: 10,
                                                           ),
-                                                          SizedBox(width: 2,),
+                                                          SizedBox(
+                                                            width: 2,
+                                                          ),
                                                           Text(
                                                             'Order Qty: ${snapshot.data[index].requestQty}' +
                                                                 "  " +
@@ -802,7 +816,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                                     .SKU,
                                                             style:
                                                                 containerTextStyle2(),
-
                                                           ),
                                                         ],
                                                       ),
@@ -811,7 +824,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                                       ),
                                                       Text(
                                                         "Code: " +
-                                                            snapshot.data[index].Code,
+                                                            snapshot.data[index]
+                                                                .Code,
                                                         style:
                                                             containerTextStyle3(),
                                                       ),
@@ -849,6 +863,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
 //=============================================================================
                 const Padding(padding: EdgeInsets.all(10)),
+
                 const SizedBox(height: 15),
                 formsHeadTextNew("Req. Date", width * .045),
                 Container(
