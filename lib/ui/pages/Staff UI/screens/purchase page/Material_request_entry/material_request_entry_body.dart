@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables, non_constant_identifier_names, deprecated_member_use
 
+import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,9 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   double _amount;
   String order = '';
   List<Widget> _itemContainer = [];
+  List<Map<String, String>> params = [] ;
+// List<dynamic> params = [] ;
+   // var params;
   // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
@@ -110,8 +114,34 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   StreamController<List<ItemNameModel>> listStream = StreamController();
   List<ItemNameModel> list1 = [];
 
+  bool ActiveConnection = false;
+  String T = "";
+  Future CheckUserConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          ActiveConnection = true;
+          T = "Turn off the data and repress again";
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        ActiveConnection = false;
+        T = "Turn On the data and repress again";
+      });
+    }
+  }
+
   @override
-  void initState() {
+   initState() {
+
+    newurl = "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:[$params]}'}";
+    // params = '{"StrItemCode":"${selectItemName.Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}'as List<Map<String, String>> ;
+    // if(selectItemName.Code!= null) {
+    //   params = '${'{"StrItemCode":"${selectItemName
+    //       .Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}'}' as List<Map<String, String>> ;
+    // }
     _amount = 0;
     super.initState();
     reqQty = TextEditingController();
@@ -141,7 +171,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   verifyDetail() {
     if (connectionStatus == ConnectivityResult.wifi ||
         connectionStatus == ConnectivityResult.mobile) {
-      if (selectIndentorName != null &&
+      if (selectItemName != null &&
+      selectIndentorName != null &&
           selectItemCurrentStatus != null &&
           selectItemCostCenter != null &&
           materialRequestEntryFormKey.currentState.validate()) {
@@ -153,48 +184,35 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
-
+  var url;
+  var newurl ;
+  // var newurl = 'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:[]}'}';
   Future<dynamic> sendData() async {
     try {
-      await http.post(Uri.parse(ApiService.mockDataPostMaterialRequestEntryURL),
-          // await http.post(Uri.parse(ApiService.postMaterialRequestEntryURL),
-          body: json.encode({
-            "StrRecord": {
-              "StrVType": selectVoucherType.SubCode,
-              "StrVDate": intendDateInput.text,
-              "StrSiteCode": "AD",
-              "StrReceiveFrom": "SM149",
-              '{StrIndGrid}': [
-                {
-                  "StrItemCode": selectItemCostCenter.Code,
-                  "DblQuantity": reqQty.text,
-                  "DblAmt": selectItemCurrentStatus.PurchaseRate,
-                  "DblRate": selectItemCurrentStatus.PurchaseRate,
-                  "StrCostCenterCode": selectItemCostCenter.Code,
-                  "StrGodown": "AD1",
-                  "StrRemark": "Remark1",
-                }
-              ],
-              "StrPreparedBy": remarks.text
-            }
-            // "IndentSubCode":selectIndentName.strSubCode,
-            // "IntendDate":intendDateInput.text,
-            // "ItemName":selectItemCurrentStatus.Name,
-            // "ReqQty":reqQty.text,
-            // "ItemUnit":selectItemCurrentStatus.SKU,
-            // "Rate":selectItemCurrentStatus.PurchaseRate,
-            // "ItemSubCode":selectItemCostCenter.Code,
-            // "ReqDate":reqDateInput.text,
-            // "Remarks":remarks.text
-          }));
-      Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
-    }
+      newurl = 'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:${params}}'}';
+        url = Uri.parse(newurl);
+       // params = '{"StrItemCode":"$
+        // {selectItemName.Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}' as List ;
+        var response = await http.get(url);
+        print('Response Status: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        if (response.statusCode == 200) {
+          final String responseString = response.body;
+          return Scaffold.of(context).showSnackBar(snackBar(responseString));
+        } else {
+          return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+        }
+      } catch (e) {
+        rethrow;
+      }
+    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    //  on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
+    // }
   }
 
   IndentorName selectIndentorName;
@@ -208,14 +226,12 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       selectVoucherType = state;
     });
   }
-
   void onDataChange2(ItemNameModel state) {
     setState(() {
       selectItemName = state;
       Dblq = null;
       Unit = null;
       if (itemres == true) {
-        itemCurrentStock();
       }
     });
   }
@@ -247,7 +263,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   Future<dynamic> itemCurrentStock() async {
     if (selectItemName != null) {
       final String uri =
-          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.Code}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
+          "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndent?StrRecord=${'{"StrFilter":"ItemCurrentStatus","StrSiteCode":"","StrV_Type":"","StrChkNonStockable":"","StrItemCode":"${selectItemName.Code}","StrCostCenterCode":"AD1","StrAllCostCenter":"",StrUPCostCenter:[{"StrCostCenterCode":"AD1"},{"StrCostCenterCode":"AD1"}]}'}";
       var response = await http.get(Uri.parse(uri));
       if (response.statusCode == 200) {
         final res = await http.get(Uri.parse(uri));
@@ -280,9 +296,15 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = MaterialRequestEntryProvider.of(context);
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+      final bloc = MaterialRequestEntryProvider.of(context);
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
     if (selectItemName != null && itemres == false) {
       itemCurrentStock();
     }
@@ -323,46 +345,46 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     // height: 52, width: 343,
                     decoration: decorationForms(),
                     child:
-                        FutureBuilder<List<VoucherTypeMaterialReqEntryModel>>(
-                            future: voucherTypeDropdownBloc
-                                .voucherTypeMaterialReqEntryDropdownData,
-                            builder: (context, snapshot) {
-                              return StreamBuilder<
-                                      VoucherTypeMaterialReqEntryModel>(
-                                  stream: voucherTypeDropdownBloc
-                                      .selectedMaterialReqEntryState,
-                                  builder: (context, item) {
-                                    return SearchChoices<
-                                        VoucherTypeMaterialReqEntryModel>.single(
-                                      icon: const Icon(
-                                          Icons.keyboard_arrow_down_sharp,
-                                          size: 30),
-                                      padding: selectVoucherType != null
-                                          ? height * .002
-                                          : height * .015,
-                                      isExpanded: true,
-                                      hint: textHint,
-                                      value: selectVoucherType,
-                                      displayClearIcon: false,
-                                      onChanged: onDataChange1,
-                                      items: snapshot?.data?.map<
-                                                  DropdownMenuItem<
-                                                      VoucherTypeMaterialReqEntryModel>>(
-                                              (e) {
-                                            return DropdownMenuItem<
-                                                VoucherTypeMaterialReqEntryModel>(
-                                              value: e,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Text(e.Name ?? ''),
-                                              ),
-                                            );
-                                          })?.toList() ??
-                                          [],
-                                    );
-                                  });
-                            }),
+                    FutureBuilder<List<VoucherTypeMaterialReqEntryModel>>(
+                        future: voucherTypeDropdownBloc
+                            .voucherTypeMaterialReqEntryDropdownData,
+                        builder: (context, snapshot) {
+                          return StreamBuilder<
+                              VoucherTypeMaterialReqEntryModel>(
+                              stream: voucherTypeDropdownBloc
+                                  .selectedMaterialReqEntryState,
+                              builder: (context, item) {
+                                return SearchChoices<
+                                    VoucherTypeMaterialReqEntryModel>.single(
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_sharp,
+                                      size: 30),
+                                  padding: selectVoucherType != null
+                                      ? height * .002
+                                      : height * .015,
+                                  isExpanded: true,
+                                  hint: textHint,
+                                  value: selectVoucherType,
+                                  displayClearIcon: false,
+                                  onChanged: onDataChange1,
+                                  items: snapshot?.data?.map<
+                                      DropdownMenuItem<
+                                          VoucherTypeMaterialReqEntryModel>>(
+                                          (e) {
+                                        return DropdownMenuItem<
+                                            VoucherTypeMaterialReqEntryModel>(
+                                          value: e,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.all(4.0),
+                                            child: Text(e.Name ?? ''),
+                                          ),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                );
+                              });
+                        }),
                   ),
                 ),
                 sizedbox1,
@@ -374,7 +396,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     decoration: decorationForms(),
                     child: FutureBuilder<List<IndentorName>>(
                         future:
-                            indentorNameDropdownBloc.indentorNameDropdownData,
+                        indentorNameDropdownBloc.indentorNameDropdownData,
                         builder: (context, snapshot) {
                           return StreamBuilder<IndentorName>(
                               stream: indentorNameDropdownBloc
@@ -393,8 +415,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   displayClearIcon: false,
                                   onChanged: onDataChange4,
                                   items: snapshot?.data
-                                          ?.map<DropdownMenuItem<IndentorName>>(
-                                              (e) {
+                                      ?.map<DropdownMenuItem<IndentorName>>(
+                                          (e) {
                                         return DropdownMenuItem<IndentorName>(
                                           value: e,
                                           child: Padding(
@@ -437,7 +459,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   displayClearIcon: false,
                                   onChanged: onDataChange5,
                                   items: snapshot?.data?.map<
-                                              DropdownMenuItem<DepartmentName>>(
+                                      DropdownMenuItem<DepartmentName>>(
                                           (e) {
                                         return DropdownMenuItem<DepartmentName>(
                                           value: e,
@@ -480,7 +502,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           intendDateInput.text = formattedDate;
                         });
@@ -512,7 +534,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   displayClearIcon: false,
                                   onChanged: onDataChange3,
                                   items: snapshot?.data?.map<
-                                              DropdownMenuItem<ItemCostCenter>>(
+                                      DropdownMenuItem<ItemCostCenter>>(
                                           (e) {
                                         return DropdownMenuItem<ItemCostCenter>(
                                           value: e,
@@ -569,19 +591,19 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                           displayClearIcon: false,
                                           onChanged: onDataChange2,
                                           items: snapshot?.data?.map<
-                                                  DropdownMenuItem<
-                                                      ItemNameModel>>((e) {
-                                                return DropdownMenuItem<
-                                                    ItemNameModel>(
-                                                  value: e,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            4.0),
-                                                    child: Text(e.Name ?? ''),
-                                                  ),
-                                                );
-                                              })?.toList() ??
+                                              DropdownMenuItem<
+                                                  ItemNameModel>>((e) {
+                                            return DropdownMenuItem<
+                                                ItemNameModel>(
+                                              value: e,
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.all(
+                                                    4.0),
+                                                child: Text(e.Name ?? ''),
+                                              ),
+                                            );
+                                          })?.toList() ??
                                               [],
                                         );
                                       });
@@ -596,7 +618,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 35),
+                              const EdgeInsets.symmetric(horizontal: 35),
                               child: Container(
                                 padding: padding1,
                                 decoration: decoration1(),
@@ -629,20 +651,20 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                             ),
                             selectItemName != null
                                 ? Container(
-                                    height: height * .067,
-                                    width: width * .18,
-                                    // padding: const EdgeInsets.symmetric(
-                                    //     horizontal: 15.0),
-                                    decoration: decoration1(),
-                                    child:
-                                        Center(child: Text(selectItemName.SKU)))
+                                height: height * .067,
+                                width: width * .18,
+                                // padding: const EdgeInsets.symmetric(
+                                //     horizontal: 15.0),
+                                decoration: decoration1(),
+                                child:
+                                Center(child: Text(selectItemName.SKU)))
                                 : Container(
-                                    height: height * .067,
-                                    width: width * .18,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0),
-                                    decoration: decoration1(),
-                                    child: const Center(child: Text("Unit"))),
+                                height: height * .067,
+                                width: width * .18,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 0.0),
+                                decoration: decoration1(),
+                                child: const Center(child: Text("Unit"))),
                           ],
                         ),
                         // const Padding(
@@ -653,7 +675,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           children: [
                             Padding(
                               padding:
-                                  EdgeInsets.symmetric(horizontal: width * 0.1),
+                              EdgeInsets.symmetric(horizontal: width * 0.1),
                               child: Text(
                                 "Current Stock : ",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -684,7 +706,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                               children: [
                                 const Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 13)),
+                                    EdgeInsets.symmetric(horizontal: 13)),
                                 RaisedButton(
                                   onPressed: () {
                                     setState(() {
@@ -702,25 +724,43 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                 return*/
                                 const Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 8)),
+                                    EdgeInsets.symmetric(horizontal: 8)),
                                 RoundedButtonInput(
                                   text: "Add Item to List",
                                   press: (selectItemName != null) && (isActive)
                                       ? () {
-                                          materialRequestEntryFormKey
-                                              .currentState
-                                              .save();
-                                          selectItemName.requestQty =
-                                              reqQty.text;
-                                          // _calculation();
-                                          setState(() {
-                                            pressed = true;
-                                            list1.add(
-                                              selectItemName,
-                                            );
-                                            listStream.add(list1);
-                                          });
-                                        }
+                                    materialRequestEntryFormKey
+                                        .currentState
+                                        .save();
+                                    selectItemName.requestQty =
+                                        reqQty.text;
+                                    // _calculation();
+                                    setState(() {
+                                      pressed = true;
+                                      list1.add(
+                                        selectItemName,
+                                      );
+                                      listStream.add(list1);
+                                      Map<String, String> localMap = {
+                                        "StrItemCode": "'${selectItemName.Code}'",
+                                        "DblQuantity":"'10'",
+                                        "StrCostCenterCode":"'AD1'",
+                                        "StrRequiredDate":"'09/07/2022'",
+                                        "StrRemark":"'remark1'"
+                                      };
+                                      params.add(localMap);
+                                      //  //= '{,,,,}'as List<Map<String, String>> ;
+                                      // if (params.isNotEmpty && newurl != null && newurl.contains("StrCostCenterCode")) {
+                                      //   newurl =
+                                      //   'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:[${'${params}' +
+                                      //       ',' + '${params}'}]}'}' as String;
+                                      // }
+                                      // else {
+                                      //   newurl =
+                                      //   'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:[${params}]}'}' as String;
+                                      // }
+                                    });
+                                  }
                                       : null,
                                   /*press: !snapshot.hasData ? null: (){
                                   } ,*/
@@ -743,122 +783,127 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 ),
 
                 pressed
-                    ? StreamBuilder<List<ItemNameModel>>(
-                        // ? StreamBuilder<List<String>>(
-                        stream: listStream.stream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Center(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: snapshot.data?.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Stack(
-                                    alignment: Alignment.centerRight,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            height: height * .12,
-                                            width: width * .95,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              color: primaryColor3,
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                  color: primaryColor5,
-                                                  offset:
-                                                      Offset(0.0, 1.0), //(x,y)
-                                                  blurRadius: 6.0,
-                                                ),
-                                              ],
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                            width: width * .35,
-                                                            child: Text(
+                    ? SingleChildScrollView(physics: AlwaysScrollableScrollPhysics(),
+                      child: StreamBuilder<List<ItemNameModel>>(
+                  // ? StreamBuilder<List<String>>(
+                      stream: listStream.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: AlwaysScrollableScrollPhysics(),
+                              itemCount: snapshot.data?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                          alignment: Alignment.center,
+                                          height: height * .12,
+                                          width: width * .95,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(5.0),
+                                            color: primaryColor3,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: primaryColor5,
+                                                offset:
+                                                Offset(0.0, 1.0), //(x,y)
+                                                blurRadius: 6.0,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment
+                                                      .start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                      children: [
+                                                        Container(
+                                                          width: width * .35,
+                                                          child: Text(
+                                                            snapshot
+                                                                .data[index]
+                                                                .Name,
+                                                            maxLines: 3,
+                                                            style:
+                                                            containerTextStyle1(),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                          height: 10,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 2,
+                                                        ),
+                                                        Text(
+                                                          'Order Qty: ${snapshot
+                                                              .data[index]
+                                                              .requestQty}' +
+                                                              "  " +
                                                               snapshot
                                                                   .data[index]
-                                                                  .Name,
-                                                              maxLines: 3,
-                                                              style:
-                                                                  containerTextStyle1(),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 10,
-                                                            height: 10,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 2,
-                                                          ),
-                                                          Text(
-                                                            'Order Qty: ${snapshot.data[index].requestQty}' +
-                                                                "  " +
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .SKU,
-                                                            style:
-                                                                containerTextStyle2(),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Text(
-                                                        "Code: " +
-                                                            snapshot.data[index]
-                                                                .Code,
-                                                        style:
-                                                            containerTextStyle3(),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                                  .SKU,
+                                                          style:
+                                                          containerTextStyle2(),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      "Code: " +
+                                                          snapshot.data[index]
+                                                              .Code,
+                                                      style:
+                                                      containerTextStyle3(),
+                                                    ),
+                                                  ],
                                                 ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                              ],
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            list1.removeAt(index);
-                                            listStream.add(list1);
-                                          },
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                          ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          list1.removeAt(index);
+                                          listStream.add(list1);
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
                                         ),
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                          return Container();
-                        })
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        }
+                        return Container();
+                      }),
+                    )
                     : const SizedBox(),
 
 //=============================================================================
@@ -890,7 +935,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           reqDateInput.text = formattedDate;
                         });
@@ -905,31 +950,32 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                   decoration: decoration1(),
                   child: StreamBuilder<String>(
                     stream: bloc.outtextField,
-                    builder: (context, snapshot) => TextFormField(
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Enter Detail';
-                        }
-                        if (val != remarks.text) {
-                          return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
-                              ? null
-                              : "Enter valid detail";
-                        }
-                        return null;
-                      },
-                      controller: remarks,
-                      onChanged: bloc.intextField,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: primaryColor8,
-                          enabledBorder: textFieldBorder(),
-                          focusedBorder: textFieldBorder(),
-                          isDense: true,
-                          errorBorder: textFieldBorder(),
-                          errorText: snapshot.error),
-                      keyboardType: TextInputType.text,
-                      style: simpleTextStyle7(),
-                    ),
+                    builder: (context, snapshot) =>
+                        TextFormField(
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return 'Enter Detail';
+                            }
+                            if (val != remarks.text) {
+                              return RegExp(r'^[a-zA-Z0-9._ ]+$').hasMatch(val)
+                                  ? null
+                                  : "Enter valid detail";
+                            }
+                            return null;
+                          },
+                          controller: remarks,
+                          onChanged: bloc.intextField,
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: primaryColor8,
+                              enabledBorder: textFieldBorder(),
+                              focusedBorder: textFieldBorder(),
+                              isDense: true,
+                              errorBorder: textFieldBorder(),
+                              errorText: snapshot.error),
+                          keyboardType: TextInputType.text,
+                          style: simpleTextStyle7(),
+                        ),
                   ),
                 ),
                 Padding(
