@@ -1,6 +1,7 @@
 // Login page Ui
 // ignore_for_file: prefer_typing_uninitialized_variables
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,10 +35,10 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   TextEditingController phoneController = TextEditingController();
   AuthClass authClass = AuthClass();
   String verificationIdFinal = "";
-  String smsCode = "";
+  String smsCode;
+
   @override
   void initState() {
-    // Calling Phone number validation with BLoc
     _phoneNumberFocusNode.addListener(() {
       if (!_phoneNumberFocusNode.hasFocus) {
         context.read<LoginBloc>().add(PhoneNumberUnfocused());
@@ -111,6 +112,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                 const SizedBox(
                   height: 20,
                 ),
+
                 Container(
                   color: primaryColor3,
                   height: textFeildHeight,
@@ -130,24 +132,24 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                   style: t2Style(),
                   textAlign: TextAlign.center,
                 ),
-                // const SizedBox(height: 20),
-                // RichText(
-                //     text: TextSpan(
-                //   children: [
-                //     TextSpan(
-                //       text: "Send OTP again in ",
-                //       style: TextStyle(fontSize: 16, color: textColor4),
-                //     ),
-                //     TextSpan(
-                //       text: "00:$start",
-                //       style: TextStyle(fontSize: 16, color: stepperColor1),
-                //     ),
-                //     TextSpan(
-                //       text: " sec ",
-                //       style: TextStyle(fontSize: 16, color: textColor4),
-                //     ),
-                //   ],
-                // )),
+                const SizedBox(height: 20),
+                RichText(
+                    text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Send OTP again in ",
+                      style: TextStyle(fontSize: 16, color: textColor4),
+                    ),
+                    TextSpan(
+                      text: "00:$start",
+                      style: TextStyle(fontSize: 16, color: stepperColor1),
+                    ),
+                    TextSpan(
+                      text: " sec ",
+                      style: TextStyle(fontSize: 16, color: textColor4),
+                    ),
+                  ],
+                )),
                 // Text(
                 //   text5,
                 //   textAlign: TextAlign.center,
@@ -163,13 +165,31 @@ class _LoginPageBodyState extends State<LoginPageBody> {
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 40,
                 ),
+
                 InkWell(
                   onTap: () {
+                    FirebaseFirestore.instance
+                        .collection('vastu')
+                        .get()
+                        .then((QuerySnapshot querySnapshot) {
+                      querySnapshot.docs.forEach((doc) {
+                        print("wah....${doc["contact"]}");
+                        if (doc['contact'].contains(phoneController.text)) {
+                          print("yaya");
+                          authClass.signInwithPhoneNumber(
+                              verificationIdFinal, smsCode, context);
+                        } else {
+                          showSnackBar(
+                              context, "Sorry! You have not authorized no.");
+                        }
+                      });
+                    });
+
                     // otp 10 no count limit
-                    authClass.signInwithPhoneNumber(
-                        verificationIdFinal, smsCode, context);
+                    // authClass.signInwithPhoneNumber(
+                    //     verificationIdFinal, smsCode, context);
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
@@ -198,6 +218,11 @@ class _LoginPageBodyState extends State<LoginPageBody> {
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, String text) {
+    final snackBar = SnackBar(content: Text(text));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Widget PhoneNoInput() {
@@ -232,11 +257,12 @@ class _LoginPageBodyState extends State<LoginPageBody> {
               onTap: wait
                   ? null
                   : () async {
-                      setState(() {
-                        start = 30;
-                        wait = true;
-                        buttonName = "Resend";
-                      });
+                      if (mounted)
+                        setState(() {
+                          start = 60;
+                          wait = true;
+                          buttonName = "Resend";
+                        });
                       await authClass.verifyPhoneNumber(
                           "+91 ${phoneController.text}", context, setData);
                     },
@@ -268,7 +294,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
         backgroundColor: Color(0xff1d1d1d),
         borderColor: Colors.white,
       ),
-      style: TextStyle(fontSize: 18, color: Colors.white),
+      style: TextStyle(fontSize: 16, color: Colors.white),
       textFieldAlignment: MainAxisAlignment.spaceAround,
       fieldStyle: FieldStyle.underline,
       onCompleted: (pin) {
@@ -281,9 +307,10 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   }
 
   void setData(String verificationId) {
-    setState(() {
-      verificationIdFinal = verificationId;
-    });
+    if (mounted)
+      setState(() {
+        verificationIdFinal = verificationId;
+      });
     startTimer();
   }
 
@@ -291,14 +318,16 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     const onsec = Duration(seconds: 1);
     Timer _timer = Timer.periodic(onsec, (timer) {
       if (start == 0) {
-        setState(() {
-          timer.cancel();
-          wait = false;
-        });
+        if (mounted)
+          setState(() {
+            timer.cancel();
+            wait = false;
+          });
       } else {
-        setState(() {
-          start--;
-        });
+        if (mounted)
+          setState(() {
+            start--;
+          });
       }
     });
   }
@@ -375,9 +404,10 @@ class _OtpInputState extends State<OtpInput> {
                 color: Colors.black45,
               ),
               onPressed: () {
-                setState(() {
-                  _obscureText = !_obscureText;
-                });
+                if (mounted)
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
               },
             ),
             labelStyle: const TextStyle(
@@ -409,7 +439,6 @@ class _OtpInputState extends State<OtpInput> {
 
 class SubmitButton2 extends StatelessWidget {
   const SubmitButton2({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
