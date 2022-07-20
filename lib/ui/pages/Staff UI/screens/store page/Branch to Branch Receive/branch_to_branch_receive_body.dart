@@ -65,7 +65,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   Future<String> fetchFillTransferData() async {
     if (selectSupplier != null) {
       final String uri =
-          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer",'
+          "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer",'
               '"StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":""}'}";
 
       var response = await http.get(Uri.parse(uri));
@@ -89,7 +89,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
     if (selectFillTransfer != null) {
       try {
         var url = Uri.parse(
-            "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/"
+            "http://103.205.66.207:888/"
             "Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillSelectedTransferNo",'
                 '"StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":"${selectFillTransfer}"}'}");
         final response = await http.get(url);
@@ -100,7 +100,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
       }
     }
   }
-
   @override
   void initState() {
     myFuture = fetchFillTransferData();
