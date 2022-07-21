@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -75,7 +76,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   String StringAmount;
   bool isActive = false;
   bool pressed = false;
-
   _calculation() {
     setState(
       () {
@@ -201,7 +201,6 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
           selectFromItemCostCenter != null &&
           selectToGodown != null &&
           selectToItemCostCenter != null &&
-          selectItemName != null &&
           phaseToPhaseTransferFormKey.currentState.validate()) {
         sendData();
       } else {
@@ -211,28 +210,14 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
-
+  List<ItemNameModel> listContainer = [];
+  StreamController<List<ItemNameModel>> listStream = StreamController();
+  var url,newurl;
+  List<Map<String, String>> params = [];
   Future<dynamic> sendData() async {
-    // try {
-    //   await http.post(Uri.parse(ApiService.mockDataPostPhaseToPhaseTransfer),
-    //       body: json.encode({
-    //         "Voucher Type": selectVoucherType.V_Type,
-    //         "Date": dateinput.text,
-    //         "IssueToWhichStaff": selectIssuedTo.Name,
-    //         "FromWhichPhase": selectFromGodown.GodCode,
-    //         "LocationFrom": selectFromItemCostCenter.Code,
-    //         "ToPhase": selectToGodown.GodCode,
-    //         "LocationTo": selectToItemCostCenter.Code,
-    //         "Item": selectItemCurrentStatus.strItemName,
-    //         "ReqQty": reqQty.text,
-    //         "Rate": selectItemCurrentStatus.PurchaseRate,
-    //         "Remarks": remarks.text
-    //       }));
     try {
-      var url = Uri.parse(
-          "http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"${selectVoucherType.V_Type}","StrSiteCode":"AD","StrNo":"2","StrDate":"${dateinput.text}",'
-              '"StrIssuedTo":"${selectIssuedTo.SubCode}","StrPreparedByCode":"SA",StrIndGrid:[{"StrCostCenterCode":"${selectFromItemCostCenter.Code}","StrGodownCode":"${selectFromGodown.GodCode}","StrToCostCenterCode":"${selectFromItemCostCenter.Code} ",'
-              '"StrToGodownCode":"${selectToGodown.GodCode}","StrItemCode":"${selectToItemCostCenter.Code}","DblQuantity":"${reqQty.text}","StrSKU":"${selectItemName.SKU}","DblRate":"${selectItemName.PurchaseRate}","DblAmt":"${StringAmount}"}],"StrRemark":"${remarks.text}"}'}");
+      newurl= 'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"STKTR","StrSiteCode":"AD","StrNo":"1","StrDate":"${dateinput.text}","StrIssuedTo":"AS495","StrPreparedByCode":"SA",StrIndGrid:${params},"StrRemark":""}'}';
+       url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -240,7 +225,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
-        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+        return Scaffold.of(context).showSnackBar(snackBar(response.body));
       }
     } catch (e) {
       rethrow;
@@ -769,9 +754,15 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                 press: (selectItemName != null) &&
                                         (isActive)
                                     ? () {
+                                  selectItemName.requestQty = reqQty.text;
                                         _calculation();
                                         setState(() {
                                           pressed = true;
+                                          listContainer.add(selectItemName);
+                                          listStream.add(listContainer);
+                                          Map<String, String> localMap =
+                                            {"StrCostCenterCode":"'${selectFromItemCostCenter.Code}'","StrGodownCode":"'${selectFromGodown.GodCode}'","StrToCostCenterCode":"'${selectToItemCostCenter.Code}'","StrToGodownCode":"'${selectToGodown.GodCode}'","StrItemCode":"'${selectItemName.SearchCode}'","DblQuantity":"'${selectItemName.requestQty}'","StrSKU":"'${selectItemName.SKU}'","DblRate":"10","DblAmt":"100"};
+                                        params.add(localMap);
                                         });
                                         //clearData();
                                       }
@@ -796,14 +787,173 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                 ),
               ),
               pressed
-                  ? AddItemContainer(
-                      itemNameText: selectItemName.Name,
-                      orderQtyText: reqQty.text,
-                      rateText: selectItemName.PurchaseRate,
-                      amountText: StringAmount.toString(),
-                    )
-                  : const SizedBox(),
-
+                  ? StreamBuilder<List<ItemNameModel>>(
+                // ? StreamBuilder<List<String>>(
+                  stream: listStream.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        height: pressed == false? height* 0.2 : height*0.4 ,
+                        child: Center(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Stack(
+                                alignment: Alignment.centerRight,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        height: height * .14,
+                                        width: width * .95,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(5.0),
+                                          color: primaryColor3,
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: primaryColor5,
+                                              offset:
+                                              Offset(0.0, 1.0), //(x,y)
+                                              blurRadius: 6.0,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                      Container(
+                                                        width: width * .35,
+                                                        child: Text(
+                                                          snapshot.data[index]
+                                                              .Name,
+                                                          maxLines: 3,
+                                                          style:
+                                                          containerTextStyle1(),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                        height: 13,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Text(
+                                                            'Transfer Qty:',
+                                                            style:
+                                                            containerTextStyle2(),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                            'Rate:',
+                                                            style:
+                                                            containerTextStyle2(),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text('Amount:', style: containerTextStyle2(),)
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Text(
+                                                            '${snapshot.data[index].requestQty}' +
+                                                                "  " +
+                                                                snapshot
+                                                                    .data[
+                                                                index]
+                                                                    .SKU,
+                                                            style:
+                                                            containerTextStyle2(),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                            snapshot
+                                                                .data[index]
+                                                                .PurchaseRate,
+                                                            style:
+                                                            containerTextStyle2(),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(StringAmount, style: containerTextStyle2(),)
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    "HSN/SAC: " +
+                                                        snapshot
+                                                            .data[index].HSN_SAC,
+                                                    style:
+                                                    containerTextStyle3(),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                          ],
+                                        )),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        listContainer.removeAt(index);
+                                        listStream.add(listContainer);
+                                      },
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    return Container();
+                  })
+:const SizedBox(),
               sizedbox1,
               formsHeadTextNew("Total Amount:", width * .045),
               sizedbox1,
