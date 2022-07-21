@@ -61,13 +61,17 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   var connectionStatus;
   String formatted;
   String selectFillTransfer;
-
+  String itmcode;
+  String itmunit;
+  String itmrate;
+  String itmorder;
+  String itmcostcentre;
+  String itmamount;
   Future<String> fetchFillTransferData() async {
     if (selectSupplier != null) {
       final String uri =
           "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillTransfer",'
               '"StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":""}'}";
-
       var response = await http.get(Uri.parse(uri));
       if (response.statusCode == 200) {
         var res = await http.get(
@@ -76,7 +80,6 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
         var resBody = json.decode(res.body);
         setState(() {
           filltransferdata = resBody;
-          print("body:$resBody");
         });
         return "Loaded Successfully";
       }
@@ -88,10 +91,10 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   Future<List<dynamic>> FillSelectedTransferNo() async {
     if (selectFillTransfer != null) {
       try {
-        var url = Uri.parse(
-            "http://103.205.66.207:888/"
+        var url = Uri.parse("http://103.205.66.207:888/"
             "Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetStkIntransit?StrRecord=${'{"StrFilter":"FillSelectedTransferNo",'
                 '"StrSiteCode":"AA","StrPartyCode":"${selectSupplier.SubCode}","StrStkTrnManID":"${selectFillTransfer}"}'}");
+
         final response = await http.get(url);
         final List<dynamic> items = json.decode(response.body);
         return items;
@@ -100,6 +103,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
       }
     }
   }
+
   @override
   void initState() {
     myFuture = fetchFillTransferData();
@@ -183,11 +187,11 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIntransit";
+          "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIntransit";
       var url = Uri.parse(baseUrl +
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"2022-05-14","StrRefNo":"101","StrRefDate":"2022-05-14","StrSupplier":"${selectSupplier.SubCode}","StrFrmGodown":"${selectGodown.GodCode}","StrSiteCode":"AA","StrVehicleNo":"${_vehicleNo.text}","DblGAmount":"0","StrPreparedBy":"SA",'
-              '"StrRemark":"${_remarks.text}",StrIndGrid:[{"StrItemCode":"PN25","StrPONo":"DADSTKML 2022       2","DblPOQuantity":"5","DblQuantity":"5","StrOUnit":"PIECE","DblRate":"10","DblAmt":"50","StrCostCenterCode":"AA504",'
+              '"StrRemark":"${_remarks.text}",StrIndGrid:[{"StrItemCode":"${itmcode}","StrPONo":"${selectFillTransfer}","DblPOQuantity":"${itmorder}","DblQuantity":"5","StrOUnit":"${itmunit}","DblRate":"${itmrate}","DblAmt":"${itmamount}","StrCostCenterCode":"${itmcostcentre}",'
               '"StrHSNSACCode":"","StrGoodsServices":"","StrTransferNo":"${selectFillTransfer}","DblItemValueRate":"10","DblItemValueAmt":"50","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"50","DblSGSTRate":"9","DblSGSTAmt":"4.5","DblCGSTRate":"9","DblCGSTAmt":"4.5","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0",'
               '"DblUGSTAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"59"}],"DblGrossRate":"0","DblGrossAmt":"0","DblDiscountRate":"0","DblDiscountAmt":"0","DblAVRate":"0","DblAVAmt":"50","DblSGSTRate":"0","DblSGSTAmt":"4.5","DblCGSTRate":"0","DblCGSTAmt":"4.5","DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0",'
               '"DblOtherAddRate":"0","DblOtherAddAmt":"0","DblOtherDedRate":"0","DblOtherDedAmt":"0","DblBillRate":"0","DblBillAmt":"59",'
@@ -396,7 +400,7 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                       stream: fetchFillTransferData().asStream(),
                       builder: (context, snapshot) {
                         return DropdownButton(
-                          hint: Text("  Search here                    "),
+                          hint: Text("  Search here"),
                           icon: Padding(
                             padding: const EdgeInsets.all(4.0),
                             // padding: EdgeInsets.symmetric(horizontal: 0.15),
@@ -440,6 +444,19 @@ class MyBranchtoBranchReceiveBody extends State<BranchtoBranchReceiveBody> {
                               shrinkWrap: true,
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) {
+                                itmcode = snapshot.data[index]['ItemCode'];
+                                itmunit = snapshot.data[index]['Unit'];
+                                itmrate =
+                                    snapshot.data[index]['Rate'].toString();
+                                itmorder =
+                                    snapshot.data[index]['OrdQty'].toString();
+                                itmcostcentre =
+                                    snapshot.data[index]['CostCenter'];
+                                itmamount =
+                                    snapshot.data[index]['Amount'].toString();
+                                // print("code!!: $itmcode");
+                                // print("unit!!: $itmunit");
+                                print("rate!!: $itmcostcentre");
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
