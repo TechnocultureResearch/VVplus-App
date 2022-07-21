@@ -47,7 +47,6 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   TextEditingController reqQty = TextEditingController();
   final extraWorkEntryFormKey1 = GlobalKey<FormState>();
   bool pressed = false;
-  List<Widget> _itemContainer = [];
   List<Map<String, String>> params = [];
   VoucherTypeDropdownBloc voucherTypeDropdownBloc1;
   ReceivedByDropdownBloc receivedByDropdownBloc;
@@ -182,7 +181,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   Future<dynamic> sendData() async {
     try {
       newurl =
-          "http://103.205.66.207:888//Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-05-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:${params},"StrPreparedBy":"WA"}'}";
+          "http://103.205.66.207:888//Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkReceive?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-05-29","StrSiteCode":"AD","StrReceiveFrom":"${selectReceivedBy.SubCode}",StrIndGrid:${params},"StrPreparedBy":"kk"}'}";
       url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -622,13 +621,13 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                           Map<String, String> localMap = {
                                             "StrItemCode":
                                                 "'${selectItemName.SearchCode}'",
-                                            "DblQuantity": "'10'",
-                                            "DblAmt": "'$_amount'",
+                                            "DblQuantity": "'${reqQty.text}'",
+                                            "DblAmt": "'$StringAmount'",
                                             // "DblRate":
                                             //     "'${selectItemName.PurchaseRate}'",
                                             "DblRate": "'10'",
                                             "StrCostCenterCode":
-                                                "'${selectItemCostCenter.Code}'",
+                                                "'${selectItemCostCenter.SubCode}'",
                                             "StrGodown":
                                                 "'${selectGodown.GodCode}'",
                                             "StrRemark": "'remark1'",
@@ -859,7 +858,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     //verifyDetail();
-                    clearData();
+                    // clearData();
                     sendData();
                   }, roundedButtonHomeColor1)),
             ],
