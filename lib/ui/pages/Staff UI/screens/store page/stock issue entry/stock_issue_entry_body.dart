@@ -193,19 +193,12 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
-
+  List<Map<String, String>> params = [];
+var url;var newurl;
   Future<dynamic> sendData() async {
     try {
-      var baseUrl =
-          'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue';
-      var url = Uri.parse(baseUrl +
-          '?' +
-          'StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"$formatted","StrSiteCode":"AD",'
-              '"StrIssuedTo":"${selectIssuedTo.SubCode}",StrIndGrid:[{"StrItemCode":"${selectItemName.SearchCode}",'
-              '"DblQuantity":"${reqQty.text}",'
-              '"DblAmt":"${StringAmount}","DblRate":"${selectItemName.PurchaseRate}",'
-              '"StrCostCenterCode":"${selectItemCostCenter.Code}","StrGodown":"${selectGodown.GodCode}",'
-              '"StrRemark":"${remarks.text}"}],"StrPreparedBy":"SA"}'}');
+      newurl= 'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"ISU","StrVDate":"2022-01-31","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
+      url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -215,7 +208,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
         Scaffold.of(context).showSnackBar(snackBar(responseStatus));
       } else {
-        return Scaffold.of(context).showSnackBar(snackBar("Not Succeed"));
+        return Scaffold.of(context).showSnackBar(snackBar(response.body));
       }
       Scaffold.of(context).showSnackBar(snackBar(sendDataText));
     } catch (e) {
@@ -641,6 +634,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                             selectItemName,
                                           );
                                           listStockIssue.add(listIssue);
+                                        Map<String, String> localMap = {
+                                          "StrItemCode":"'${selectItemName.SearchCode}'","DblQuantity":"'${selectItemName.requestQty}'","DblAmt":"'10'","DblRate":"'10'","StrCostCenterCode":"'${selectItemCostCenter.Code}'","StrGodown":"'${selectGodown.GodCode}'","StrRemark":"'Remk'"
+                                        };
+                                        params.add(localMap);
                                         });
                                         //clearData();
                                       }
@@ -671,159 +668,162 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                       stream: listStockIssue.stream,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Center(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data?.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Stack(
-                                  alignment: Alignment.centerRight,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                          alignment: Alignment.center,
-                                          height: height * .14,
-                                          width: width * .95,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color: primaryColor3,
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                color: primaryColor5,
-                                                offset:
-                                                    Offset(0.0, 1.0), //(x,y)
-                                                blurRadius: 6.0,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                          width: width * .35,
-                                                          child: Text(
-                                                            snapshot.data[index]
-                                                                .Name,
-                                                            maxLines: 3,
-                                                            style:
-                                                                containerTextStyle1(),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 5,
-                                                          height: 13,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              'Issue Qty:',
-                                                              style:
-                                                                  containerTextStyle2(),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text(
-                                                              'Rate:',
-                                                              style:
-                                                                  containerTextStyle2(),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text('Amount:', style: containerTextStyle2(),)
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              '${snapshot.data[index].requestQty}' +
-                                                                  "  " +
-                                                                  snapshot
-                                                                      .data[
-                                                                          index]
-                                                                      .SKU,
-                                                              style:
-                                                                  containerTextStyle2(),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text(
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .PurchaseRate,
-                                                              style:
-                                                                  containerTextStyle2(),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text(StringAmount, style: containerTextStyle2(),)
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      "HSN/SAC: " +
-                                                          snapshot
-                                                              .data[index].HSN_SAC,
-                                                      style:
-                                                          containerTextStyle3(),
-                                                    ),
-                                                  ],
+                          return Container(
+                            height: pressed == false? height* 0.2 : height*0.4 ,
+                            child: Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data?.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Stack(
+                                    alignment: Alignment.centerRight,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            height: height * .14,
+                                            width: width * .95,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: primaryColor3,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: primaryColor5,
+                                                  offset:
+                                                      Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 6.0,
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                            ],
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          listIssue.removeAt(index);
-                                          listStockIssue.add(listIssue);
-                                        },
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
+                                              ],
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            width: width * .35,
+                                                            child: Text(
+                                                              snapshot.data[index]
+                                                                  .Name,
+                                                              maxLines: 3,
+                                                              style:
+                                                                  containerTextStyle1(),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                            height: 13,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                'Issue Qty:',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                'Rate:',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text('Amount:', style: containerTextStyle2(),)
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                '${snapshot.data[index].requestQty}' +
+                                                                    "  " +
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                        .SKU,
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .PurchaseRate,
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(StringAmount, style: containerTextStyle2(),)
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        "HSN/SAC: " +
+                                                            snapshot
+                                                                .data[index].HSN_SAC,
+                                                        style:
+                                                            containerTextStyle3(),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            )),
                                       ),
-                                    )
-                                  ],
-                                );
-                              },
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            listIssue.removeAt(index);
+                                            listStockIssue.add(listIssue);
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           );
                         }
