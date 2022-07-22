@@ -53,7 +53,7 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
     if (selectIndentNo != null) {
       try {
         var url = Uri.parse(
-            'http://43.228.113.108:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"FillGrid","StrSiteCode":"AD","StrV_Date":"2022-05-27",StrIndDocID:[{"StrDocID":"${selectIndentNo.StrDocID}"},{"StrDocID":""}]}'}');
+            'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetIndentApproval?StrRecord=${'{"StrFilter":"FillGrid","StrSiteCode":"AD","StrV_Date":"${selectIndentNo.StrV_Date}",StrIndDocID:[{"StrDocID":"${selectIndentNo.StrDocID}"},{"StrDocID":""}]}'}');
         final response = await http.get(url);
         final List<dynamic> items = json.decode(response.body);
         // final items = (jsonDecode(response.body) as List)
