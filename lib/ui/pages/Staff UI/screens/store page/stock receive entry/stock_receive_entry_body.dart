@@ -70,10 +70,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   String StringAmount;
   int i = 0;
   List<List<String>> droppedImages = [];
-  int getDragTargetListLength = 0;
+  double netamt = 0;
   StreamController<List<ItemNameModel>> listStockReceive = StreamController();
   List<ItemNameModel> listReceive = [];
-
+  double itmamt;
   _calculation() {
     setState(
       () {
@@ -83,7 +83,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
         StringAmount = _amount.toStringAsFixed(3);
       },
     );
-    print(_amount);
+    print("amountt::$_amount");
   }
 
   @override
@@ -571,7 +571,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                               child: Text("100.00"))),
                                     ),
                               SizedBox(
-                                width: 70,
+                                width: 53,
                               ),
                               Text(
                                 "$StringAmount",
@@ -609,14 +609,13 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                 press: (selectItemName != null) && (isActive)
                                     ? () {
                                         droppedImages.add([]);
-                                        getDragTargetListLength++;
+
                                         _calculation();
                                         selectItemName.requestQty = reqQty.text;
                                         setState(() {
+                                          netamt = (netamt + _amount);
                                           pressed = true;
-                                          listReceive.add(
-                                            selectItemName,
-                                          );
+                                          listReceive.add(selectItemName);
                                           listStockReceive.add(listReceive);
                                           Map<String, String> localMap = {
                                             "StrItemCode":
@@ -826,6 +825,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                           onTap: () {
                                             listReceive.removeAt(index);
                                             listStockReceive.add(listReceive);
+                                            setState(() {
+                                              netamt = (netamt - _amount);
+                                              print("itmamt$itmamt");
+                                            });
                                           },
                                           child: Icon(
                                             Icons.delete,
@@ -852,7 +855,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               // : const SizedBox(),
 
               sizedbox1,
-              formsHeadText("Total Amount:"),
+              formsHeadText("Total Amount:  $netamt"),
 
               Padding(
                   padding: padding4,
