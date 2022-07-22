@@ -148,7 +148,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule';
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostOtherSchedule';
       var url = Uri.parse(baseUrl +
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrSiteCode":"RN","StrEntryDate":"${dateinput.text}","StrBookingNo":"${selectBookingId.DocId}",'
@@ -383,7 +383,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                                         value: e,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text(e.SearchCode ?? ''),
+                                          child: Text(e.Name ?? ''),
                                         ),
                                       );
                                     })?.toList() ??
