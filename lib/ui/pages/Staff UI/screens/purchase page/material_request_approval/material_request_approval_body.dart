@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:meta/meta.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_no_dropdown_bloc.dart';
 import 'package:vvplus_app/Application/Bloc/Dropdown_Bloc/indent_selection_dropdown_bloc.dart';
@@ -34,13 +35,15 @@ class MaterialRequestApprovalBody extends StatefulWidget {
 class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
   bool isActive = false;
   bool pressed = false;
+  List<bool> isChecked ;
   TextEditingController dateinput = TextEditingController();
   final materialRequestApprovalFormKey = GlobalKey<FormState>();
   IndentorNameDropdownBloc _dropdownBloc;
   IndentNoDropdownBloc indentNoDropdownBloc;
   bool pressAttention = false;
+  bool selected = false;
   List<String> itemList = [];
-
+Map<String, bool> values = {};
   @override
   void initState() {
     dateinput.text = "";
@@ -278,7 +281,15 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                                                   const SizedBox(
                                                     width: 80,
                                                   ),
-                                                  Image.asset(icon15),
+                                                  // Image.asset(icon15),
+Checkbox(
+    value: this.selected,
+    onChanged: (bool value){
+      setState(() {
+
+      });
+    }
+)
                                                 ],
                                               ),
                                               const SizedBox(
