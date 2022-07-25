@@ -71,8 +71,10 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   // ItemCurrentStatus selectItemCurrentStatus;
   var subscription;
   var connectionStatus;
-
+  String purchase;
+  String qun;
   double _amount;
+  double netamt = 0;
   String StringAmount;
   bool isActive = false;
   bool pressed = false;
@@ -210,14 +212,16 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
+
   List<ItemNameModel> listContainer = [];
   StreamController<List<ItemNameModel>> listStream = StreamController();
-  var url,newurl;
+  var url, newurl;
   List<Map<String, String>> params = [];
   Future<dynamic> sendData() async {
     try {
-      newurl= 'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"STKTR","StrSiteCode":"AD","StrNo":"1","StrDate":"${dateinput.text}","StrIssuedTo":"AS495","StrPreparedByCode":"SA",StrIndGrid:${params},"StrRemark":""}'}';
-       url = Uri.parse(newurl);
+      newurl =
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostPhaseTransfer?StrRecord=${'{"StrTypeCode":"STKTR","StrSiteCode":"AD","StrNo":"1","StrDate":"${dateinput.text}","StrIssuedTo":"AS495","StrPreparedByCode":"SA",StrIndGrid:${params},"StrRemark":""}'}';
+      url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -577,10 +581,12 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                         child: Container(
                           decoration: decorationForms(),
                           child: FutureBuilder<List<ItemNameModel>>(
-                              future: itemNameDropdownBloc.itemNamePhaseToPhaseDropdownData,
+                              future: itemNameDropdownBloc
+                                  .itemNamePhaseToPhaseDropdownData,
                               builder: (context, snapshot) {
                                 return StreamBuilder<ItemNameModel>(
-                                    stream: itemNameDropdownBloc.selecteditemPhaseToPhaseTransferState,
+                                    stream: itemNameDropdownBloc
+                                        .selecteditemPhaseToPhaseTransferState,
                                     builder: (context, item) {
                                       return SearchChoices<
                                           ItemNameModel>.single(
@@ -659,8 +665,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                   // padding: const EdgeInsets.symmetric(
                                   //     horizontal: 15.0),
                                   decoration: decoration1(),
-                                  child: Center(
-                                      child: Text(selectItemName.SKU)))
+                                  child:
+                                      Center(child: Text(selectItemName.SKU)))
                               : Container(
                                   height: height * .067,
                                   width: width * .18,
@@ -700,10 +706,8 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                           width: width * .28,
                                           decoration: decoration1(),
                                           child: Center(
-                                              child: Text(
-                                                  selectItemName
-                                                          .PurchaseRate
-                                                      .toString()))),
+                                              child: Text(selectItemName
+                                                  .PurchaseRate.toString()))),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -751,18 +755,33 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                   padding: EdgeInsets.symmetric(horizontal: 8)),
                               RoundedButtonInput(
                                 text: "Add Item to List",
-                                press: (selectItemName != null) &&
-                                        (isActive)
+                                press: (selectItemName != null) && (isActive)
                                     ? () {
-                                  selectItemName.requestQty = reqQty.text;
+                                        selectItemName.requestQty = reqQty.text;
                                         _calculation();
                                         setState(() {
+                                          netamt = (netamt + _amount);
                                           pressed = true;
                                           listContainer.add(selectItemName);
                                           listStream.add(listContainer);
-                                          Map<String, String> localMap =
-                                            {"StrCostCenterCode":"'${selectFromItemCostCenter.Code}'","StrGodownCode":"'${selectFromGodown.GodCode}'","StrToCostCenterCode":"'${selectToItemCostCenter.Code}'","StrToGodownCode":"'${selectToGodown.GodCode}'","StrItemCode":"'${selectItemName.SearchCode}'","DblQuantity":"'${selectItemName.requestQty}'","StrSKU":"'${selectItemName.SKU}'","DblRate":"10","DblAmt":"100"};
-                                        params.add(localMap);
+                                          Map<String, String> localMap = {
+                                            "StrCostCenterCode":
+                                                "'${selectFromItemCostCenter.Code}'",
+                                            "StrGodownCode":
+                                                "'${selectFromGodown.GodCode}'",
+                                            "StrToCostCenterCode":
+                                                "'${selectToItemCostCenter.Code}'",
+                                            "StrToGodownCode":
+                                                "'${selectToGodown.GodCode}'",
+                                            "StrItemCode":
+                                                "'${selectItemName.SearchCode}'",
+                                            "DblQuantity":
+                                                "'${selectItemName.requestQty}'",
+                                            "StrSKU": "'${selectItemName.SKU}'",
+                                            "DblRate": "10",
+                                            "DblAmt": "100"
+                                          };
+                                          params.add(localMap);
                                         });
                                         //clearData();
                                       }
@@ -788,174 +807,192 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
               ),
               pressed
                   ? StreamBuilder<List<ItemNameModel>>(
-                // ? StreamBuilder<List<String>>(
-                  stream: listStream.stream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Container(
-                        height: pressed == false? height* 0.2 : height*0.4 ,
-                        child: Center(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Stack(
-                                alignment: Alignment.centerRight,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        height: height * .14,
-                                        width: width * .95,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(5.0),
-                                          color: primaryColor3,
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              color: primaryColor5,
-                                              offset:
-                                              Offset(0.0, 1.0), //(x,y)
-                                              blurRadius: 6.0,
+                      // ? StreamBuilder<List<String>>(
+                      stream: listStream.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Container(
+                            height:
+                                pressed == false ? height * 0.2 : height * 0.4,
+                            child: Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data?.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  qun = snapshot.data[index].requestQty;
+                                  purchase = snapshot.data[index].PurchaseRate;
+                                  double itemamt = double.parse(purchase) *
+                                      double.parse(qun);
+                                  return Stack(
+                                    alignment: Alignment.centerRight,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            height: height * .14,
+                                            width: width * .95,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: primaryColor3,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: primaryColor5,
+                                                  offset:
+                                                      Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 6.0,
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Container(
-                                                        width: width * .35,
-                                                        child: Text(
-                                                          snapshot.data[index]
-                                                              .Name,
-                                                          maxLines: 3,
-                                                          style:
-                                                          containerTextStyle1(),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                        height: 13,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Column(
+                                                      Row(
                                                         crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Text(
-                                                            'Transfer Qty:',
-                                                            style:
-                                                            containerTextStyle2(),
+                                                          Container(
+                                                            width: width * .35,
+                                                            child: Text(
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .Name,
+                                                              maxLines: 3,
+                                                              style:
+                                                                  containerTextStyle1(),
+                                                            ),
                                                           ),
                                                           SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                            'Rate:',
-                                                            style:
-                                                            containerTextStyle2(),
+                                                            width: 5,
+                                                            height: 13,
                                                           ),
                                                           SizedBox(
-                                                            height: 5,
+                                                            width: 10,
                                                           ),
-                                                          Text('Amount:', style: containerTextStyle2(),)
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Text(
-                                                            '${snapshot.data[index].requestQty}' +
-                                                                "  " +
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                'Transfer Qty:',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                'Rate:',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                'Amount:',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                '${snapshot.data[index].requestQty}' +
+                                                                    "  " +
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                        .SKU,
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
                                                                 snapshot
-                                                                    .data[
-                                                                index]
-                                                                    .SKU,
-                                                            style:
-                                                            containerTextStyle2(),
+                                                                    .data[index]
+                                                                    .PurchaseRate,
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                "${itemamt.toStringAsFixed(2)}",
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              )
+                                                            ],
                                                           ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                            snapshot
-                                                                .data[index]
-                                                                .PurchaseRate,
-                                                            style:
-                                                            containerTextStyle2(),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(StringAmount, style: containerTextStyle2(),)
                                                         ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        "HSN/SAC: " +
+                                                            snapshot.data[index]
+                                                                .HSN_SAC,
+                                                        style:
+                                                            containerTextStyle3(),
                                                       ),
                                                     ],
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    "HSN/SAC: " +
-                                                        snapshot
-                                                            .data[index].HSN_SAC,
-                                                    style:
-                                                    containerTextStyle3(),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        listContainer.removeAt(index);
-                                        listStream.add(listContainer);
-                                      },
-                                      child: Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            )),
                                       ),
-                                    ),
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    }
-                    return Container();
-                  })
-:const SizedBox(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            listContainer.removeAt(index);
+                                            listStream.add(listContainer);
+                                            setState(() {
+                                              netamt = (netamt - itemamt);
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                        return Container();
+                      })
+                  : const SizedBox(),
               sizedbox1,
-              formsHeadTextNew("Total Amount:", width * .045),
+              formsHeadText("Total Amount:  ${netamt.toStringAsFixed(2)}"),
               sizedbox1,
               formsHeadTextNew("Remarks", width * .045),
               Container(

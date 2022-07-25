@@ -65,8 +65,10 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   VoucherType selectVoucherType3;
   ItemCostCenter selectItemCostCenter;
   ItemNameModel selectItemName;
-
+  String purchase;
+  String qun;
   double _amount;
+  double netamt = 0;
   var subscription;
   var connectionStatus;
   String StringAmount;
@@ -193,11 +195,14 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       Scaffold.of(context).showSnackBar(snackBar(internetFailedConnectionText));
     }
   }
+
   List<Map<String, String>> params = [];
-var url;var newurl;
+  var url;
+  var newurl;
   Future<dynamic> sendData() async {
     try {
-      newurl= 'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"ISU","StrVDate":"2022-01-31","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
+      newurl =
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"ISU","StrVDate":"2022-01-31","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
       url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -629,15 +634,26 @@ var url;var newurl;
                                         selectItemName.requestQty = reqQty.text;
                                         _calculation();
                                         setState(() {
+                                          netamt = (netamt + _amount);
                                           pressed = true;
                                           listIssue.add(
                                             selectItemName,
                                           );
                                           listStockIssue.add(listIssue);
-                                        Map<String, String> localMap = {
-                                          "StrItemCode":"'${selectItemName.SearchCode}'","DblQuantity":"'${selectItemName.requestQty}'","DblAmt":"'10'","DblRate":"'10'","StrCostCenterCode":"'${selectItemCostCenter.Code}'","StrGodown":"'${selectGodown.GodCode}'","StrRemark":"'Remk'"
-                                        };
-                                        params.add(localMap);
+                                          Map<String, String> localMap = {
+                                            "StrItemCode":
+                                                "'${selectItemName.SearchCode}'",
+                                            "DblQuantity":
+                                                "'${selectItemName.requestQty}'",
+                                            "DblAmt": "'10'",
+                                            "DblRate": "'10'",
+                                            "StrCostCenterCode":
+                                                "'${selectItemCostCenter.Code}'",
+                                            "StrGodown":
+                                                "'${selectGodown.GodCode}'",
+                                            "StrRemark": "'Remk'"
+                                          };
+                                          params.add(localMap);
                                         });
                                         //clearData();
                                       }
@@ -669,12 +685,17 @@ var url;var newurl;
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Container(
-                            height: pressed == false? height* 0.2 : height*0.4 ,
+                            height:
+                                pressed == false ? height * 0.2 : height * 0.4,
                             child: Center(
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: snapshot.data?.length,
                                 itemBuilder: (BuildContext context, int index) {
+                                  qun = snapshot.data[index].requestQty;
+                                  purchase = snapshot.data[index].PurchaseRate;
+                                  double itemamt = double.parse(purchase) *
+                                      double.parse(qun);
                                   return Stack(
                                     alignment: Alignment.centerRight,
                                     children: [
@@ -704,7 +725,8 @@ var url;var newurl;
                                                       const EdgeInsets.all(8.0),
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Row(
                                                         crossAxisAlignment:
@@ -714,7 +736,8 @@ var url;var newurl;
                                                           Container(
                                                             width: width * .35,
                                                             child: Text(
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .Name,
                                                               maxLines: 3,
                                                               style:
@@ -749,7 +772,11 @@ var url;var newurl;
                                                               SizedBox(
                                                                 height: 5,
                                                               ),
-                                                              Text('Amount:', style: containerTextStyle2(),)
+                                                              Text(
+                                                                'Amount:',
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              )
                                                             ],
                                                           ),
                                                           SizedBox(
@@ -783,7 +810,11 @@ var url;var newurl;
                                                               SizedBox(
                                                                 height: 5,
                                                               ),
-                                                              Text(StringAmount, style: containerTextStyle2(),)
+                                                              Text(
+                                                                "${itemamt.toStringAsFixed(2)}",
+                                                                style:
+                                                                    containerTextStyle2(),
+                                                              )
                                                             ],
                                                           ),
                                                         ],
@@ -793,8 +824,8 @@ var url;var newurl;
                                                       ),
                                                       Text(
                                                         "HSN/SAC: " +
-                                                            snapshot
-                                                                .data[index].HSN_SAC,
+                                                            snapshot.data[index]
+                                                                .HSN_SAC,
                                                         style:
                                                             containerTextStyle3(),
                                                       ),
@@ -813,6 +844,9 @@ var url;var newurl;
                                           onTap: () {
                                             listIssue.removeAt(index);
                                             listStockIssue.add(listIssue);
+                                            setState(() {
+                                              netamt = (netamt - itemamt);
+                                            });
                                           },
                                           child: Icon(
                                             Icons.delete,
@@ -874,7 +908,7 @@ var url;var newurl;
                 ),
               ),
               sizedbox1,
-              formsHeadText("Total Amount: "),
+              formsHeadText("Total Amount:  ${netamt.toStringAsFixed(2)}"),
               sizedbox1,
               Padding(
                   padding: padding4,
