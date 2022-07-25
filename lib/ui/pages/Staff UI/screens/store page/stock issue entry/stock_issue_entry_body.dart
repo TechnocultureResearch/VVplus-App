@@ -67,6 +67,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   ItemNameModel selectItemName;
   String purchase;
   String qun;
+  double itemamt;
   double _amount;
   double netamt = 0;
   var subscription;
@@ -202,7 +203,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   Future<dynamic> sendData() async {
     try {
       newurl =
-          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"ISU","StrVDate":"2022-01-31","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-31","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
       url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
@@ -645,8 +646,11 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                                                 "'${selectItemName.SearchCode}'",
                                             "DblQuantity":
                                                 "'${selectItemName.requestQty}'",
-                                            "DblAmt": "'10'",
-                                            "DblRate": "'10'",
+                                            // "DblAmt": "'10'",
+                                            // "DblRate": "'10'",
+                                            "DblAmt": "'${_amount}'",
+                                            "DblRate":
+                                                "'${selectItemName.PurchaseRate}'",
                                             "StrCostCenterCode":
                                                 "'${selectItemCostCenter.Code}'",
                                             "StrGodown":

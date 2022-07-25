@@ -73,6 +73,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
   var connectionStatus;
   String purchase;
   String qun;
+  double itemamt;
   double _amount;
   double netamt = 0;
   String StringAmount;
@@ -760,6 +761,7 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                         selectItemName.requestQty = reqQty.text;
                                         _calculation();
                                         setState(() {
+                                          print("ho..$_amount");
                                           netamt = (netamt + _amount);
                                           pressed = true;
                                           listContainer.add(selectItemName);
@@ -778,8 +780,11 @@ class MyPhaseToPhaseTransferBody extends State<PhaseToPhaseTransferBody> {
                                             "DblQuantity":
                                                 "'${selectItemName.requestQty}'",
                                             "StrSKU": "'${selectItemName.SKU}'",
-                                            "DblRate": "10",
-                                            "DblAmt": "100"
+                                            "DblAmt": "'${_amount}'",
+                                            "DblRate":
+                                                "'${selectItemName.PurchaseRate}'",
+                                            // "DblRate": "10",
+                                            // "DblAmt": "100"
                                           };
                                           params.add(localMap);
                                         });

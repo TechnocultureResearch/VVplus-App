@@ -75,6 +75,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   List<ItemNameModel> listReceive = [];
   String purchase;
   String qun;
+  double itemamt;
   _calculation() {
     setState(
       () {
@@ -622,10 +623,10 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                             "StrItemCode":
                                                 "'${selectItemName.SearchCode}'",
                                             "DblQuantity": "'${reqQty.text}'",
-                                            "DblAmt": "'$StringAmount'",
-                                            // "DblRate":
-                                            //     "'${selectItemName.PurchaseRate}'",
-                                            "DblRate": "'10'",
+                                            "DblAmt": "'${_amount}'",
+                                            "DblRate":
+                                                "'${selectItemName.PurchaseRate}'",
+                                            // "DblRate": "'10'",
                                             "StrCostCenterCode":
                                                 "'${selectItemCostCenter.SubCode}'",
                                             "StrGodown":
@@ -680,7 +681,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                 itemBuilder: (BuildContext context, int index) {
                                   qun = snapshot.data[index].requestQty;
                                   purchase = snapshot.data[index].PurchaseRate;
-                                  double itemamt = double.parse(purchase) *
+                                  itemamt = double.parse(purchase) *
                                       double.parse(qun);
 
                                   return Stack(
