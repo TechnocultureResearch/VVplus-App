@@ -73,14 +73,15 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
   double netamt = 0;
   StreamController<List<ItemNameModel>> listStockReceive = StreamController();
   List<ItemNameModel> listReceive = [];
-  double itmamt;
+  String purchase;
+  String qun;
   _calculation() {
     setState(
       () {
         //value1 = double.parse(reqQty.text);
         _amount = (double.parse(reqQty.text) *
             double.parse(selectItemName.PurchaseRate));
-        StringAmount = _amount.toStringAsFixed(3);
+        StringAmount = _amount.toStringAsFixed(2);
       },
     );
     print("amountt::$_amount");
@@ -677,6 +678,11 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                 shrinkWrap: true,
                                 itemCount: snapshot.data?.length,
                                 itemBuilder: (BuildContext context, int index) {
+                                  qun = snapshot.data[index].requestQty;
+                                  purchase = snapshot.data[index].PurchaseRate;
+                                  double itemamt = double.parse(purchase) *
+                                      double.parse(qun);
+
                                   return Stack(
                                     alignment: Alignment.centerRight,
                                     children: [
@@ -726,11 +732,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                                             ),
                                                           ),
                                                           SizedBox(
-                                                            width: 5,
-                                                            height: 13,
-                                                          ),
-                                                          SizedBox(
                                                             width: 10,
+                                                            height: 13,
                                                           ),
                                                           Column(
                                                             crossAxisAlignment:
@@ -792,7 +795,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                                                 height: 5,
                                                               ),
                                                               Text(
-                                                                StringAmount,
+                                                                "${itemamt.toStringAsFixed(2)}",
                                                                 style:
                                                                     containerTextStyle2(),
                                                               ),
@@ -826,8 +829,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
                                             listReceive.removeAt(index);
                                             listStockReceive.add(listReceive);
                                             setState(() {
-                                              netamt = (netamt - _amount);
-                                              print("itmamt$itmamt");
+                                              netamt = (netamt - itemamt);
                                             });
                                           },
                                           child: Icon(
@@ -855,13 +857,13 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               // : const SizedBox(),
 
               sizedbox1,
-              formsHeadText("Total Amount:  $netamt"),
+              formsHeadText("Total Amount:  ${netamt.toStringAsFixed(2)}"),
 
               Padding(
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     //verifyDetail();
-                    // clearData();
+                    clearData();
                     sendData();
                   }, roundedButtonHomeColor1)),
             ],
