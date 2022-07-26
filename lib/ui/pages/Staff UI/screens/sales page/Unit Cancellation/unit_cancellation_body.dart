@@ -149,13 +149,14 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
+          "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
       var url = Uri.parse(baseUrl +
           "?" +
           "StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}",'
               '"StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",StrTaxGrid:[{"StrOH":"${selectTAX.ExpCode}",'
               '"StrTaxOHCode":"${selectTAX.SubExpCode}","DblTaxPer":"${selectTAX.TaxPer}","DblRC_TaxPer":"${selectTAX.RC_TaxPer}","StrROff":"H","DblAmt":450,"StrSubCode":"${selectTAX.Account}"}],"DblNetAmt":"10450",'
-              '"StrRemark":"${remarks.text}","StrBookingDate":"2022-06-07","StrPreparedBy":"SA","StrCustomer":"RN2000","StrCostCenter":"AD1"}'}");
+              '"StrRemark":"${remarks.text}","StrBookingDate":"2022-07-25","StrPreparedBy":"SA","StrCustomer":"AD220","StrCostCenter":"AD1"}'}");
+
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -170,6 +171,8 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
       //  }));
       //Scaffold.of(context).showSnackBar(snackBar(sendDataText));
       if (response.statusCode == 200) {
+        final String code = response.statusCode.toString();
+        Scaffold.of(context).showSnackBar(snackBar("Status code : $code"));
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
@@ -295,8 +298,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                                     [],
                               );
                             });
-                      }
-                      ),
+                      }),
                 ),
               ),
               selectBookingNo != null
