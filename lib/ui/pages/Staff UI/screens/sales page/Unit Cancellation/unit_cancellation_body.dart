@@ -264,11 +264,12 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   // width: 343,
                   decoration: decorationForms(),
                   child: FutureBuilder<List<BookingIdModel>>(
-                      future: bookingIdDropdownBloc3.bookingIdDropdownData,
+                      future: bookingIdDropdownBloc3
+                          .bookingIdUnitCancelDropdownData,
                       builder: (context, snapshot) {
                         return StreamBuilder<BookingIdModel>(
-                            stream:
-                                bookingIdDropdownBloc3.selectedBookingIdState,
+                            stream: bookingIdDropdownBloc3
+                                .selectedUnitCancelBookingIdState,
                             builder: (context, item) {
                               return SearchChoices<BookingIdModel>.single(
                                 icon: const Icon(
