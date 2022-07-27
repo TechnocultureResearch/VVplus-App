@@ -58,19 +58,18 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   String DblRate;
   String StrPODate;
   String StrItemCode;
+  String StrOrdQty;
+  String StrGoodser;
 
   var subscription;
   var connectionStatus;
   List fillPO = List();
   List filllistdata = [];
-  List fillselectlistdata = [];
-
   String fillSelectPoDoc;
   final TextEditingController _remarks = TextEditingController();
   String selectFillPo;
-  Future<String> futureList;
+
   Future<String> myFuture;
-  Future<String> myFuturee;
 
   void onDataChange1(VoucherType state) {
     setState(() {
@@ -92,9 +91,9 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
 
   Future<String> fetchFillPoData() async {
     final String uri =
-        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
+        "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillPO",'
             '"StrSiteCode":"AD",'
-            '"StrStateCode":"","StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"",'
+            '"StrStateCode":"","StrPartyCode":"${selectSupplier.SubCode}","StrPOValDate":"",'
             '"StrPODocID":"","Strv_type":"PCHLN"}'}";
     var response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
@@ -111,32 +110,12 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
     }
   }
 
-  Future<String> fetchFillselectPo() async {
-    final String uri =
-        "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
-            '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}";
-    var response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200) {
-      var res = await http.get(
-        Uri.parse(uri),
-      );
-      var respBody = json.decode(res.body);
-      setState(() {
-        fillselectlistdata = respBody;
-        //print("body: $fillselectlistdata");
-      });
-      return "Loaded Successfully";
-    } else {
-      throw Exception('Failed to load data.');
-    }
-  }
-
   Future<List<dynamic>> getFillselectPo() async {
     if (selectFillPo != null) {
       try {
         var url = Uri.parse(
-            "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
-                '"StrPartyCode":"${selectSupplier.subCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}");
+            "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FGetGRN?StrRecord=${'{"StrFilter":"FillSelectedPO","StrSiteCode":"AD","StrStateCode":"",'
+                '"StrPartyCode":"${selectSupplier.SubCode}","StrPOValDate":"","StrPODocID":"$selectFillPo"}'}");
 
         final response = await http.get(url);
         final List<dynamic> items = json.decode(response.body);
@@ -150,8 +129,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   @override
   void initState() {
     myFuture = fetchFillPoData();
-    futureList = fetchFillselectPo();
-
     dateinput.text = "";
     dateinput1.text = "";
     voucherTypeDropdownBloc = VoucherTypeDropdownBloc();
@@ -213,13 +190,13 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   Future<dynamic> sendData() async {
     try {
       var baseUrl =
-          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
+          "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostGRN";
       var url = Uri.parse(baseUrl +
           "?" +
-          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"23","StrPtyChlDate":"${dateinput1.text}",'
-              '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.subCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${StrItemCode}",'
-              '"StrPONo":"${StrPONo}","DblQuantity":"10","DblPOQuantity":"10","DblAmt":"100","DblRate":"100",'
-              '"StrCostCenterCode":"AD1","StrOUnit":"${StrOUnit}","StrHSNSACCode":"${StrHSNSACCode}","StrGoodsServices":"G","StrPODate":"2022-05-05",'
+          'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"212","StrPtyChlDate":"${dateinput1.text}",'
+              '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.SubCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${StrItemCode}",'
+              '"StrPONo":"${StrPONo}","DblQuantity":"100","DblPOQuantity":"${StrOrdQty}","DblAmt":"${DblAmt}","DblRate":"${DblRate}",'
+              '"StrCostCenterCode":"AD1","StrOUnit":"${StrOUnit}","StrHSNSACCode":"${StrHSNSACCode}","StrGoodsServices":"${StrGoodser}","StrPODate":"2022-07-25",'
               '"StrRemark":"${_remarks.text}","DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0",'
               '"DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9",'
               '"DblIGSTRate":"0","DblIGSTAmt":"0","DblUGSTRate":"0","DblUGSTAmt":"0","DblNetValueRate":"0","DblNetValueAmt":"118"}],'
@@ -529,51 +506,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                 ),
               ),
               sizedbox1,
-              // formsHeadTextNew("Purchase Order Select", width * .045),
-              // Padding(
-              //   padding: padding1,
-              //   child: Container(
-              //     width: width * .85,
-              //     height: height * .066,
-              //     decoration: decorationForms(),
-              //     child: StreamBuilder<String>(
-              //         stream: fetchFillselectPo().asStream(),
-              //         builder: (context, snapshot) {
-              //           return DropdownButton(
-              //             hint: Text("  Search here                    "),
-              //             icon: Padding(
-              //               padding: EdgeInsets.symmetric(horizontal: 0.2),
-              //               child: const Icon(Icons.keyboard_arrow_down_sharp,
-              //                   size: 30),
-              //             ),
-              //             isExpanded: true,
-              //             items: fillselectlistdata.map((itemm) {
-              //               StrOUnit = itemm['SKU'];
-              //               StrHSNSACCode = itemm['HSN_SAC_Code'];
-              //               DblAmt = itemm['Rate'];
-              //               DblRate = itemm['Amount'];
-              //               StrPODate = itemm['POrdDate'];
-              //               StrItemCode = itemm['ItemCode'];
-              //               return DropdownMenuItem(
-              //                 value: itemm['Item'],
-              //                 child: Padding(
-              //                   padding: EdgeInsets.all(8.0),
-              //                   //child: Text(itemm['Item'] ?? ""),
-              //                 ),
-              //               );
-              //             }).toList(),
-              //             onChanged: (value) {
-              //               setState(() {
-              //                 fillSelectPoDoc = value;
-              //               });
-              //             },
-              //             value:
-              //                 fillSelectPoDoc != null ? fillSelectPoDoc : null,
-              //           );
-              //         }),
-              //
-              //   ),
-              // ),
               StreamBuilder(
                   stream: getFillselectPo().asStream(),
                   builder: (context, snapshot) {
@@ -588,6 +520,18 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                               shrinkWrap: true,
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) {
+                                StrItemCode = snapshot.data[index]['ItemCode'];
+                                StrPONo = snapshot.data[index]['DocID'];
+                                StrOrdQty = snapshot.data[index]['OrdQty'];
+                                DblAmt = snapshot.data[index]['Amount'];
+                                DblRate = snapshot.data[index]['Rate'];
+                                StrOUnit = snapshot.data[index]['Unit'];
+                                StrGoodser =
+                                    snapshot.data[index]['Goods_Services'];
+                                StrPODate = snapshot.data[index]['POrdDate'];
+                                StrHSNSACCode =
+                                    snapshot.data[index]['HSN_SAC_Code'];
+
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
