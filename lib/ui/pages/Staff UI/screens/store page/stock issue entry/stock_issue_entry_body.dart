@@ -203,7 +203,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
   Future<dynamic> sendData() async {
     try {
       newurl =
-          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"2022-01-31","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostStkIssue?StrRecord=${'{"StrVType":"${selectVoucherType1.V_Type}","StrVDate":"${formatted}","StrSiteCode":"AD","StrIssuedTo":"SM149",StrIndGrid:${params},"StrPreparedBy":"SA"}'}';
       url = Uri.parse(newurl);
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
