@@ -59,6 +59,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
   String StrPODate;
   String StrItemCode;
   String StrOrdQty;
+  String StrrcvQty;
   String StrGoodser;
 
   var subscription;
@@ -195,7 +196,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
           "?" +
           'StrRecord=${'{"StrVType":"${selectVoucherType.V_Type}","StrVDate":"${dateinput.text}","StrPtyChlNo":"212","StrPtyChlDate":"${dateinput1.text}",'
               '"StrSiteCode":"AD","StrSupplier":"${selectSupplier.SubCode}","StrGodown":"AD1",StrIndGrid:[{"StrItemCode":"${StrItemCode}",'
-              '"StrPONo":"${StrPONo}","DblQuantity":"100","DblPOQuantity":"${StrOrdQty}","DblAmt":"${DblAmt}","DblRate":"${DblRate}",'
+              '"StrPONo":"${StrPONo}","DblQuantity":"${StrrcvQty}","DblPOQuantity":"${StrOrdQty}","DblAmt":"${DblAmt}","DblRate":"${DblRate}",'
               '"StrCostCenterCode":"AD1","StrOUnit":"${StrOUnit}","StrHSNSACCode":"${StrHSNSACCode}","StrGoodsServices":"${StrGoodser}","StrPODate":"2022-07-25",'
               '"StrRemark":"${_remarks.text}","DblItemValueRate":"10","DblItemValueAmt":"100","DblDiscountRate":"0","DblDiscountAmt":"0",'
               '"DblAVRate":"0","DblAVAmt":"100","DblSGSTRate":"9","DblSGSTAmt":"9","DblCGSTRate":"9","DblCGSTAmt":"9",'
@@ -523,6 +524,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 StrItemCode = snapshot.data[index]['ItemCode'];
                                 StrPONo = snapshot.data[index]['DocID'];
                                 StrOrdQty = snapshot.data[index]['OrdQty'];
+                                StrrcvQty = snapshot.data[index]['RecievedQty'];
                                 DblAmt = snapshot.data[index]['Amount'];
                                 DblRate = snapshot.data[index]['Rate'];
                                 StrOUnit = snapshot.data[index]['Unit'];
@@ -531,7 +533,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                                 StrPODate = snapshot.data[index]['POrdDate'];
                                 StrHSNSACCode =
                                     snapshot.data[index]['HSN_SAC_Code'];
-
+                                //  print("$StrItemCode $StrPONo");
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
