@@ -239,7 +239,7 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      height: height * .15,
+                                      height: height * .18,
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(5.0),
@@ -261,12 +261,11 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               const SizedBox(
-                                                height: 15,
+                                                height: 20,
                                               ),
                                               Container(
                                                 height: height * .095,
                                                 width: width * .3,
-                                                //color: Colors.green,
                                                 child: Text(
                                                     snapshot.data[index]
                                                         ['Item'],
@@ -283,12 +282,11 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                                                     "Order Qty: " +
                                                         snapshot.data[index]
                                                             ['indqty'],
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 12),
+                                                    style:
+                                                        containerTextStyle2(),
                                                   ),
                                                   const SizedBox(
-                                                    width: 8,
+                                                    width: 2,
                                                   ),
                                                   Text(
                                                     snapshot.data[index]['Sku'],
@@ -316,54 +314,54 @@ class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
                                                           color: Colors.green,
                                                           fontSize: 13)),
                                                   const SizedBox(
-                                                    width: 80,
+                                                    width: 30,
                                                   ),
                                                   // Image.asset(icon15),
-                                                  Expanded(
-                                                    child: Checkbox(
-                                                        value: selected.isEmpty ? false : selected[index],
-                                                        onChanged: (bool value) {
-                                                          setState(() {
-                                                            print('checkbox test ===============================================\n');
-                                                            selected[index] = value;
-                                                            Map<String, String>
-                                                                localMap = {
-                                                              "'StrItemCode'":
-                                                                  "'${snapshot.data[index]['Itemcode']}'",
-                                                              "'DblAprQty'":
-                                                                  "'${snapshot.data[index]['Aprqty']}'",
-                                                              "'DblIndQty'":
-                                                                  "'${snapshot.data[index]['indqty']}'",
-                                                              "'StrIndDocID'":
-                                                                  "'${snapshot.data[index]['IndDocid']}'",
-                                                              "'StrIndV_SNo'":
-                                                                  "'${snapshot.data[index]['V_sno']}'",
-                                                              "'StrMaintainStockValue'":
-                                                                  "''",
-                                                              "'StrSiteCode'":
-                                                                  "'AD'",
-                                                              "'StrAssignedTo'":
-                                                                  "''",
-                                                              "'StrAprRemark'":
-                                                                  "'abc'",
-                                                              "'StrAprBy'": "'SA'",
-                                                              "'StrAprTime'":
-                                                                  "'${dateinput.text}'"
-                                                            };
-                                                            selected[index]
-                                                                ? params
-                                                                    .add(localMap)
-                                                                : params.remove(
-                                                                    localMap);
-                                                          });
-                                                        } // controlAffinity: ListTileControlAffinity.leading,
-                                                        ),
-                                                  )
+                                                  Checkbox(
+                                                      value: selected.isEmpty
+                                                          ? false
+                                                          : selected[index],
+                                                      onChanged: (bool value) {
+                                                        setState(() {
+                                                          print(
+                                                              'checkbox test ===============================================\n');
+                                                          selected[index] =
+                                                              value;
+                                                          Map<String, String>
+                                                              localMap = {
+                                                            "'StrItemCode'":
+                                                                "'${snapshot.data[index]['Itemcode']}'",
+                                                            "'DblAprQty'":
+                                                                "'${snapshot.data[index]['Aprqty']}'",
+                                                            "'DblIndQty'":
+                                                                "'${snapshot.data[index]['indqty']}'",
+                                                            "'StrIndDocID'":
+                                                                "'${snapshot.data[index]['IndDocid']}'",
+                                                            "'StrIndV_SNo'":
+                                                                "'${snapshot.data[index]['V_sno']}'",
+                                                            "'StrMaintainStockValue'":
+                                                                "''",
+                                                            "'StrSiteCode'":
+                                                                "'AD'",
+                                                            "'StrAssignedTo'":
+                                                                "''",
+                                                            "'StrAprRemark'":
+                                                                "'abc'",
+                                                            "'StrAprBy'":
+                                                                "'SA'",
+                                                            "'StrAprTime'":
+                                                                "'${dateinput.text}'"
+                                                          };
+                                                          selected[index]
+                                                              ? params
+                                                                  .add(localMap)
+                                                              : params.remove(
+                                                                  localMap);
+                                                        });
+                                                      } // controlAffinity: ListTileControlAffinity.leading,
+                                                      )
                                                 ],
                                               ),
-                                              // const SizedBox(
-                                              //   height: 5,
-                                              // ),
                                               Text(
                                                 "Req Date: " +
                                                     snapshot.data[index]
