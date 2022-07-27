@@ -135,13 +135,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
   @override
   initState() {
-    newurl =
-        "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:[$params]}'}";
-    // params = '{"StrItemCode":"${selectItemName.Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}'as List<Map<String, String>> ;
-    // if(selectItemName.Code!= null) {
-    //   params = '${'{"StrItemCode":"${selectItemName
-    //       .Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}'}' as List<Map<String, String>> ;
-    // }
     _amount = 0;
     super.initState();
     reqQty = TextEditingController();
@@ -781,10 +774,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
 
                 pressed
                     ? SingleChildScrollView(
-                        //scrollDirection: Axis.vertical,
-                        // physics: AlwaysScrollableScrollPhysics(),
                         child: StreamBuilder<List<ItemNameModel>>(
-                            // ? StreamBuilder<List<String>>(
                             stream: listStream.stream,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
@@ -792,8 +782,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                   height: pressed == false
                                       ? height * .2
                                       : height * .4,
-                                  // color: Colors.yellow,
-                                  // height: height * .55,
                                   child: Center(
                                     child: ListView.builder(
                                       shrinkWrap: true,
