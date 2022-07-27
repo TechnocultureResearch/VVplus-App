@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ import '../../../../../widgets/constants/colors.dart';
 
 class MaterialRequestApprovalBody extends StatefulWidget {
   const MaterialRequestApprovalBody({Key key}) : super(key: key);
+
   @override
   State<MaterialRequestApprovalBody> createState() =>
       MyMaterialRequestApprovalBody();
@@ -35,15 +37,18 @@ class MaterialRequestApprovalBody extends StatefulWidget {
 class MyMaterialRequestApprovalBody extends State<MaterialRequestApprovalBody> {
   bool isActive = false;
   bool pressed = false;
-  List<bool> isChecked ;
+  List<bool> isChecked;
+
   TextEditingController dateinput = TextEditingController();
   final materialRequestApprovalFormKey = GlobalKey<FormState>();
   IndentorNameDropdownBloc _dropdownBloc;
   IndentNoDropdownBloc indentNoDropdownBloc;
   bool pressAttention = false;
-  bool selected = false;
+  List<bool> selected = [false, false];
+
   List<String> itemList = [];
-Map<String, bool> values = {};
+  Map<String, bool> values = {};
+
   @override
   void initState() {
     dateinput.text = "";
@@ -69,13 +74,45 @@ Map<String, bool> values = {};
         rethrow;
       }
     }
-    // else{
-    //    print("Please select indent No");
+  }
+
+  var url;
+  var newurl;
+  List<Map<String, String>> params = [];
+
+  // var newurl = 'http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:[]}'}';
+  Future<dynamic> sendData() async {
+    try {
+      newurl =
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndentApp?StrRecord=$params';
+      url = Uri.parse(newurl);
+      // params = '{"StrItemCode":"$
+      // {selectItemName.Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}' as List ;
+      var response = await http.get(url);
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return Scaffold.of(context).showSnackBar(snackBar(responseString));
+      } else {
+        return Scaffold.of(context).showSnackBar(snackBar(response.body));
+      }
+    } catch (e) {
+      rethrow;
+    }
+    //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
+    //  on SocketException {
+    //   Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
+    // } on HttpException {
+    //   Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
+    // } on FormatException {
+    //   Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     // }
   }
 
   // IndentorName selectIndentorName;
   IndentNo selectIndentNo;
+
   void onDataChange1(IndentNo state) {
     setState(() {
       selectIndentNo = state;
@@ -227,7 +264,7 @@ Map<String, bool> values = {};
                                                 height: 15,
                                               ),
                                               Container(
-                                                height: height * .08,
+                                                height: height * .095,
                                                 width: width * .3,
                                                 //color: Colors.green,
                                                 child: Text(
@@ -238,7 +275,7 @@ Map<String, bool> values = {};
                                                         containerTextStyle1()),
                                               ),
                                               const SizedBox(
-                                                height: 8,
+                                                height: 5,
                                               ),
                                               Row(
                                                 children: [
@@ -254,7 +291,7 @@ Map<String, bool> values = {};
                                                     width: 8,
                                                   ),
                                                   Text(
-                                                    "pc",
+                                                    snapshot.data[index]['Sku'],
                                                     style:
                                                         containerTextStyle2(),
                                                   ),
@@ -267,7 +304,7 @@ Map<String, bool> values = {};
                                                 CrossAxisAlignment.start,
                                             children: [
                                               const SizedBox(
-                                                height: 10,
+                                                height: 5,
                                               ),
                                               Row(
                                                 children: [
@@ -282,19 +319,51 @@ Map<String, bool> values = {};
                                                     width: 80,
                                                   ),
                                                   // Image.asset(icon15),
-Checkbox(
-    value: this.selected,
-    onChanged: (bool value){
-      setState(() {
-
-      });
-    }
-)
+                                                  Expanded(
+                                                    child: Checkbox(
+                                                        value: selected.isEmpty ? false : selected[index],
+                                                        onChanged: (bool value) {
+                                                          setState(() {
+                                                            print('checkbox test ===============================================\n');
+                                                            selected[index] = value;
+                                                            Map<String, String>
+                                                                localMap = {
+                                                              "'StrItemCode'":
+                                                                  "'${snapshot.data[index]['Itemcode']}'",
+                                                              "'DblAprQty'":
+                                                                  "'${snapshot.data[index]['Aprqty']}'",
+                                                              "'DblIndQty'":
+                                                                  "'${snapshot.data[index]['indqty']}'",
+                                                              "'StrIndDocID'":
+                                                                  "'${snapshot.data[index]['IndDocid']}'",
+                                                              "'StrIndV_SNo'":
+                                                                  "'${snapshot.data[index]['V_sno']}'",
+                                                              "'StrMaintainStockValue'":
+                                                                  "''",
+                                                              "'StrSiteCode'":
+                                                                  "'AD'",
+                                                              "'StrAssignedTo'":
+                                                                  "''",
+                                                              "'StrAprRemark'":
+                                                                  "'abc'",
+                                                              "'StrAprBy'": "'SA'",
+                                                              "'StrAprTime'":
+                                                                  "'${dateinput.text}'"
+                                                            };
+                                                            selected[index]
+                                                                ? params
+                                                                    .add(localMap)
+                                                                : params.remove(
+                                                                    localMap);
+                                                          });
+                                                        } // controlAffinity: ListTileControlAffinity.leading,
+                                                        ),
+                                                  )
                                                 ],
                                               ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
+                                              // const SizedBox(
+                                              //   height: 5,
+                                              // ),
                                               Text(
                                                 "Req Date: " +
                                                     snapshot.data[index]
@@ -344,8 +413,9 @@ Checkbox(
                     }),
                 Padding(
                     padding: padding4,
-                    child: roundedButtonHome2(
-                        "Approve", () {}, roundedButtonHomeColor1)),
+                    child: roundedButtonHome2("Approve", () {
+                      sendData();
+                    }, roundedButtonHomeColor1)),
                 Padding(
                     padding: padding4,
                     child: roundedButtonHome2(
