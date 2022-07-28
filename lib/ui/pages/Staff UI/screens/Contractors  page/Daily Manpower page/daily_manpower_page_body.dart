@@ -46,7 +46,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
   ItemCostCenter selectItemCostCenter;
   ResourceType selectResourceType;
   DepartmentName selectDepartmentName;
-
+  bool issucceed = false;
   var subscription;
   var connectionStatus;
 
@@ -135,8 +135,8 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
               '"DblQty":"${_qty.text}","StrParty":"${selectDepartmentName.subCode}","StrItem":"${selectResourceType.SearchCode}","StrRemark":"${_remarks.text}"}]}'}");
       var response = await http.get(url);
       print('Response Status: ${response.statusCode}');
-      print('Response Body: ${response.body}');
       if (response.statusCode == 200) {
+        issucceed = true;
         final String responseString = response.body;
         print('Response Body: ${responseString}');
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
@@ -145,26 +145,8 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
       }
     } catch (e) {
       rethrow;
-      // try {
-      //   await http.post(Uri.parse(ApiService.mockDataPostDailyManPowerURL),
-      //       body: json.encode({
-      //         "IntendDate": intendDate,
-      //         "PartyNameSubCode": partyNameSubCode,
-      //         "CostCenterSubCode": costCenterSubCode,
-      //         "ResourceTypeSubCode": resourceTypeSubCode,
-      //         "ReqQty": reqQty,
-      //         "Remarks": remarks
-      //       }));
-      //   Scaffold.of(context).showSnackBar(snackBar(sendDataText));
-    } on SocketException {
-      Scaffold.of(context).showSnackBar(snackBar(socketExceptionText));
-    } on HttpException {
-      Scaffold.of(context).showSnackBar(snackBar(httpExceptionText));
-    } on FormatException {
-      Scaffold.of(context).showSnackBar(snackBar(formatExceptionText));
     }
   }
-
   Future<void> _refresh() async {
     await Future.delayed(const Duration(milliseconds: 800), () {
       setState(() {});
@@ -444,7 +426,10 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                    clearData();
+                    if(issucceed == true) {
+                      clearData();
+                    }else{}
+                    issucceed = false;
                   }, roundedButtonHomeColor1)),
             ],
           ),
