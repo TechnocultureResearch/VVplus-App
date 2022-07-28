@@ -130,7 +130,7 @@ class MyDailyManpowerBody extends State<DailyManpowerBody> {
       String remarks) async {
     try {
       var url = Uri.parse(
-          "http://techno-alb-1780774514.ap-south-1.elb.amazonaws.com:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostDRM?StrRecord=${'{"StrVType":"DRME",'
+          "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostDRM?StrRecord=${'{"StrVType":"DRME",'
               '"StrVDate":"${dateInput.text}","StrSiteCode":"AD","StrRemark":"${_remarks.text}","StrPreparedBy":"SA",StrDRMGrid:[{"StrCostcenter":"${selectItemCostCenter.strSubCode}",'
               '"DblQty":"${_qty.text}","StrParty":"${selectDepartmentName.subCode}","StrItem":"${selectResourceType.SearchCode}","StrRemark":"${_remarks.text}"}]}'}");
       var response = await http.get(url);
