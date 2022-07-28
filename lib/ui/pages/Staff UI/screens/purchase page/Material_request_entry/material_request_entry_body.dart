@@ -63,7 +63,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
-  //int index;
+  bool issucceed = false;
   bool isdelet = true;
   void clearData() {
     setState(() {
@@ -184,7 +184,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   Future<dynamic> sendData() async {
     try {
       newurl =
-          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"IND","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"09/07/2022","StrDepartmentCode":"AD1","StrIndentorCode":"SG344","StrPreparedByCode":"SA",StrIndGrid:${params}}'}';
+          'http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostIndent?StrRecord=${'{"StrIndTypeCode":"${selectVoucherType.SubCode}","StrSiteCode":"AD","StrIndNo":"11","StrIndDate":"${intendDateInput.text}","StrDepartmentCode":"${selectDepartment.subCode}","StrIndentorCode":"${selectIndentorName.SubCode}","StrPreparedByCode":"SA",StrIndGrid:${params}}'}';
       url = Uri.parse(newurl);
       // params = '{"StrItemCode":"$
       // {selectItemName.Code}","DblQuantity":"10","StrCostCenterCode":"AD1","StrRequiredDate":"09/07/2022","StrRemark":"remark1"}' as List ;
@@ -192,6 +192,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
       if (response.statusCode == 200) {
+        issucceed = true;
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
@@ -491,7 +492,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                            DateFormat("dd/MM/yyyy").format(pickedDate);
                         setState(() {
                           intendDateInput.text = formattedDate;
                         });
@@ -733,10 +734,12 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                                             Map<String, String> localMap = {
                                               "StrItemCode":
                                                   "'${selectItemName.Code}'",
-                                              "DblQuantity": "'10'",
-                                              "StrCostCenterCode": "'AD1'",
-                                              "StrRequiredDate": "'09/07/2022'",
-                                              "StrRemark": "'remark1'"
+                                              "DblQuantity": "'${reqQty.text}'",
+                                              "StrCostCenterCode":
+                                                  "'${selectItemCostCenter.SubCode}'",
+                                              "StrRequiredDate":
+                                                  "'${reqDateInput.text}'",
+                                              "StrRemark": "'${remarks.text}'"
                                             };
                                             params.add(localMap);
                                             //  //= '{,,,,}'as List<Map<String, String>> ;
@@ -938,7 +941,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                            DateFormat("dd/MM/yyyy").format(pickedDate);
                         setState(() {
                           reqDateInput.text = formattedDate;
                         });
@@ -948,7 +951,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                 ),
                 formsHeadTextNew("Remarks", width * .045),
                 Container(
-                  //height: 70,
                   padding: padding1,
                   decoration: decoration1(),
                   child: StreamBuilder<String>(
@@ -984,7 +986,10 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 10),
                     child: roundedButtonHome("Submit", () {
-                      clearData();
+                      if (issucceed == true) {
+                        clearData();
+                      } else {}
+                      issucceed = false;
                       sendData();
                     })),
               ],
