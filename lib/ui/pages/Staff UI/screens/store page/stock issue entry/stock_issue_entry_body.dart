@@ -209,6 +209,7 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
       if (response.statusCode == 200) {
+        clearData();
         final String responseString = response.body;
         final String responseStatus = response.statusCode.toString();
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
@@ -918,7 +919,6 @@ class MyStockIssueEntryBody extends State<StockIssueEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),

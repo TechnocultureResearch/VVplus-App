@@ -212,6 +212,7 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
       print('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
+        clearData();
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
@@ -769,7 +770,6 @@ class MyGoodsRecepitEntryBody extends State<GoodsRecepitEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                    clearData();
                   }, roundedButtonHomeColor1)),
             ],
           ),

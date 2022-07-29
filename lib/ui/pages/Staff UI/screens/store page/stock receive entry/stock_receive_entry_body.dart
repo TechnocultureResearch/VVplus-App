@@ -167,7 +167,8 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       if (selectVoucherType1 != null &&
           selectReceivedBy != null &&
           selectGodown != null &&
-          //  selectItemCostCenter != null &&
+          selectItemName != null &&
+          selectItemCostCenter != null &&
           extraWorkEntryFormKey1.currentState.validate()) {
         sendData();
       } else {
@@ -190,6 +191,7 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
       print('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
+        clearData();
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
@@ -863,9 +865,9 @@ class MyStockReceiveEntryBody extends State<StockReceiveEntryBody> {
               Padding(
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
-                    //verifyDetail();
-                    clearData();
-                    sendData();
+                    verifyDetail();
+                    //clearData();
+                    //sendData();
                   }, roundedButtonHomeColor1)),
             ],
           ),
