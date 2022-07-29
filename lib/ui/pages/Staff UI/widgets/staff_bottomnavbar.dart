@@ -33,13 +33,7 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
           MaterialPageRoute(
             builder: (context) => NotificationStaff(),
           ));
-    } else if (index == 2) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NotificationStaff(),
-          ));
-    } else if (index == 3) {
+    }  else if (index == 2) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -82,19 +76,6 @@ class _MyBottomNavbarStaff extends State<BottomNavBarStaff> {
             ),
             activeIcon: Icon(
               Icons.notifications,
-              size: 32,
-              color: primaryColor4,
-            ),
-            // title: Text('', style: TextStyle(color: primaryColor2))
-            label: ''),
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.check,
-              size: 32,
-              color: primaryColor2,
-            ),
-            activeIcon: Icon(
-              Icons.check,
               size: 32,
               color: primaryColor4,
             ),
