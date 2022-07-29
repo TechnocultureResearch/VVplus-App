@@ -51,7 +51,6 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
 
   DepartmentName selectDepartmentName;
   VoucherType selectVoucherType1;
-  VoucherType selectVoucherType2;
   BookingIdModel selectBookingNo;
   TAXOH selectTAX;
   ChangeApplicable selectChangeApplicable;
@@ -118,7 +117,6 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
       selectTAX = null;
       selectDepartmentName = null;
       selectVoucherType1 = null;
-      selectVoucherType2 = null;
       selectChangeApplicable = null;
     });
 
@@ -152,7 +150,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
           "http://103.205.66.207:888/Individual_WebSite/LoginInfo_WS/WCF/WebService_Test.asmx/FPostUnitCancellation";
       var url = Uri.parse(baseUrl +
           "?" +
-          "StrRecord=${'{"StrVType":"UCANC","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}",'
+          "StrRecord=${'{"StrVType":"${selectBookingNo.V_Type}","StrSiteCode":"AD","StrCancelDate":"${dateinput.text}","StrBookingNo":"${selectBookingNo.DocId}",'
               '"StrChangeApplicable":"${selectChangeApplicable.strSubCode}","StrDueDate":"${dueDate.text}","DblBaseAmt":"${baseAmount.text}","DblTaxAmt":"450",StrTaxGrid:[{"StrOH":"${selectTAX.ExpCode}",'
               '"StrTaxOHCode":"${selectTAX.SubExpCode}","DblTaxPer":"${selectTAX.TaxPer}","DblRC_TaxPer":"${selectTAX.RC_TaxPer}","StrROff":"H","DblAmt":450,"StrSubCode":"${selectTAX.Account}"}],"DblNetAmt":"10450",'
               '"StrRemark":"${remarks.text}","StrBookingDate":"2022-07-25","StrPreparedBy":"SA","StrCustomer":"AD220","StrCostCenter":"AD1"}'}");
@@ -171,6 +169,7 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
       //  }));
       //Scaffold.of(context).showSnackBar(snackBar(sendDataText));
       if (response.statusCode == 200) {
+        _refresh();
         final String code = response.statusCode.toString();
         Scaffold.of(context).showSnackBar(snackBar("Status code : $code"));
         final String responseString = response.body;
@@ -507,7 +506,6 @@ class MyUnitCancellationBody extends State<UnitCancellationBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                    _refresh();
                   }, roundedButtonHomeColor1)),
             ],
           ),
