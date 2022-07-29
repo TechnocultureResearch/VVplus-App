@@ -63,7 +63,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
   // List itemStatus = ['ItemName','CostCenterName','DblQty','Unit'];
   double Dblq;
   String Unit;
-  bool issucceed = false;
+
   bool isdelet = true;
   void clearData() {
     setState(() {
@@ -72,6 +72,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       selectItemCurrentStatus = null;
       selectItemCostCenter = null;
       selectDepartment = null;
+      Dblq = null;
+      Unit = null;
       reqQty.clear();
       remarks.clear();
       intendDateInput.clear();
@@ -166,7 +168,6 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
         connectionStatus == ConnectivityResult.mobile) {
       if (selectItemName != null &&
           selectIndentorName != null &&
-          selectItemCurrentStatus != null &&
           selectItemCostCenter != null &&
           materialRequestEntryFormKey.currentState.validate()) {
         sendData();
@@ -192,7 +193,7 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
       print('Response Status: ${response.statusCode}');
       print('Response Body: ${response.body}');
       if (response.statusCode == 200) {
-        issucceed = true;
+        clearData();
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
@@ -986,11 +987,8 @@ class MyMaterialEntryBody extends State<MaterialEntryBody> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 10),
                     child: roundedButtonHome("Submit", () {
-                      if (issucceed == true) {
-                        clearData();
-                      } else {}
-                      issucceed = false;
-                      sendData();
+                      // sendData();
+                      verifyDetail();
                     })),
               ],
             ),

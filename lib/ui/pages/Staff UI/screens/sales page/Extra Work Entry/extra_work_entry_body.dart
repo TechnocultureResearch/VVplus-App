@@ -58,6 +58,7 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   VoucherType selectVoucherType2;
   var subscription;
   var connectionStatus;
+
   void onDataChange1(DepartmentName state) {
     setState(() {
       selectDepartmentName = state;
@@ -183,6 +184,10 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
       //      })
       // );
       if (response.statusCode == 200) {
+        clearData();
+
+        final String code = response.statusCode.toString();
+        Scaffold.of(context).showSnackBar(snackBar("Status code : $code"));
         final String responseString = response.body;
         return Scaffold.of(context).showSnackBar(snackBar(responseString));
       } else {
@@ -202,15 +207,17 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
   }
 
   void clearData() {
-    selectDepartmentName = null;
-    selectVoucherType = null;
-    selectStage = null;
-    selectBookingId = null;
-    selectTaxOh = null;
-    selectVoucherType2 = null;
-    _remarks.clear();
-    _baseAmount.clear();
-    dateinput.clear();
+    setState(() {
+      selectDepartmentName = null;
+      selectVoucherType = null;
+      selectStage = null;
+      selectBookingId = null;
+      selectTaxOh = null;
+      selectVoucherType2 = null;
+      _remarks.clear();
+      _baseAmount.clear();
+      dateinput.clear();
+    });
   }
 
   @override
@@ -550,9 +557,6 @@ class MyExtraWorkEntryBody extends State<ExtraWorkEntryBody> {
                   padding: padding4,
                   child: roundedButtonHome2("Submit", () {
                     verifyDetail();
-                    setState(() {
-                      clearData();
-                    });
                   }, roundedButtonHomeColor1)),
             ],
           ),
